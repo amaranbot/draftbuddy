@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Women's Basketball Draft - DraftBuddy</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1117; color: #fff; min-height: 100vh; }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid #1e2433; }
+    .logo { font-size: 1.5rem; font-weight: 800; color: #4ade80; letter-spacing: -0.5px; text-decoration: none; }
+    .back-link { color: #9ca3af; text-decoration: none; font-size: 0.9rem; }
+    .back-link:hover { color: #fff; }
+    .main { padding: 60px 40px; max-width: 860px; margin: 0 auto; }
+    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
+    .subtitle { color: #6b7280; margin-bottom: 40px; }
+    .form-card { background: #1a1f2e; border: 1px solid #2d3748; border-radius: 16px; padding: 40px; }
+    .form-group { margin-bottom: 22px; }
+    .form-group label { display: block; font-size: 0.9rem; font-weight: 600; color: #9ca3af; margin-bottom: 8px; }
+    .form-group input, .form-group select { width: 100%; padding: 12px 14px; background: #0f1117; border: 1px solid #2d3748; border-radius: 8px; color: #fff; font-size: 0.95rem; }
+    .form-group input:focus, .form-group select:focus { border-color: #4ade80; outline: none; }
+    select option { background: #1a1f2e; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .submit-btn { width: 100%; padding: 14px; background: #4ade80; color: #0f1117; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 10px; }
+    .submit-btn:hover { background: #22c55e; }
+    .success-banner { display: none; background: #1a2d1a; border: 1px solid #4ade80; color: #4ade80; padding: 16px; border-radius: 8px; margin-top: 20px; text-align: center; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/dashboard" class="logo">DraftBuddy</a>
+    <a href="/dashboard" class="back-link">Back to Dashboard</a>
+  </nav>
+  <div class="main">
+    <h1>Women's Basketball Draft Setup</h1>
+    <p class="subtitle">Configure your WNBA fantasy draft</p>
+    <div class="form-card">
+      <form id="draftForm">
+        <div class="form-group">
+          <label>League Name</label>
+          <input type="text" id="leagueName" placeholder="e.g. WNBA Champions League" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Number of Teams</label>
+            <select id="numTeams">
+              <option value="8">8 Teams</option>
+              <option value="10" selected>10 Teams</option>
+              <option value="12">12 Teams</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Roster Size</label>
+            <select id="rosterSize">
+              <option value="8">8 Players</option>
+              <option value="10" selected>10 Players</option>
+              <option value="12">12 Players</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Draft Type</label>
+            <select id="draftType">
+              <option value="snake" selected>Snake Draft</option>
+              <option value="auction">Auction Draft</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Scoring Format</label>
+            <select id="scoringFormat">
+              <option value="standard" selected>Standard</option>
+              <option value="categories">Categories</option>
+              <option value="points">Points</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="submit-btn">Create Women's Basketball Draft</button>
+      </form>
+      <div class="success-banner" id="successBanner">
+        Draft created! Head to <a href="/womens-rankings" style="color:#4ade80">Rankings</a> to start picking.
+      </div>
+    </div>
+  </div>
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+    const firebaseConfig = { apiKey: "AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88", authDomain: "draftbuddy-cf5c9.firebaseapp.com", projectId: "draftbuddy-cf5c9", storageBucket: "draftbuddy-cf5c9.firebasestorage.app", messagingSenderId: "861425863011", appId: "1:861425863011:web:e6b8ee8525ba71f7de6b56" };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, user => { if (!user) window.location.href = '/login'; });
+    document.getElementById('draftForm').addEventListener('submit', e => {
+      e.preventDefault();
+      document.getElementById('successBanner').style.display = 'block';
+    });
+  </script>
+</body>
+      </html>
