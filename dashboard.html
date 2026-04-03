@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - DraftBuddy</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1117; color: #fff; min-height: 100vh; }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid #1e2130; }
+    .logo { font-size: 1.5rem; font-weight: 800; color: #4ade80; }
+    .nav-right { display: flex; align-items: center; gap: 20px; }
+    .user-email { color: #6b7280; font-size: 0.9rem; }
+    .btn-signout { background: transparent; border: 1px solid #374151; color: #9ca3af; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+    .btn-signout:hover { border-color: #6b7280; color: #fff; }
+    .content { max-width: 1000px; margin: 0 auto; padding: 60px 40px; }
+    .welcome { margin-bottom: 48px; }
+    .welcome h1 { font-size: 2rem; font-weight: 800; margin-bottom: 8px; }
+    .welcome p { color: #6b7280; font-size: 1rem; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+    .card { background: #161b27; border: 1px solid #1e2130; border-radius: 12px; padding: 28px; }
+    .card-icon { font-size: 2rem; margin-bottom: 14px; }
+    .card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+    .card p { color: #6b7280; font-size: 0.9rem; line-height: 1.5; margin-bottom: 16px; }
+    .card-btn { background: #4ade80; color: #000; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; font-size: 0.88rem; cursor: pointer; }
+    .loading { display: flex; align-items: center; justify-content: center; min-height: 100vh; font-size: 1.1rem; color: #6b7280; }
+    @media (max-width: 600px) { nav { padding: 16px 20px; } .content { padding: 40px 20px; } }
+  </style>
+</head>
+<body>
+  <div id="loading" class="loading">Loading...</div>
+  <div id="app" style="display:none">
+    <nav>
+      <div class="logo">DraftBuddy</div>
+      <div class="nav-right">
+        <span class="user-email" id="user-email"></span>
+        <button class="btn-signout" onclick="signOut()">Sign Out</button>
+      </div>
+    </nav>
+    <div class="content">
+      <div class="welcome">
+        <h1>Welcome to DraftBuddy</h1>
+        <p>Your AI-powered fantasy sports draft assistant is ready.</p>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">🏈</div>
+          <h3>Start a Draft</h3>
+          <p>Set up your league settings and get AI-powered draft recommendations in real time.</p>
+          <button class="card-btn">New Draft</button>
+        </div>
+        <div class="card">
+          <div class="card-icon">📊</div>
+          <h3>Player Rankings</h3>
+          <p>Browse up-to-date player rankings customized for your scoring format.</p>
+          <button class="card-btn">View Rankings</button>
+        </div>
+        <div class="card">
+          <div class="card-icon">⚙️</div>
+          <h3>League Settings</h3>
+          <p>Configure your league size, scoring settings, and draft format preferences.</p>
+          <button class="card-btn">Settings</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut as fbSignOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    const firebaseConfig = { apiKey: "AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88", authDomain: "draftbuddy-cf5c9.firebaseapp.com", projectId: "draftbuddy-cf5c9", storageBucket: "draftbuddy-cf5c9.firebasestorage.app", messagingSenderId: "861425863011", appId: "1:861425863011:web:e6b8ee8525ba71f7de6b56" };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, (user) => {
+      document.getElementById("loading").style.display = "none";
+      if (user) {
+        document.getElementById("app").style.display = "block";
+        document.getElementById("user-email").textContent = user.email;
+      } else {
+        window.location.href = "/login";
+      }
+    });
+    window.signOut = function() {
+      fbSignOut(auth).then(() => { window.location.href = "/login"; });
+    };
+  </script>
+</body>
+</html>
