@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Player Rankings - DraftBuddy</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1117; color: #fff; min-height: 100vh; }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid #1e2433; }
+    .logo { font-size: 1.5rem; font-weight: 800; color: #4ade80; letter-spacing: -0.5px; text-decoration: none; }
+    .back-link { color: #9ca3af; text-decoration: none; font-size: 0.9rem; }
+    .back-link:hover { color: #fff; }
+    .main { padding: 60px 40px; max-width: 900px; margin: 0 auto; }
+    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
+    .subtitle { color: #6b7280; margin-bottom: 32px; }
+    .filters { display: flex; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
+    .filter-btn { padding: 8px 18px; border-radius: 20px; border: 1px solid #2d3748; background: transparent; color: #9ca3af; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+    .filter-btn.active, .filter-btn:hover { background: #4ade80; color: #0f1117; border-color: #4ade80; font-weight: 600; }
+    .rankings-table { background: #1a1f2e; border: 1px solid #2d3748; border-radius: 16px; overflow: hidden; }
+    .table-header { display: grid; grid-template-columns: 60px 1fr 120px 100px 100px; padding: 14px 24px; background: #0f1117; color: #6b7280; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+    .player-row { display: grid; grid-template-columns: 60px 1fr 120px 100px 100px; padding: 16px 24px; border-top: 1px solid #1e2433; align-items: center; transition: background 0.15s; }
+    .player-row:hover { background: #1e2535; }
+    .rank { font-weight: 700; color: #4ade80; font-size: 1.05rem; }
+    .player-name { font-weight: 600; }
+    .player-team { color: #6b7280; font-size: 0.85rem; margin-top: 2px; }
+    .position { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 700; }
+    .pos-QB { background: #1e3a5f; color: #60a5fa; }
+    .pos-RB { background: #1a2d1a; color: #4ade80; }
+    .pos-WR { background: #2d1f3d; color: #a78bfa; }
+    .pos-TE { background: #3d2a1a; color: #fb923c; }
+    .pos-K  { background: #2d2020; color: #f87171; }
+    .adp { color: #9ca3af; }
+    .bye { color: #9ca3af; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/" class="logo">DraftBuddy</a>
+    <a href="/dashboard" class="back-link">&#8592; Back to Dashboard</a>
+  </nav>
+  <div class="main">
+    <h1>&#128202; Player Rankings</h1>
+    <p class="subtitle">2025 Fantasy Football rankings.</p>
+    <div class="filters">
+      <button class="filter-btn active" onclick="filterPos('ALL',this)">All</button>
+      <button class="filter-btn" onclick="filterPos('QB',this)">QB</button>
+      <button class="filter-btn" onclick="filterPos('RB',this)">RB</button>
+      <button class="filter-btn" onclick="filterPos('WR',this)">WR</button>
+      <button class="filter-btn" onclick="filterPos('TE',this)">TE</button>
+      <button class="filter-btn" onclick="filterPos('K',this)">K</button>
+    </div>
+    <div class="rankings-table">
+      <div class="table-header"><span>Rank</span><span>Player</span><span>Position</span><span>ADP</span><span>Bye</span></div>
+      <div id="rankings-list"></div>
+    </div>
+  </div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    const firebaseConfig = { apiKey: "AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88", authDomain: "draftbuddy-cf5c9.firebaseapp.com", projectId: "draftbuddy-cf5c9", storageBucket: "draftbuddy-cf5c9.firebasestorage.app", messagingSenderId: "861425863011", appId: "1:861425863011:web:e6b8ee8525ba71f7de6b56" };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, (user) => { if (!user) window.location.href = '/login'; });
+    const players = [
+      {rank:1,  name:'Christian McCaffrey', team:'SF',  pos:'RB', adp:1.2,  bye:9},
+      {rank:2,  name:'CeeDee Lamb',          team:'DAL', pos:'WR', adp:2.1,  bye:7},
+      {rank:3,  name:'Tyreek Hill',           team:'MIA', pos:'WR', adp:3.0,  bye:6},
+      {rank:4,  name:'Justin Jefferson',      team:'MIN', pos:'WR', adp:3.8,  bye:6},
+      {rank:5,  name:'Breece Hall',           team:'NYJ', pos:'RB', adp:4.5,  bye:12},
+      {rank:6,  name:"Ja'Marr Chase",         team:'CIN', pos:'WR', adp:5.2,  bye:7},
+      {rank:7,  name:'Bijan Robinson',        team:'ATL', pos:'RB', adp:6.0,  bye:11},
+      {rank:8,  name:'Amon-Ra St. Brown',     team:'DET', pos:'WR', adp:7.1,  bye:5},
+      {rank:9,  name:'Sam LaPorta',           team:'DET', pos:'TE', adp:8.0,  bye:5},
+      {rank:10, name:'Puka Nacua',            team:'LAR', pos:'WR', adp:8.8,  bye:6},
+      {rank:11, name:"De'Von Achane",         team:'MIA', pos:'RB', adp:9.5,  bye:6},
+      {rank:12, name:'Drake London',          team:'ATL', pos:'WR', adp:10.2, bye:11},
+      {rank:13, name:'Lamar Jackson',         team:'BAL', pos:'QB', adp:11.0, bye:14},
+      {rank:14, name:'Josh Allen',            team:'BUF', pos:'QB', adp:11.8, bye:12},
+      {rank:15, name:'Davante Adams',         team:'LV',  pos:'WR', adp:12.5, bye:10},
+      {rank:16, name:'Tony Pollard',          team:'TEN', pos:'RB', adp:13.0, bye:5},
+      {rank:17, name:'Travis Kelce',          team:'KC',  pos:'TE', adp:13.8, bye:10},
+      {rank:18, name:'Stefon Diggs',          team:'BUF', pos:'WR', adp:14.5, bye:12},
+      {rank:19, name:'Josh Jacobs',           team:'GB',  pos:'RB', adp:15.2, bye:10},
+      {rank:20, name:'Patrick Mahomes',       team:'KC',  pos:'QB', adp:15.9, bye:10}
+    ];
+    function renderPlayers(filter) {
+      const list = document.getElementById('rankings-list');
+      const filtered = filter === 'ALL' ? players : players.filter(p => p.pos === filter);
+      list.innerHTML = filtered.map(p =>
+        '<div class="player-row">' +
+        '<span class="rank">' + p.rank + '</span>' +
+        '<div><div class="player-name">' + p.name + '</div><div class="player-team">' + p.team + '</div></div>' +
+        '<span><span class="position pos-' + p.pos + '">' + p.pos + '</span></span>' +
+        '<span class="adp">' + p.adp + '</span>' +
+        '<span class="bye">Wk ' + p.bye + '</span>' +
+        '</div>'
+      ).join('');
+    }
+    window.filterPos = function(pos, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderPlayers(pos);
+    };
+    renderPlayers('ALL');
+  </script>
+</body>
+</html>
