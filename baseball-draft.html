@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baseball Draft - DraftBuddy</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1117; color: #fff; min-height: 100vh; }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid #1e2433; }
+    .logo { font-size: 1.5rem; font-weight: 800; color: #4ade80; letter-spacing: -0.5px; text-decoration: none; }
+    .back-link { color: #9ca3af; text-decoration: none; font-size: 0.9rem; }
+    .back-link:hover { color: #fff; }
+    .main { padding: 60px 40px; max-width: 860px; margin: 0 auto; }
+    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
+    .subtitle { color: #6b7280; margin-bottom: 40px; }
+    .form-card { background: #1a1f2e; border: 1px solid #2d3748; border-radius: 16px; padding: 40px; }
+    .form-group { margin-bottom: 22px; }
+    .form-group label { display: block; font-size: 0.9rem; font-weight: 600; color: #9ca3af; margin-bottom: 8px; }
+    .form-group input, .form-group select { width: 100%; padding: 12px 14px; background: #0f1117; border: 1px solid #2d3748; border-radius: 8px; color: #fff; font-size: 1rem; outline: none; transition: border-color 0.2s; }
+    .form-group input:focus, .form-group select:focus { border-color: #4ade80; }
+    select option { background: #1a1f2e; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .submit-btn { width: 100%; padding: 14px; background: #4ade80; color: #0f1117; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 8px; transition: background 0.2s; }
+    .submit-btn:hover { background: #22c55e; }
+    .success-banner { background: #1a2d1a; border: 1px solid #4ade80; color: #4ade80; padding: 16px; border-radius: 8px; margin-bottom: 24px; display: none; font-weight: 600; }
+    .filters { display: flex; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
+    .filter-btn { padding: 8px 18px; border-radius: 20px; border: 1px solid #2d3748; background: transparent; color: #9ca3af; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+    .filter-btn.active, .filter-btn:hover { background: #4ade80; color: #0f1117; border-color: #4ade80; font-weight: 600; }
+    .rankings-table { background: #1a1f2e; border: 1px solid #2d3748; border-radius: 16px; overflow: hidden; }
+    .table-header { display: grid; padding: 14px 24px; background: #0f1117; color: #6b7280; font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+    .player-row { display: grid; padding: 15px 24px; border-top: 1px solid #1e2433; align-items: center; transition: background 0.15s; }
+    .player-row:hover { background: #1e2535; }
+    .rank { font-weight: 700; color: #4ade80; }
+    .pname { font-weight: 600; }
+    .pteam { color: #6b7280; font-size: 0.85rem; margin-top: 2px; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.78rem; font-weight: 700; }
+    .bb { background: #1e3a5f; color: #60a5fa; }
+    .bg { background: #1a2d1a; color: #4ade80; }
+    .bp { background: #2d1f3d; color: #a78bfa; }
+    .bo { background: #3d2a1a; color: #fb923c; }
+    .br { background: #2d1a1a; color: #f87171; }
+    .muted { color: #9ca3af; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/" class="logo">DraftBuddy</a>
+    <a href="/dashboard" class="back-link">&#8592; Back to Dashboard</a>
+  </nav>
+  <div class="main"><h1>&#9918; New Baseball Draft</h1>
+<p class="subtitle">Set up your league and start your AI-powered draft.</p>
+<div class="success-banner" id="banner">&#9989; Draft setup saved!</div>
+<div class="form-card"><form onsubmit="handleSubmit(event)">
+<div class="form-group"><label>League Name</label><input type="text" placeholder="Enter league name" required></div>
+<div class="form-row"><div class="form-group"><label>Format</label><select><option>Rotisserie</option><option>H2H Categories</option><option>H2H Points</option></select></div><div class="form-group"><label>Teams</label><select><option>8</option><option>10</option><option>12</option><option>14</option></select></div></div><div class="form-row"><div class="form-group"><label>Scoring</label><select><option>5x5 Categories</option><option>6x6 Categories</option><option>Points</option></select></div><div class="form-group"><label>Draft Type</label><select><option>Snake</option><option>Auction</option></select></div></div>
+<div class="form-group"><label>Draft Position</label><select><option value="1">Pick 1</option><option value="2">Pick 2</option><option value="3">Pick 3</option><option value="4">Pick 4</option><option value="5">Pick 5</option><option value="6">Pick 6</option><option value="7">Pick 7</option><option value="8">Pick 8</option><option value="9">Pick 9</option><option value="10">Pick 10</option><option value="11">Pick 11</option><option value="12">Pick 12</option></select></div>
+<button type="submit" class="submit-btn">Start Draft Assistant &#9889;</button>
+</form></div>
+<script>window.handleSubmit=function(e){e.preventDefault();document.getElementById('banner').style.display='block';window.scrollTo({top:0,behavior:'smooth'});}</script></div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    const firebaseConfig = { apiKey: "AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88", authDomain: "draftbuddy-cf5c9.firebaseapp.com", projectId: "draftbuddy-cf5c9", storageBucket: "draftbuddy-cf5c9.firebasestorage.app", messagingSenderId: "861425863011", appId: "1:861425863011:web:e6b8ee8525ba71f7de6b56" };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, (user) => { if (!user) window.location.href = '/login'; });
+  </script>
+</body>
+</html>
