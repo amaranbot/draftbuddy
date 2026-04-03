@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DraftBuddy - Your AI-powered fantasy sports draft assistant. Get smarter picks, real-time analysis, and win your league.">
+  <title>DraftBuddy - AI Fantasy Sports Draft Assistant</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1117; color: #fff; }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid #1e2130; }
+    .logo { font-size: 1.5rem; font-weight: 800; color: #4ade80; letter-spacing: -0.5px; }
+    .nav-links a { color: #9ca3af; text-decoration: none; margin-left: 30px; font-size: 0.95rem; transition: color 0.2s; }
+    .nav-links a:hover { color: #fff; }
+    .hero { text-align: center; padding: 100px 20px 80px; max-width: 800px; margin: 0 auto; }
+    .badge { display: inline-block; background: #1a2a1a; color: #4ade80; border: 1px solid #2d5a2d; padding: 6px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-bottom: 24px; letter-spacing: 0.5px; }
+    h1 { font-size: 3.5rem; font-weight: 900; line-height: 1.1; margin-bottom: 24px; background: linear-gradient(135deg, #fff 0%, #9ca3af 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .subtitle { font-size: 1.2rem; color: #6b7280; line-height: 1.7; margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto; }
+    .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { background: #4ade80; color: #000; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 1rem; transition: transform 0.2s, opacity 0.2s; }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-secondary { background: transparent; color: #fff; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 1rem; border: 1px solid #374151; transition: border-color 0.2s; }
+    .btn-secondary:hover { border-color: #6b7280; }
+    .features { padding: 80px 40px; max-width: 1100px; margin: 0 auto; }
+    .features h2 { text-align: center; font-size: 2rem; font-weight: 800; margin-bottom: 60px; }
+    .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .feature-card { background: #161b27; border: 1px solid #1e2130; border-radius: 12px; padding: 32px; transition: border-color 0.2s; }
+    .feature-card:hover { border-color: #374151; }
+    .feature-icon { font-size: 2rem; margin-bottom: 16px; }
+    .feature-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; }
+    .feature-card p { color: #6b7280; line-height: 1.6; font-size: 0.95rem; }
+    .how-it-works { background: #0a0d13; padding: 80px 40px; text-align: center; }
+    .how-it-works h2 { font-size: 2rem; font-weight: 800; margin-bottom: 60px; }
+    .steps { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; max-width: 900px; margin: 0 auto; }
+    .step { max-width: 220px; }
+    .step-num { width: 48px; height: 48px; background: #4ade80; color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.2rem; margin: 0 auto 16px; }
+    .step h3 { font-weight: 700; margin-bottom: 8px; }
+    .step p { color: #6b7280; font-size: 0.9rem; line-height: 1.5; }
+    .cta-section { padding: 100px 20px; text-align: center; }
+    .cta-section h2 { font-size: 2.5rem; font-weight: 900; margin-bottom: 16px; }
+    .cta-section p { color: #6b7280; margin-bottom: 40px; font-size: 1.1rem; }
+    footer { border-top: 1px solid #1e2130; padding: 30px 40px; text-align: center; color: #4b5563; font-size: 0.85rem; }
+    footer a { color: #4b5563; text-decoration: none; }
+    footer a:hover { color: #9ca3af; }
+    @media (max-width: 600px) { h1 { font-size: 2.2rem; } nav { padding: 16px 20px; } .features, .how-it-works { padding: 60px 20px; } }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">DraftBuddy</div>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="mailto:hello@mydraftbuddy.com">Contact</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="badge">AI-POWERED DRAFT ASSISTANT</div>
+    <h1>Win Your Fantasy League This Season</h1>
+    <p class="subtitle">DraftBuddy uses AI to give you real-time draft recommendations, player analysis, and position alerts — so you always make the smartest pick.</p>
+    <div class="cta-buttons">
+      <a href="mailto:hello@mydraftbuddy.com" class="btn-primary">Get Early Access</a>
+      <a href="#how-it-works" class="btn-secondary">See How It Works</a>
+    </div>
+  </section>
+
+  <section class="features" id="features">
+    <h2>Everything You Need to Draft Like a Pro</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <h3>AI-Powered Recommendations</h3>
+        <p>Get instant pick suggestions based on your league settings, scoring format, and what's already been drafted.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Real-Time Analysis</h3>
+        <p>As the draft unfolds, DraftBuddy updates its recommendations live so you always have the freshest data.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏆</div>
+        <h3>Position Alerts</h3>
+        <p>Never miss a run on a position. Get notified when a run is starting so you can react before it's too late.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Value Tracker</h3>
+        <p>See which players are being drafted above or below their value, and exploit the gaps everyone else misses.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <h3>Auction Mode</h3>
+        <p>Works for both snake and auction drafts. Get dollar value recommendations for every player in the pool.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <h3>Works Everywhere</h3>
+        <p>Use it on your phone, tablet, or laptop right alongside your fantasy platform — no installs needed.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="how-it-works" id="how-it-works">
+    <h2>How It Works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Set Up Your League</h3>
+        <p>Enter your league size, scoring settings, and draft format. Takes under 60 seconds.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Open Your Draft</h3>
+        <p>Start your draft on any platform. Keep DraftBuddy open side-by-side.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Get Your Pick</h3>
+        <p>When it's your turn, DraftBuddy shows your best available options with clear reasoning.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>Win Your League</h3>
+        <p>Walk away with the strongest roster at the table. Your competition won't know what hit them.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2>Ready to Draft Smarter?</h2>
+    <p>Join the waitlist and be first to know when DraftBuddy launches.</p>
+    <a href="mailto:hello@mydraftbuddy.com" class="btn-primary">Join the Waitlist</a>
+  </section>
+
+  <footer>
+    <p>mydraftbuddy.com &nbsp;&middot;&nbsp; <a href="mailto:hello@mydraftbuddy.com">hello@mydraftbuddy.com</a></p>
+  </footer>
+</body>
+</html>
