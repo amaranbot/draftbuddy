@@ -7,7 +7,7 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1117; color: #fff; min-height: 100vh; }
-    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid #1e2433; }
+    nav { display: flex; justify-content: space-betwen; align-items: center; padding: 20px 40px; border-bottom: 1px solid #1e2433; }
     .logo { font-size: 1.5rem; font-weight: 800; color: #4ade80; letter-spacing: -0.5px; text-decoration: none; }
     .back-link { color: #9ca3af; text-decoration: none; font-size: 0.9rem; }
     .back-link:hover { color: #fff; }
@@ -103,11 +103,16 @@
     const auth = getAuth(app);
     onAuthStateChanged(auth, (user) => { if (!user) window.location.href = '/login'; });
     window.handleDraftSubmit = function(e) {
-      e.preventDefault();
-      const banner = document.getElementById('success-banner');
-      banner.style.display = 'block';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
+    e.preventDefault();
+    const sport = document.getElementById('sport').value;
+    const numTeams = document.getElementById('num-teams').value;
+    const draftType = document.getElementById('draft-type').value;
+    const scoring = document.getElementById('scoring').value;
+    const position = document.getElementById('draft-position').value;
+    const leagueName = encodeURIComponent(document.getElementById('league-name').value);
+    const params = 'sport=' + sport + '&teams=' + numTeams + '&type=' + draftType + '&scoring=' + scoring + '&pick=' + position + '&league=' + leagueName;
+    window.location.href = '/rankings?' + params;
+  };
   </script>
 </body>
 </html>
