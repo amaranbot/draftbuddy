@@ -1,1 +1,74 @@
-<!DOCTYPE html><html><head><title>test</title></head><body><p>test</p></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NBA Basketball Draft Setup - DraftBuddy</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0f172a;color:#e2e8f0;font-family:'Segoe UI',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.card{background:#1e293b;border-radius:16px;padding:32px;width:100%;max-width:480px;border:1px solid #334155}
+h1{color:#4ade80;font-size:1.5rem;margin-bottom:8px}
+p{color:#94a3b8;font-size:.9rem;margin-bottom:24px}
+label{display:block;color:#94a3b8;font-size:.85rem;margin-bottom:6px;margin-top:16px}
+input,select{width:100%;background:#0f172a;border:1px solid #334155;color:#e2e8f0;padding:10px 14px;border-radius:8px;font-size:.95rem}
+input:focus,select:focus{outline:none;border-color:#4ade80}
+.btn{width:100%;background:#4ade80;color:#0f172a;border:none;padding:14px;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:24px}
+.btn:hover{background:#22c55e}
+.back-link{color:#4ade80;font-size:.85rem;display:block;text-align:center;margin-top:16px;text-decoration:none}
+.back-link:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>🏀 NBA Basketball Draft</h1>
+  <p>Configure your league settings to activate the AI draft assistant.</p>
+  <form id="draftForm">
+    <label>League Name</label>
+    <input type="text" id="leagueName" placeholder="My NBA Basketball League">
+    <label>Number of Teams</label>
+    <select id="numTeams">
+      <option value="8">8 Teams</option>
+      <option value="10" selected>10 Teams</option>
+      <option value="12">12 Teams</option>
+      <option value="14">14 Teams</option>
+    </select>
+    <label>Draft Type</label>
+    <select id="draftType">
+      <option value="snake" selected>Snake Draft</option>
+      <option value="linear">Linear Draft</option>
+      <option value="auction">Auction Draft</option>
+    </select>
+    <label>Scoring Format</label>
+    <select id="scoring">
+      <option value="standard" selected>Standard (Pts/Reb/Ast/Stl/Blk)</option>
+      <option value="categories">Categories</option>
+      <option value="points">Points League</option>
+    </select>
+    <label>Your Draft Position</label>
+    <select id="draftPosition">
+      <option value="1">1 (1st pick)</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option>
+    </select>
+    <button type="submit" class="btn">Start Draft →</button>
+  </form>
+  <a class="back-link" href="/dashboard">← Back to Dashboard</a>
+</div>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+const firebaseConfig = {apiKey:"AIzaSyBv7NdNGq7UGe9jqFuPsPV_4nrSlO_gWrA",authDomain:"draftbuddy-cf5c9.firebaseapp.com",projectId:"draftbuddy-cf5c9",storageBucket:"draftbuddy-cf5c9.appspot.com",messagingSenderId:"822764808554",appId:"1:822764808554:web:1f7eb56e52543abd96c1fb"};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+onAuthStateChanged(auth, user => { if (!user) window.location.href = '/login'; });
+document.getElementById('draftForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const numTeams = document.getElementById('numTeams').value;
+  const draftType = document.getElementById('draftType').value;
+  const scoring = document.getElementById('scoring').value;
+  const pick = document.getElementById('draftPosition').value;
+  const league = encodeURIComponent(document.getElementById('leagueName').value || 'NBA Basketball League');
+  window.location.href = '/rankings?sport=basketball&teams=' + numTeams + '&type=' + draftType + '&scoring=' + scoring + '&pick=' + pick + '&league=' + league;
+});
+</script>
+</body>
+</html>
