@@ -1,115 +1,308 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Settings - DraftBuddy</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1117; color: #fff; min-height: 100vh; }
-    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid #1e2433; }
-    .logo { font-size: 1.5rem; font-weight: 800; color: #4ade80; letter-spacing: -0.5px; text-decoration: none; }
-    .back-link { color: #9ca3af; text-decoration: none; font-size: 0.9rem; }
-    .back-link:hover { color: #fff; }
-    .main { padding: 60px 40px; max-width: 700px; margin: 0 auto; }
-    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
-    .subtitle { color: #6b7280; margin-bottom: 40px; }
-    .section { background: #1a1f2e; border: 1px solid #2d3748; border-radius: 16px; padding: 32px; margin-bottom: 24px; }
-    .section h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid #2d3748; }
-    .form-group { margin-bottom: 20px; }
-    .form-group label { display: block; font-size: 0.9rem; font-weight: 600; color: #9ca3af; margin-bottom: 8px; }
-    .form-group input, .form-group select { width: 100%; padding: 12px 14px; background: #0f1117; border: 1px solid #2d3748; border-radius: 8px; color: #fff; font-size: 1rem; outline: none; transition: border-color 0.2s; }
-    .form-group input:focus, .form-group select:focus { border-color: #4ade80; }
-    .form-group select option { background: #1a1f2e; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .save-btn { background: #4ade80; color: #0f1117; border: none; padding: 12px 28px; border-radius: 8px; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: background 0.2s; }
-    .save-btn:hover { background: #22c55e; }
-    .danger-btn { background: transparent; color: #ef4444; border: 1px solid #ef4444; padding: 12px 28px; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-    .danger-btn:hover { background: #ef4444; color: #fff; }
-    .toast { position: fixed; bottom: 24px; right: 24px; background: #1a2d1a; border: 1px solid #4ade80; color: #4ade80; padding: 14px 20px; border-radius: 10px; font-weight: 600; display: none; z-index: 999; }
-    .email-display { color: #e5e7eb; font-size: 0.95rem; padding: 12px 0; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings - DraftBuddy</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--green:#4ade80;--green-dark:#22c55e;--bg:#0f172a;--bg2:#1e293b;--bg3:#334155;--text:#e2e8f0;--muted:#94a3b8;--red:#f87171}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+.topnav{background:var(--bg2);border-bottom:1px solid rgba(74,222,128,.15);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.topnav-logo{font-size:1.2rem;font-weight:800;color:var(--green);text-decoration:none}
+.topnav-logo span{color:var(--text)}
+.btn-sm{padding:7px 16px;border-radius:8px;border:1px solid var(--bg3);background:transparent;color:var(--muted);font-size:.85rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all .15s}
+.btn-sm:hover{color:var(--text)}
+.page{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 60px)}
+.sidebar{background:var(--bg2);border-right:1px solid var(--bg3);padding:20px 12px}
+.sidebar-section{font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding:12px 12px 6px;margin-top:8px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;cursor:pointer;text-decoration:none;color:var(--muted);font-size:.9rem;font-weight:500;transition:all .15s;margin-bottom:2px}
+.nav-item:hover{background:rgba(74,222,128,.08);color:var(--text)}
+.nav-item.active{background:rgba(74,222,128,.12);color:var(--green);font-weight:600}
+.main{padding:32px;overflow-y:auto;max-width:760px}
+.page-header{margin-bottom:32px}
+.page-header h1{font-size:1.5rem;font-weight:800;margin-bottom:6px}
+.page-header p{color:var(--muted);font-size:.9rem}
+.settings-section{background:var(--bg2);border:1px solid var(--bg3);border-radius:14px;margin-bottom:20px;overflow:hidden}
+.settings-section-header{padding:18px 22px;border-bottom:1px solid var(--bg3);display:flex;align-items:center;gap:10px}
+.settings-section-header h2{font-size:.95rem;font-weight:700}
+.settings-section-header .icon{font-size:1.1rem}
+.setting-row{display:flex;justify-content:space-between;align-items:center;padding:16px 22px;border-bottom:1px solid rgba(255,255,255,.04)}
+.setting-row:last-child{border-bottom:none}
+.setting-info{flex:1}
+.setting-label{font-size:.9rem;font-weight:600;margin-bottom:3px}
+.setting-desc{font-size:.8rem;color:var(--muted);line-height:1.4}
+.setting-control{margin-left:24px;flex-shrink:0}
+/* Toggle */
+.toggle{width:44px;height:24px;background:var(--bg3);border-radius:12px;position:relative;cursor:pointer;transition:background .2s;border:none}
+.toggle.on{background:var(--green)}
+.toggle::after{content:'';position:absolute;width:18px;height:18px;background:white;border-radius:50%;top:3px;left:3px;transition:left .2s}
+.toggle.on::after{left:23px}
+/* Select */
+.setting-select{background:var(--bg);border:1px solid var(--bg3);color:var(--text);padding:7px 10px;border-radius:7px;font-size:.85rem;outline:none;cursor:pointer}
+.setting-select:focus{border-color:var(--green)}
+/* Input */
+.setting-input{background:var(--bg);border:1px solid var(--bg3);color:var(--text);padding:7px 10px;border-radius:7px;font-size:.85rem;outline:none;width:200px}
+.setting-input:focus{border-color:var(--green)}
+/* Buttons */
+.btn-danger{background:transparent;color:var(--red);border:1px solid rgba(248,113,113,.3);padding:8px 16px;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-danger:hover{background:rgba(248,113,113,.1)}
+.btn-primary{background:var(--green);color:#0f172a;border:none;padding:8px 20px;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-primary:hover{background:var(--green-dark)}
+.save-bar{background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.25);border-radius:10px;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.save-bar p{font-size:.9rem;color:var(--green)}
+.account-info{display:flex;align-items:center;gap:14px;padding:20px 22px}
+.account-avatar{width:48px;height:48px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;color:#0f172a}
+.account-name{font-size:1rem;font-weight:700;margin-bottom:3px}
+.account-email{font-size:.85rem;color:var(--muted)}
+.toast{position:fixed;bottom:24px;right:24px;background:#1e293b;border:1px solid var(--green);color:var(--green);padding:12px 20px;border-radius:10px;font-size:.9rem;font-weight:600;transform:translateY(100px);opacity:0;transition:all .3s;z-index:1000}
+.toast.show{transform:translateY(0);opacity:1}
+@media(max-width:768px){.page{grid-template-columns:1fr}.sidebar{display:none}.main{padding:20px}}
+</style>
 </head>
 <body>
-  <nav>
-    <a href="/" class="logo">DraftBuddy</a>
-    <a href="/dashboard" class="back-link">&#8592; Back to Dashboard</a>
-  </nav>
+
+<div class="topnav">
+  <a href="/" class="topnav-logo">Draft<span>Buddy</span></a>
+  <a href="/dashboard" class="btn-sm">← Dashboard</a>
+</div>
+
+<div class="page">
+  <aside class="sidebar">
+    <div class="sidebar-section">Main</div>
+    <a href="/dashboard" class="nav-item">🏠 Dashboard</a>
+    <a href="/settings" class="nav-item active">⚙️ Settings</a>
+    <div class="sidebar-section">Sports</div>
+    <a href="/draft" class="nav-item">🏈 NFL Draft</a>
+    <a href="/baseball-draft" class="nav-item">⚾ MLB Draft</a>
+    <a href="/basketball-draft" class="nav-item">🏀 NBA Draft</a>
+    <a href="/hockey-draft" class="nav-item">🏒 NHL Draft</a>
+    <a href="/womens-draft" class="nav-item">🏀 WNBA Draft</a>
+    <a href="/bracket" class="nav-item">🗓️ March Madness</a>
+  </aside>
+
   <div class="main">
-    <h1>&#9881;&#65039; Settings</h1>
-    <p class="subtitle">Configure your league preferences and account.</p>
-    <div class="section">
-      <h2>League Defaults</h2>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Default Sport</label>
-          <select id="default-sport">
-            <option value="nfl">NFL Football</option>
-            <option value="nba">NBA Basketball</option>
-            <option value="mlb">MLB Baseball</option>
-            <option value="nhl">NHL Hockey</option>
+    <div class="page-header">
+      <h1>Settings</h1>
+      <p>Manage your account, preferences, and league defaults</p>
+    </div>
+
+    <div class="save-bar" id="saveBar" style="display:none">
+      <p>⚠️ You have unsaved changes</p>
+      <button class="btn-primary" onclick="saveSettings()">Save Changes</button>
+    </div>
+
+    <!-- Account -->
+    <div class="settings-section">
+      <div class="settings-section-header"><span class="icon">👤</span><h2>Account</h2></div>
+      <div class="account-info">
+        <div class="account-avatar" id="settingsAvatar">?</div>
+        <div>
+          <div class="account-name" id="settingsName">Loading...</div>
+          <div class="account-email" id="settingsEmail">Loading...</div>
+        </div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Display Name</div>
+          <div class="setting-desc">How your name appears in the app</div>
+        </div>
+        <div class="setting-control">
+          <input class="setting-input" id="displayNameInput" placeholder="Your name" oninput="markDirty()">
+        </div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Sign Out</div>
+          <div class="setting-desc">Sign out of your DraftBuddy account</div>
+        </div>
+        <div class="setting-control">
+          <button class="btn-danger" id="signOutBtn">Sign Out</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Draft Defaults -->
+    <div class="settings-section">
+      <div class="settings-section-header"><span class="icon">📋</span><h2>Draft Defaults</h2></div>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Default Scoring Format (NFL)</div>
+          <div class="setting-desc">Pre-fill this on the NFL draft setup form</div>
+        </div>
+        <div class="setting-control">
+          <select class="setting-select" id="defaultScoring" onchange="markDirty()">
+            <option value="ppr">PPR (1 pt/reception)</option>
+            <option value="half">Half PPR (0.5 pt)</option>
+            <option value="standard">Standard</option>
           </select>
         </div>
-        <div class="form-group">
-          <label>Default League Size</label>
-          <select id="default-size">
+      </div>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Default League Size</div>
+          <div class="setting-desc">Pre-fill team count on draft forms</div>
+        </div>
+        <div class="setting-control">
+          <select class="setting-select" id="defaultLeagueSize" onchange="markDirty()">
             <option value="8">8 Teams</option>
             <option value="10" selected>10 Teams</option>
             <option value="12">12 Teams</option>
             <option value="14">14 Teams</option>
-            <option value="16">16 Teams</option>
           </select>
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Default Scoring</label>
-          <select id="default-scoring">
-            <option value="standard">Standard</option>
-            <option value="ppr">PPR (Full Point)</option>
-            <option value="half-ppr">Half PPR</option>
-          </select>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Default Draft Type</div>
+          <div class="setting-desc">Snake or linear draft</div>
         </div>
-        <div class="form-group">
-          <label>Default Draft Type</label>
-          <select id="default-draft-type">
+        <div class="setting-control">
+          <select class="setting-select" id="defaultDraftType" onchange="markDirty()">
             <option value="snake">Snake Draft</option>
-            <option value="auction">Auction Draft</option>
             <option value="linear">Linear Draft</option>
           </select>
         </div>
       </div>
-      <button class="save-btn" onclick="saveSettings()">Save Preferences</button>
     </div>
-    <div class="section">
-      <h2>Account</h2>
-      <div class="form-group">
-        <label>Email Address</label>
-        <div class="email-display" id="account-email">Loading...</div>
+
+    <!-- Display Preferences -->
+    <div class="settings-section">
+      <div class="settings-section-header"><span class="icon">🎨</span><h2>Display</h2></div>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Show Injury Status</div>
+          <div class="setting-desc">Show IR/Q/O badges next to player names in rankings</div>
+        </div>
+        <div class="setting-control">
+          <button class="toggle on" id="showInjury" onclick="toggleSetting(this)"></button>
+        </div>
       </div>
-      <button class="danger-btn" onclick="handleSignOut()">Sign Out</button>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Show Projected Points</div>
+          <div class="setting-desc">Display projected point totals in the player table</div>
+        </div>
+        <div class="setting-control">
+          <button class="toggle on" id="showProjPts" onclick="toggleSetting(this)"></button>
+        </div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Show ADP</div>
+          <div class="setting-desc">Show Average Draft Position in the player table</div>
+        </div>
+        <div class="setting-control">
+          <button class="toggle on" id="showADP" onclick="toggleSetting(this)"></button>
+        </div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Auto-hide Drafted Players</div>
+          <div class="setting-desc">Hide drafted players from the table by default</div>
+        </div>
+        <div class="setting-control">
+          <button class="toggle on" id="autoHideDrafted" onclick="toggleSetting(this)"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data -->
+    <div class="settings-section">
+      <div class="settings-section-header"><span class="icon">📡</span><h2>Data</h2></div>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Live Data Sources</div>
+          <div class="setting-desc">NFL/NBA: Sleeper API · MLB: MLB Stats API · NHL: NHL API · Always fetched fresh on page load</div>
+        </div>
+        <div class="setting-control">
+          <span style="font-size:.8rem;background:rgba(74,222,128,.1);color:var(--green);border:1px solid rgba(74,222,128,.2);padding:3px 10px;border-radius:10px">🟢 Active</span>
+        </div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Cache Player Data</div>
+          <div class="setting-desc">Store player data locally for 24hrs to reduce load time</div>
+        </div>
+        <div class="setting-control">
+          <button class="toggle" id="cacheData" onclick="toggleSetting(this)"></button>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:flex-end;margin-top:8px">
+      <button class="btn-primary" onclick="saveSettings()" id="mainSaveBtn">💾 Save Settings</button>
     </div>
   </div>
-  <div class="toast" id="toast">&#9989; Settings saved!</div>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    const firebaseConfig = { apiKey: "AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88", authDomain: "draftbuddy-cf5c9.firebaseapp.com", projectId: "draftbuddy-cf5c9", storageBucket: "draftbuddy-cf5c9.firebasestorage.app", messagingSenderId: "861425863011", appId: "1:861425863011:web:e6b8ee8525ba71f7de6b56" };
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    onAuthStateChanged(auth, (user) => {
-      if (!user) { window.location.href = '/login'; return; }
-      document.getElementById('account-email').textContent = user.email;
-    });
-    window.saveSettings = function() {
-      const toast = document.getElementById('toast');
-      toast.style.display = 'block';
-      setTimeout(() => { toast.style.display = 'none'; }, 3000);
-    };
-    window.handleSignOut = async function() {
-      await signOut(auth);
-      window.location.href = '/login';
-    };
-  </script>
+</div>
+
+<div class="toast" id="toast">✅ Settings saved!</div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+import { getAuth, onAuthStateChanged, signOut, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+const FB = {apiKey:"AIzaSyBv7NdNGq7UGe9jqFuPsPV_4nrSlO_gWrA",authDomain:"draftbuddy-cf5c9.firebaseapp.com",projectId:"draftbuddy-cf5c9",storageBucket:"draftbuddy-cf5c9.appspot.com",messagingSenderId:"822764808554",appId:"1:822764808554:web:1f7eb56e52543abd96c1fb"};
+const auth = getAuth(initializeApp(FB));
+let currentUser = null;
+
+onAuthStateChanged(auth, user => {
+  if (!user) { window.location.href = '/login'; return; }
+  currentUser = user;
+  const name = user.displayName || user.email || 'User';
+  document.getElementById('settingsAvatar').textContent = name.substring(0,2).toUpperCase();
+  document.getElementById('settingsName').textContent = user.displayName || 'Not set';
+  document.getElementById('settingsEmail').textContent = user.email;
+  document.getElementById('displayNameInput').value = user.displayName || '';
+});
+
+document.getElementById('signOutBtn').addEventListener('click', async () => {
+  await signOut(auth);
+  window.location.href = '/';
+});
+
+// Load saved settings
+const saved = JSON.parse(localStorage.getItem('draftbuddy_settings') || '{}');
+if (saved.defaultScoring) document.getElementById('defaultScoring').value = saved.defaultScoring;
+if (saved.defaultLeagueSize) document.getElementById('defaultLeagueSize').value = saved.defaultLeagueSize;
+if (saved.defaultDraftType) document.getElementById('defaultDraftType').value = saved.defaultDraftType;
+if (saved.showInjury === false) document.getElementById('showInjury').classList.remove('on');
+if (saved.showProjPts === false) document.getElementById('showProjPts').classList.remove('on');
+if (saved.showADP === false) document.getElementById('showADP').classList.remove('on');
+if (saved.autoHideDrafted === false) document.getElementById('autoHideDrafted').classList.remove('on');
+if (saved.cacheData === true) document.getElementById('cacheData').classList.add('on');
+
+window.markDirty = function() {
+  document.getElementById('saveBar').style.display = 'flex';
+};
+window.toggleSetting = function(btn) {
+  btn.classList.toggle('on');
+  markDirty();
+};
+window.saveSettings = async function() {
+  const settings = {
+    defaultScoring: document.getElementById('defaultScoring').value,
+    defaultLeagueSize: document.getElementById('defaultLeagueSize').value,
+    defaultDraftType: document.getElementById('defaultDraftType').value,
+    showInjury: document.getElementById('showInjury').classList.contains('on'),
+    showProjPts: document.getElementById('showProjPts').classList.contains('on'),
+    showADP: document.getElementById('showADP').classList.contains('on'),
+    autoHideDrafted: document.getElementById('autoHideDrafted').classList.contains('on'),
+    cacheData: document.getElementById('cacheData').classList.contains('on')
+  };
+  localStorage.setItem('draftbuddy_settings', JSON.stringify(settings));
+  
+  // Update display name if changed
+  const newName = document.getElementById('displayNameInput').value.trim();
+  if (currentUser && newName && newName !== currentUser.displayName) {
+    await updateProfile(currentUser, { displayName: newName });
+    document.getElementById('settingsName').textContent = newName;
+  }
+  
+  document.getElementById('saveBar').style.display = 'none';
+  const toast = document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+};
+</script>
 </body>
 </html>
