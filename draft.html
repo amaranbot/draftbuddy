@@ -1,118 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>New Draft - DraftBuddy</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1117; color: #fff; min-height: 100vh; }
-    nav { display: flex; justify-content: space-betwen; align-items: center; padding: 20px 40px; border-bottom: 1px solid #1e2433; }
-    .logo { font-size: 1.5rem; font-weight: 800; color: #4ade80; letter-spacing: -0.5px; text-decoration: none; }
-    .back-link { color: #9ca3af; text-decoration: none; font-size: 0.9rem; }
-    .back-link:hover { color: #fff; }
-    .main { padding: 60px 40px; max-width: 700px; margin: 0 auto; }
-    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
-    .subtitle { color: #6b7280; margin-bottom: 40px; }
-    .form-card { background: #1a1f2e; border: 1px solid #2d3748; border-radius: 16px; padding: 40px; }
-    .form-group { margin-bottom: 24px; }
-    .form-group label { display: block; font-size: 0.9rem; font-weight: 600; color: #9ca3af; margin-bottom: 8px; }
-    .form-group input, .form-group select { width: 100%; padding: 12px 14px; background: #0f1117; border: 1px solid #2d3748; border-radius: 8px; color: #fff; font-size: 1rem; outline: none; transition: border-color 0.2s; }
-    .form-group input:focus, .form-group select:focus { border-color: #4ade80; }
-    .form-group select option { background: #1a1f2e; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .submit-btn { width: 100%; padding: 14px; background: #4ade80; color: #0f1117; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 8px; transition: background 0.2s; }
-    .submit-btn:hover { background: #22c55e; }
-    .success-banner { background: #1a2d1a; border: 1px solid #4ade80; color: #4ade80; padding: 16px; border-radius: 8px; margin-bottom: 24px; display: none; font-weight: 600; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NFL Draft Setup - DraftBuddy</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--green:#4ade80;--green-dark:#22c55e;--bg:#0f172a;--bg2:#1e293b;--bg3:#334155;--text:#e2e8f0;--muted:#94a3b8}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+.topnav{background:var(--bg2);border-bottom:1px solid rgba(74,222,128,.15);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
+.topnav-logo{font-size:1.2rem;font-weight:800;color:var(--green);text-decoration:none}
+.topnav-logo span{color:var(--text)}
+.nav-links{display:flex;gap:8px}
+.btn-sm{padding:7px 14px;border-radius:8px;border:1px solid var(--bg3);background:transparent;color:var(--muted);font-size:.85rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all .15s}
+.btn-sm:hover{color:var(--text);border-color:rgba(74,222,128,.3)}
+.page{display:flex;min-height:calc(100vh - 56px)}
+.sidebar{width:200px;background:var(--bg2);border-right:1px solid var(--bg3);padding:16px 10px;display:flex;flex-direction:column;gap:4px}
+.sidebar-section{font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding:10px 10px 4px;margin-top:4px}
+.nav-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:7px;cursor:pointer;text-decoration:none;color:var(--muted);font-size:.88rem;font-weight:500;transition:all .15s}
+.nav-item:hover{background:rgba(74,222,128,.08);color:var(--text)}
+.nav-item.active{background:rgba(74,222,128,.12);color:var(--green);font-weight:600}
+.main{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}
+.form-wrap{width:100%;max-width:640px}
+.page-header{margin-bottom:28px}
+.page-header h1{font-size:1.6rem;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.page-header p{color:var(--muted);font-size:.9rem}
+.section-card{background:var(--bg2);border:1px solid var(--bg3);border-radius:14px;padding:22px;margin-bottom:16px}
+.section-card h2{font-size:.85rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px;display:flex;align-items:center;gap:6px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+label{font-size:.82rem;font-weight:600;color:var(--muted)}
+input,select{background:var(--bg);border:1px solid var(--bg3);color:var(--text);padding:10px 12px;border-radius:8px;font-size:.9rem;outline:none;transition:border-color .2s;width:100%}
+input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(74,222,128,.08)}
+input::placeholder{color:#475569}
+.pick-selector{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:2px}
+.pick-btn{padding:8px 4px;border-radius:7px;border:1px solid var(--bg3);background:var(--bg);color:var(--muted);font-size:.82rem;font-weight:600;cursor:pointer;text-align:center;transition:all .15s}
+.pick-btn:hover{border-color:rgba(74,222,128,.4);color:var(--text)}
+.pick-btn.selected{background:rgba(74,222,128,.15);border-color:var(--green);color:var(--green)}
+.scoring-opts{display:flex;gap:8px}
+.scoring-opt{flex:1;padding:10px;border-radius:8px;border:1px solid var(--bg3);background:var(--bg);cursor:pointer;text-align:center;transition:all .15s}
+.scoring-opt:hover{border-color:rgba(74,222,128,.3)}
+.scoring-opt.selected{background:rgba(74,222,128,.12);border-color:var(--green)}
+.scoring-opt .score-label{font-size:.82rem;font-weight:700;color:var(--text)}
+.scoring-opt .score-desc{font-size:.72rem;color:var(--muted);margin-top:2px}
+.btn-submit{width:100%;background:var(--green);color:#0f172a;border:none;padding:14px;border-radius:11px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:8px;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-submit:hover{background:var(--green-dark);transform:translateY(-1px);box-shadow:0 6px 20px rgba(74,222,128,.3)}
+.tip-box{background:rgba(74,222,128,.05);border:1px solid rgba(74,222,128,.15);border-radius:10px;padding:12px 14px;font-size:.82rem;color:var(--muted);line-height:1.5;margin-bottom:16px}
+.tip-box strong{color:var(--green)}
+@media(max-width:700px){.sidebar{display:none}.form-grid{grid-template-columns:1fr}.form-grid-3{grid-template-columns:1fr 1fr}.pick-selector{grid-template-columns:repeat(8,1fr)}}
+</style>
 </head>
 <body>
-  <nav>
-    <a href="/" class="logo">DraftBuddy</a>
-    <a href="/dashboard" class="back-link">&#8592; Back to Dashboard</a>
-  </nav>
+
+<div class="topnav">
+  <a href="/" class="topnav-logo">Draft<span>Buddy</span></a>
+  <div class="nav-links">
+    <a href="/dashboard" class="btn-sm">← Dashboard</a>
+  </div>
+</div>
+
+<div class="page">
+  <aside class="sidebar">
+    <div class="sidebar-section">NFL</div>
+    <a href="/draft" class="nav-item active">📋 Setup Draft</a>
+    <a href="/rankings?sport=nfl" class="nav-item">📊 Rankings</a>
+    <div class="sidebar-section">Other Sports</div>
+    <a href="/baseball-draft" class="nav-item">⚾ Baseball</a>
+    <a href="/basketball-draft" class="nav-item">🏀 Basketball</a>
+    <a href="/hockey-draft" class="nav-item">🏒 Hockey</a>
+    <a href="/womens-draft" class="nav-item">🏀 WNBA</a>
+    <a href="/bracket" class="nav-item">🗓️ March Madness</a>
+  </aside>
+
   <div class="main">
-    <h1>&#127944; New Draft</h1>
-    <p class="subtitle">Set up your league and start your AI-powered draft.</p>
-    <div class="success-banner" id="success-banner">&#9989; Draft setup saved! Your AI assistant is ready.</div>
-    <div class="form-card">
-      <form id="draft-form" onsubmit="handleDraftSubmit(event)">
-        <div class="form-group">
-          <label>League Name</label>
-          <input type="text" id="league-name" placeholder="e.g. Monday Night Legends" required>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Sport</label>
-            <select id="sport">
-              <option value="nfl">NFL Football</option>
-              <option value="nba">NBA Basketball</option>
-              <option value="mlb">MLB Baseball</option>
-              <option value="nhl">NHL Hockey</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Number of Teams</label>
-            <select id="num-teams">
-              <option value="8">8 Teams</option>
-              <option value="10" selected>10 Teams</option>
-              <option value="12">12 Teams</option>
-              <option value="14">14 Teams</option>
-              <option value="16">16 Teams</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Draft Type</label>
-            <select id="draft-type">
-              <option value="snake">Snake Draft</option>
-              <option value="auction">Auction Draft</option>
-              <option value="linear">Linear Draft</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Scoring Format</label>
-            <select id="scoring">
-              <option value="standard">Standard</option>
-              <option value="ppr">PPR (Full Point)</option>
-              <option value="half-ppr">Half PPR</option>
-            </select>
+    <div class="form-wrap">
+      <div class="page-header">
+        <h1>🏈 NFL Draft Setup</h1>
+        <p>Configure your league settings to get personalized AI draft recommendations</p>
+      </div>
+
+      <div class="tip-box">
+        💡 <strong>Tip:</strong> The more accurately you configure your league, the smarter the AI recommendations will be. Make sure your scoring format and roster settings match your league exactly.
+      </div>
+
+      <form id="draftForm">
+        <div class="section-card">
+          <h2>📋 League Info</h2>
+          <div class="form-grid">
+            <div class="form-group full">
+              <label>League Name</label>
+              <input type="text" id="leagueName" placeholder="e.g. Monday Night Legends">
+            </div>
+            <div class="form-group">
+              <label>Number of Teams</label>
+              <select id="numTeams">
+                <option value="8">8 Teams</option>
+                <option value="10" selected>10 Teams</option>
+                <option value="12">12 Teams</option>
+                <option value="14">14 Teams</option>
+                <option value="16">16 Teams</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Draft Type</label>
+              <select id="draftType">
+                <option value="snake" selected>Snake Draft</option>
+                <option value="linear">Linear Draft</option>
+                <option value="auction">Auction Draft</option>
+              </select>
+            </div>
           </div>
         </div>
-        <div class="form-group">
-          <label>Your Draft Position</label>
-          <select id="draft-position">
-            <option value="1">Pick 1st</option><option value="2">Pick 2nd</option>
-            <option value="3">Pick 3rd</option><option value="4">Pick 4th</option>
-            <option value="5">Pick 5th</option><option value="6">Pick 6th</option>
-            <option value="7">Pick 7th</option><option value="8">Pick 8th</option>
-            <option value="9">Pick 9th</option><option value="10">Pick 10th</option>
-            <option value="11">Pick 11th</option><option value="12">Pick 12th</option>
-          </select>
+
+        <div class="section-card">
+          <h2>🏆 Scoring Format</h2>
+          <div class="scoring-opts" id="scoringOpts">
+            <div class="scoring-opt selected" data-val="ppr" onclick="selectScoring('ppr',this)">
+              <div class="score-label">PPR</div>
+              <div class="score-desc">1 pt per reception</div>
+            </div>
+            <div class="scoring-opt" data-val="half" onclick="selectScoring('half',this)">
+              <div class="score-label">Half PPR</div>
+              <div class="score-desc">0.5 pt per rec</div>
+            </div>
+            <div class="scoring-opt" data-val="standard" onclick="selectScoring('standard',this)">
+              <div class="score-label">Standard</div>
+              <div class="score-desc">No reception pts</div>
+            </div>
+          </div>
+          <input type="hidden" id="scoring" value="ppr">
         </div>
-        <button type="submit" class="submit-btn">Start Draft Assistant &#9889;</button>
+
+        <div class="section-card">
+          <h2>📍 Your Draft Position</h2>
+          <p style="font-size:.82rem;color:var(--muted);margin-bottom:10px">Which pick are you in the first round?</p>
+          <div class="pick-selector" id="pickSelector"></div>
+          <input type="hidden" id="draftPosition" value="1">
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+          🤖 Launch AI Draft Assistant →
+        </button>
       </form>
     </div>
   </div>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    const firebaseConfig = { apiKey: "AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88", authDomain: "draftbuddy-cf5c9.firebaseapp.com", projectId: "draftbuddy-cf5c9", storageBucket: "draftbuddy-cf5c9.firebasestorage.app", messagingSenderId: "861425863011", appId: "1:861425863011:web:e6b8ee8525ba71f7de6b56" };
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    onAuthStateChanged(auth, (user) => { if (!user) window.location.href = '/login'; });
-    window.handleDraftSubmit = function(e) {
-    e.preventDefault();
-    const sport = document.getElementById('sport').value;
-    const numTeams = document.getElementById('num-teams').value;
-    const draftType = document.getElementById('draft-type').value;
-    const scoring = document.getElementById('scoring').value;
-    const position = document.getElementById('draft-position').value;
-    const leagueName = encodeURIComponent(document.getElementById('league-name').value);
-    const params = 'sport=' + sport + '&teams=' + numTeams + '&type=' + draftType + '&scoring=' + scoring + '&pick=' + position + '&league=' + leagueName;
-    window.location.href = '/rankings?' + params;
-  };
-  </script>
+</div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+const FB = {apiKey:"AIzaSyBv7NdNGq7UGe9jqFuPsPV_4nrSlO_gWrA",authDomain:"draftbuddy-cf5c9.firebaseapp.com",projectId:"draftbuddy-cf5c9",storageBucket:"draftbuddy-cf5c9.appspot.com",messagingSenderId:"822764808554",appId:"1:822764808554:web:1f7eb56e52543abd96c1fb"};
+const auth = getAuth(initializeApp(FB));
+onAuthStateChanged(auth, u => { if (!u) window.location.href = '/login'; });
+
+// Build pick selector
+const numTeamsEl = document.getElementById('numTeams');
+function buildPickSelector() {
+  const n = parseInt(numTeamsEl.value);
+  const sel = document.getElementById('pickSelector');
+  sel.style.gridTemplateColumns = 'repeat(' + Math.min(n, 8) + ', 1fr)';
+  sel.innerHTML = '';
+  for (let i = 1; i <= n; i++) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'pick-btn' + (i === 1 ? ' selected' : '');
+    btn.textContent = i;
+    btn.onclick = () => {
+      document.querySelectorAll('.pick-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      document.getElementById('draftPosition').value = i;
+    };
+    sel.appendChild(btn);
+  }
+}
+numTeamsEl.addEventListener('change', buildPickSelector);
+buildPickSelector();
+
+window.selectScoring = function(val, el) {
+  document.querySelectorAll('.scoring-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('scoring').value = val;
+};
+
+document.getElementById('draftForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = '⏳ Loading draft...';
+  btn.disabled = true;
+  const numTeams = document.getElementById('numTeams').value;
+  const draftType = document.getElementById('draftType').value;
+  const scoring = document.getElementById('scoring').value;
+  const pick = document.getElementById('draftPosition').value;
+  const league = encodeURIComponent(document.getElementById('leagueName').value || 'NFL League');
+  window.location.href = '/rankings?sport=nfl&teams=' + numTeams + '&type=' + draftType + '&scoring=' + scoring + '&pick=' + pick + '&league=' + league;
+});
+</script>
 </body>
 </html>
