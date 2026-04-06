@@ -180,7 +180,7 @@ onAuthStateChanged(auth, u => { if (!u) window.location.href = '/login'; });
 // ===== URL PARAMS =====
 const P = new URLSearchParams(window.location.search);
 const _rawSport = (P.get('sport') || 'football').toLowerCase();
-const SPORT_MAP = {'nfl':'football','nba':'basketball','mlb':'baseball','nhl':'hockey','march_madness':'marchmadness','mm':'marchmadness','march madness':'marchmadness'};
+const SPORT_MAP = {'nfl':'football','nba':'basketball','mlb':'baseball','nhl':'hockey','wnba':'wnba','march_madness':'marchmadness','mm':'marchmadness'};
 const _rawSport = (P.get('sport') || 'football').toLowerCase();
 const SPORT_MAP = {'nfl':'football','nba':'basketball','mlb':'baseball','nhl':'hockey','march_madness':'marchmadness','mm':'marchmadness'};
 const SPORT = SPORT_MAP[_rawSport] || _rawSport;
@@ -271,6 +271,25 @@ const SPORT_CONFIG = {
     teamField: 'team',
     posField: 'fantasy_positions'
   }
+};
+
+
+SPORT_CONFIG.wnba = {
+  sleeperSport: null,
+  label: 'WNBA',
+  emoji: '🏀',
+  positions: ['PG','SG','SF','PF','C'],
+  fantasyPositions: ['PG','SG','SF','PF','C'],
+  roster: {
+    standard: {PG:1,SG:1,SF:1,PF:1,C:1,G:1,F:1,UTIL:1},
+    categories: {PG:1,SG:1,SF:1,PF:1,C:1,G:1,F:1,UTIL:1},
+    points: {PG:1,SG:1,SF:1,PF:1,C:1,G:1,F:1,UTIL:1}
+  },
+  headers: ['Rank','Player','Team','Pos','Age','Status','ADP','Action'],
+  adpField: 'search_rank',
+  nameFields: ['full_name'],
+  teamField: 'team',
+  posField: 'fantasy_positions'
 };
 
 // ===== FETCH LIVE DATA =====
@@ -530,6 +549,24 @@ const FALLBACK = {
     {id:'h19',name:'Victor Hedman',team:'TB',pos:'D',age:33,status:'Active',rank:19,adp:19,proj:350,active:true},
     {id:'h20',name:'Brady Tkachuk',team:'OTT',pos:'LW',age:24,status:'Active',rank:20,adp:20,proj:345,active:true}
   ]
+
+  wnba: [
+    {id:'w1',name:'A'ja Wilson',team:'LV',pos:'PF',age:27,status:'Active',rank:1,adp:1,proj:520,active:true},
+    {id:'w2',name:'Breanna Stewart',team:'NYL',pos:'SF',age:29,status:'Active',rank:2,adp:2,proj:500,active:true},
+    {id:'w3',name:'Sabrina Ionescu',team:'NYL',pos:'PG',age:26,status:'Active',rank:3,adp:3,proj:480,active:true},
+    {id:'w4',name:'Caitlin Clark',team:'IND',pos:'PG',age:22,status:'Active',rank:4,adp:4,proj:470,active:true},
+    {id:'w5',name:'Kelsey Plum',team:'LV',pos:'PG',age:29,status:'Active',rank:5,adp:5,proj:450,active:true},
+    {id:'w6',name:'Alyssa Thomas',team:'CT',pos:'PF',age:32,status:'Active',rank:6,adp:6,proj:440,active:true},
+    {id:'w7',name:'Napheesa Collier',team:'MIN',pos:'PF',age:27,status:'Active',rank:7,adp:7,proj:430,active:true},
+    {id:'w8',name:'Jonquel Jones',team:'NYL',pos:'C',age:29,status:'Active',rank:8,adp:8,proj:420,active:true},
+    {id:'w9',name:'DeWanna Bonner',team:'CT',pos:'SF',age:36,status:'Active',rank:9,adp:9,proj:400,active:true},
+    {id:'w10',name:'Angel Reese',team:'CHI',pos:'PF',age:22,status:'Active',rank:10,adp:10,proj:390,active:true},
+    {id:'w11',name:'Brittney Griner',team:'PHX',pos:'C',age:33,status:'Active',rank:11,adp:11,proj:380,active:true},
+    {id:'w12',name:'Rhyne Howard',team:'ATL',pos:'SG',age:24,status:'Active',rank:12,adp:12,proj:370,active:true},
+    {id:'w13',name:'Ezi Magbegor',team:'SEA',pos:'C',age:25,status:'Active',rank:13,adp:13,proj:360,active:true},
+    {id:'w14',name:'Marina Mabrey',team:'CT',pos:'SG',age:27,status:'Active',rank:14,adp:14,proj:350,active:true},
+    {id:'w15',name:'Kayla McBride',team:'MIN',pos:'SG',age:32,status:'Active',rank:15,adp:15,proj:340,active:true}
+  ],
 };
 
 // ===== MARCH MADNESS 2025 DATA =====
