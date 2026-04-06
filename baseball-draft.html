@@ -6,72 +6,150 @@
 <title>MLB Baseball Draft Setup - DraftBuddy</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#0f172a;color:#e2e8f0;font-family:'Segoe UI',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
-.card{background:#1e293b;border-radius:16px;padding:32px;width:100%;max-width:480px;border:1px solid #334155}
-h1{color:#4ade80;font-size:1.5rem;margin-bottom:8px}
-p{color:#94a3b8;font-size:.9rem;margin-bottom:24px}
-label{display:block;color:#94a3b8;font-size:.85rem;margin-bottom:6px;margin-top:16px}
-input,select{width:100%;background:#0f172a;border:1px solid #334155;color:#e2e8f0;padding:10px 14px;border-radius:8px;font-size:.95rem}
-input:focus,select:focus{outline:none;border-color:#4ade80}
-.btn{width:100%;background:#4ade80;color:#0f172a;border:none;padding:14px;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:24px}
-.btn:hover{background:#22c55e}
-.back-link{color:#4ade80;font-size:.85rem;display:block;text-align:center;margin-top:16px;text-decoration:none}
-.back-link:hover{text-decoration:underline}
-.banner{background:#14532d;color:#4ade80;padding:12px 16px;border-radius:8px;margin-top:16px;display:none;text-align:center}
+:root{--green:#4ade80;--green-dark:#22c55e;--bg:#0f172a;--bg2:#1e293b;--bg3:#334155;--text:#e2e8f0;--muted:#94a3b8}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+.topnav{background:var(--bg2);border-bottom:1px solid rgba(74,222,128,.15);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
+.topnav-logo{font-size:1.2rem;font-weight:800;color:var(--green);text-decoration:none}
+.topnav-logo span{color:var(--text)}
+.nav-links{display:flex;gap:8px}
+.btn-sm{padding:7px 14px;border-radius:8px;border:1px solid var(--bg3);background:transparent;color:var(--muted);font-size:.85rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all .15s}
+.btn-sm:hover{color:var(--text);border-color:rgba(74,222,128,.3)}
+.page{display:flex;min-height:calc(100vh - 56px)}
+.sidebar{width:200px;background:var(--bg2);border-right:1px solid var(--bg3);padding:16px 10px}
+.sidebar-section{font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding:10px 10px 4px;margin-top:4px}
+.nav-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:7px;cursor:pointer;text-decoration:none;color:var(--muted);font-size:.88rem;font-weight:500;transition:all .15s;margin-bottom:2px}
+.nav-item:hover{background:rgba(74,222,128,.08);color:var(--text)}
+.nav-item.active{background:rgba(74,222,128,.12);color:var(--green);font-weight:600}
+.main{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}
+.form-wrap{width:100%;max-width:640px}
+.page-header{margin-bottom:28px}
+.page-header h1{font-size:1.6rem;font-weight:800;margin-bottom:6px}
+.page-header p{color:var(--muted);font-size:.9rem}
+.section-card{background:var(--bg2);border:1px solid var(--bg3);border-radius:14px;padding:22px;margin-bottom:16px}
+.section-card h2{font-size:.85rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+label{font-size:.82rem;font-weight:600;color:var(--muted)}
+input,select{background:var(--bg);border:1px solid var(--bg3);color:var(--text);padding:10px 12px;border-radius:8px;font-size:.9rem;outline:none;transition:border-color .2s;width:100%}
+input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(74,222,128,.08)}
+.scoring-opts{display:flex;gap:8px;flex-wrap:wrap}
+.scoring-opt{flex:1;min-width:100px;padding:10px;border-radius:8px;border:1px solid var(--bg3);background:var(--bg);cursor:pointer;text-align:center;transition:all .15s}
+.scoring-opt:hover{border-color:rgba(74,222,128,.3)}
+.scoring-opt.selected{background:rgba(74,222,128,.12);border-color:var(--green)}
+.score-label{font-size:.82rem;font-weight:700;color:var(--text)}
+.score-desc{font-size:.72rem;color:var(--muted);margin-top:2px}
+.pick-selector{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.pick-btn{padding:8px 10px;border-radius:7px;border:1px solid var(--bg3);background:var(--bg);color:var(--muted);font-size:.82rem;font-weight:600;cursor:pointer;min-width:36px;text-align:center;transition:all .15s}
+.pick-btn:hover{border-color:rgba(74,222,128,.4);color:var(--text)}
+.pick-btn.selected{background:rgba(74,222,128,.15);border-color:var(--green);color:var(--green)}
+.btn-submit{width:100%;background:var(--green);color:#0f172a;border:none;padding:14px;border-radius:11px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:8px;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-submit:hover{background:var(--green-dark);transform:translateY(-1px);box-shadow:0 6px 20px rgba(74,222,128,.3)}
+@media(max-width:700px){.sidebar{display:none}.form-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<div class="card">
-  <h1>⚾ MLB Baseball Draft</h1>
-  <p>Configure your league settings to activate the AI draft assistant.</p>
-  <form id="draftForm">
-    <label>League Name</label>
-    <input type="text" id="leagueName" placeholder="My MLB Baseball League">
-    <label>Number of Teams</label>
-    <select id="numTeams">
-      <option value="8">8 Teams</option>
-      <option value="10" selected>10 Teams</option>
-      <option value="12">12 Teams</option>
-      <option value="14">14 Teams</option>
-      <option value="16">16 Teams</option>
-    </select>
-    <label>Draft Type</label>
-    <select id="draftType">
-      <option value="snake" selected>Snake Draft</option>
-      <option value="linear">Linear Draft</option>
-      <option value="auction">Auction Draft</option>
-    </select>
-    <label>Scoring Format</label>
-    <select id="scoring">
-      <option value="standard" selected>Standard (R/HR/RBI/SB/AVG)</option>
-      <option value="roto">Rotisserie</option>
-      <option value="points">Points League</option>
-    </select>
-    <label>Your Draft Position</label>
-    <select id="draftPosition">
-      <option value="1">1 (1st pick)</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option>
-    </select>
-    
-    <button type="submit" class="btn">Start Draft →</button>
-  </form>
-  <div class="banner" id="banner"></div>
-  <a class="back-link" href="/dashboard">← Back to Dashboard</a>
+<div class="topnav">
+  <a href="/" class="topnav-logo">Draft<span>Buddy</span></a>
+  <div class="nav-links"><a href="/dashboard" class="btn-sm">← Dashboard</a></div>
+</div>
+<div class="page">
+  <aside class="sidebar">
+    <div class="sidebar-section">NFL</div>
+    <a href="/draft" class="nav-item">🏈 Football</a>
+    <div class="sidebar-section">Other Sports</div>
+    <a href="/baseball-draft" class="nav-item active">⚾ Baseball</a>
+    <a href="/basketball-draft" class="nav-item">🏀 Basketball</a>
+    <a href="/hockey-draft" class="nav-item">🏒 Hockey</a>
+    <a href="/womens-draft" class="nav-item">🏀 WNBA</a>
+    <a href="/bracket" class="nav-item">🗓️ March Madness</a>
+  </aside>
+  <div class="main">
+    <div class="form-wrap">
+      <div class="page-header">
+        <h1>⚾ MLB Baseball Draft</h1>
+        <p>Configure your league settings for AI draft recommendations</p>
+      </div>
+      <form id="draftForm">
+        <div class="section-card">
+          <h2>📋 League Info</h2>
+          <div class="form-grid">
+            <div class="form-group full">
+              <label>League Name</label>
+              <input type="text" id="leagueName" placeholder="My MLB Baseball League">
+            </div>
+            <div class="form-group">
+              <label>Number of Teams</label>
+              <select id="numTeams">
+                <option value="8">8 Teams</option>
+                <option value="10" selected>10 Teams</option>
+                <option value="12">12 Teams</option>
+                <option value="14">14 Teams</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Draft Type</label>
+              <select id="draftType">
+                <option value="snake" selected>Snake Draft</option>
+                <option value="linear">Linear Draft</option>
+                <option value="auction">Auction Draft</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="section-card">
+          <h2>🏆 Scoring Format</h2>
+          <div class="scoring-opts" id="scoringOpts">
+            <div class="scoring-opt selected" data-val="standard"><div class="score-label">Standard</div><div class="score-desc">R/HR/RBI/SB/AVG</div></div>
+            <div class="scoring-opt" data-val="roto"><div class="score-label">Rotisserie</div><div class="score-desc">Category rankings</div></div>
+            <div class="scoring-opt" data-val="points"><div class="score-label">Points</div><div class="score-desc">Total points</div></div>
+          </div>
+          <input type="hidden" id="scoring" value="standard">
+        </div>
+        <div class="section-card">
+          <h2>📍 Your Draft Position</h2>
+          <p style="font-size:.82rem;color:var(--muted);margin-bottom:10px">Which pick are you in the first round?</p>
+          <div class="pick-selector" id="pickSelector"></div>
+          <input type="hidden" id="draftPosition" value="1">
+        </div>
+        
+        <button type="submit" class="btn-submit">🤖 Launch AI Draft Assistant →</button>
+      </form>
+    </div>
+  </div>
 </div>
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
-const firebaseConfig = {apiKey:"AIzaSyBv7NdNGq7UGe9jqFuPsPV_4nrSlO_gWrA",authDomain:"draftbuddy-cf5c9.firebaseapp.com",projectId:"draftbuddy-cf5c9",storageBucket:"draftbuddy-cf5c9.appspot.com",messagingSenderId:"822764808554",appId:"1:822764808554:web:1f7eb56e52543abd96c1fb"};
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-onAuthStateChanged(auth, user => { if (!user) window.location.href = '/login'; });
-document.getElementById('draftForm').addEventListener('submit', function(e) {
+const auth = getAuth(initializeApp({apiKey:"AIzaSyBv7NdNGq7UGe9jqFuPsPV_4nrSlO_gWrA",authDomain:"draftbuddy-cf5c9.firebaseapp.com",projectId:"draftbuddy-cf5c9",storageBucket:"draftbuddy-cf5c9.appspot.com",messagingSenderId:"822764808554",appId:"1:822764808554:web:1f7eb56e52543abd96c1fb"}));
+onAuthStateChanged(auth, u => { if (!u) window.location.href = '/login'; });
+const numTeamsEl = document.getElementById('numTeams');
+function buildPickSelector() {
+  const n = parseInt(numTeamsEl.value);
+  const sel = document.getElementById('pickSelector');
+  sel.innerHTML = '';
+  for (let i = 1; i <= n; i++) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'pick-btn' + (i === 1 ? ' selected' : '');
+    btn.textContent = i;
+    btn.onclick = () => { document.querySelectorAll('.pick-btn').forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); document.getElementById('draftPosition').value = i; };
+    sel.appendChild(btn);
+  }
+}
+numTeamsEl.addEventListener('change', buildPickSelector);
+buildPickSelector();
+document.querySelectorAll('.scoring-opt').forEach(opt => {
+  opt.addEventListener('click', () => {
+    document.querySelectorAll('.scoring-opt').forEach(o => o.classList.remove('selected'));
+    opt.classList.add('selected');
+    document.getElementById('scoring').value = opt.dataset.val;
+  });
+});
+document.getElementById('draftForm').addEventListener('submit', e => {
   e.preventDefault();
-  const numTeams = document.getElementById('numTeams').value;
-  const draftType = document.getElementById('draftType').value;
-  const scoring = document.getElementById('scoring').value;
-  const pick = document.getElementById('draftPosition').value;
   const league = encodeURIComponent(document.getElementById('leagueName').value || 'MLB Baseball League');
-  window.location.href = '/rankings?sport=baseball&teams=' + numTeams + '&type=' + draftType + '&scoring=' + scoring + '&pick=' + pick + '&league=' + league;
+  window.location.href = '/rankings?sport=baseball&teams=' + document.getElementById('numTeams').value + '&type=' + document.getElementById('draftType').value + '&scoring=' + document.getElementById('scoring').value + '&pick=' + document.getElementById('draftPosition').value + '&league=' + league;
 });
 </script>
 </body>
