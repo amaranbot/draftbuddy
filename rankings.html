@@ -296,11 +296,22 @@ SPORT_CONFIG.wnba = {
 async function fetchSleeperPlayers(sport) {
   const sportKey = sport === 'football' ? 'nfl' : sport === 'basketball' ? 'nba' : null;
   if (!sportKey) return null;
-  const url = `https://api.sleeper.app/v1/players/${sportKey}`;
+  const cacheKey = 'db_sleeper_' + sportKey;
+  const cacheTTL = 60 * 60 * 1000; // 1 hour
   try {
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) {
+      const { ts, data } = JSON.parse(cached);
+      if (Date.now() - ts < cacheTTL) return data;
+    }
+  } catch(e) {}
+  try {
+    const url = `https://api.sleeper.app/v1/players/${sportKey}`;
     const resp = await fetch(url);
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    return await resp.json();
+    const data = await resp.json();
+    try { localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data })); } catch(e) {}
+    return data;
   } catch(e) {
     console.error('Sleeper fetch failed:', e);
     return null;
@@ -309,13 +320,23 @@ async function fetchSleeperPlayers(sport) {
 
 // Fetch MLB players from MLB Stats API (free, public, CORS enabled)
 async function fetchMLBPlayers() {
+  const cacheKey = 'db_mlb_players';
+  const cacheTTL = 60 * 60 * 1000; // 1 hour
   try {
-    // Get all active MLB players
-    const url = 'https://statsapi.mlb.com/api/v1/sports/1/players?season=2025&gameType=R&fields=people,id,fullName,currentTeam,primaryPosition,active,birthDate,strikeoutRate,throwingHand,batSide,stats';
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) {
+      const { ts, data } = JSON.parse(cached);
+      if (Date.now() - ts < cacheTTL) return data;
+    }
+  } catch(e) {}
+  try {
+    const url = 'https://statsapi.mlb.com/api/v1/sports/1/players?season=2025&gameType=R&fields=people,id,fullName,firstName,lastName,primaryPosition,currentTeam,active,nameSlug';
     const resp = await fetch(url);
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
     const data = await resp.json();
-    return data.people || [];
+    const result = data.people || [];
+    try { localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data: result })); } catch(e) {}
+    return result;
   } catch(e) {
     console.error('MLB fetch failed:', e);
     return [];
@@ -324,13 +345,23 @@ async function fetchMLBPlayers() {
 
 // Fetch NHL players from NHL Stats API (free, public, CORS enabled)
 async function fetchNHLPlayers() {
+  const cacheKey = 'db_nhl_players';
+  const cacheTTL = 60 * 60 * 1000; // 1 hour
   try {
-    // NHL API v1 - get skaters
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) {
+      const { ts, data } = JSON.parse(cached);
+      if (Date.now() - ts < cacheTTL) return data;
+    }
+  } catch(e) {}
+  try {
     const url = 'https://api.nhle.com/stats/rest/en/skater/summary?limit=200&start=0&sort=points&cayenneExp=seasonId=20242025%20and%20gameTypeId=2';
     const resp = await fetch(url);
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
     const data = await resp.json();
-    return data.data || [];
+    const result = data.data || [];
+    try { localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data: result })); } catch(e) {}
+    return result;
   } catch(e) {
     console.error('NHL fetch failed:', e);
     return [];
