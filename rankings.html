@@ -3,106 +3,423 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Player Rankings - DraftBuddy</title>
+  <title>AI Draft Assistant - DraftBuddy</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1117; color: #fff; min-height: 100vh; }
-    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid #1e2433; }
-    .logo { font-size: 1.5rem; font-weight: 800; color: #4ade80; letter-spacing: -0.5px; text-decoration: none; }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 32px; border-bottom: 1px solid #1e2433; flex-wrap: wrap; gap: 10px; }
+    .logo { font-size: 1.4rem; font-weight: 800; color: #4ade80; letter-spacing: -0.5px; text-decoration: none; }
+    .nav-right { display: flex; align-items: center; gap: 16px; }
     .back-link { color: #9ca3af; text-decoration: none; font-size: 0.9rem; }
     .back-link:hover { color: #fff; }
-    .main { padding: 60px 40px; max-width: 900px; margin: 0 auto; }
-    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
-    .subtitle { color: #6b7280; margin-bottom: 32px; }
-    .filters { display: flex; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
-    .filter-btn { padding: 8px 18px; border-radius: 20px; border: 1px solid #2d3748; background: transparent; color: #9ca3af; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
-    .filter-btn.active, .filter-btn:hover { background: #4ade80; color: #0f1117; border-color: #4ade80; font-weight: 600; }
-    .rankings-table { background: #1a1f2e; border: 1px solid #2d3748; border-radius: 16px; overflow: hidden; }
-    .table-header { display: grid; grid-template-columns: 60px 1fr 120px 100px 100px; padding: 14px 24px; background: #0f1117; color: #6b7280; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
-    .player-row { display: grid; grid-template-columns: 60px 1fr 120px 100px 100px; padding: 16px 24px; border-top: 1px solid #1e2433; align-items: center; transition: background 0.15s; }
-    .player-row:hover { background: #1e2535; }
-    .rank { font-weight: 700; color: #4ade80; font-size: 1.05rem; }
-    .player-name { font-weight: 600; }
-    .player-team { color: #6b7280; font-size: 0.85rem; margin-top: 2px; }
-    .position { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 700; }
+    .league-info { color: #6b7280; font-size: 0.85rem; }
+    .main { display: grid; grid-template-columns: 1fr 340px; gap: 24px; padding: 24px 32px; max-width: 1400px; margin: 0 auto; }
+    @media (max-width: 900px) { .main { grid-template-columns: 1fr; } }
+    .section-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .panel { background: #1a1f2e; border: 1px solid #2d3748; border-radius: 14px; padding: 20px; }
+    .rec-card { background: #0f1117; border: 2px solid #4ade80; border-radius: 12px; padding: 18px; margin-bottom: 16px; }
+    .rec-label { font-size: 0.75rem; font-weight: 700; color: #4ade80; letter-spacing: 1px; margin-bottom: 6px; }
+    .rec-player { font-size: 1.4rem; font-weight: 800; margin-bottom: 4px; }
+    .rec-pos { font-size: 0.85rem; color: #9ca3af; margin-bottom: 10px; }
+    .rec-why { font-size: 0.82rem; color: #6b7280; line-height: 1.5; }
+    .draft-btn { background: #4ade80; color: #0f1117; border: none; padding: 9px 20px; border-radius: 7px; font-weight: 700; font-size: 0.88rem; cursor: pointer; transition: background 0.2s; }
+    .draft-btn:hover { background: #22c55e; }
+    .draft-btn:disabled { background: #374151; color: #6b7280; cursor: not-allowed; }
+    .pick-info { background: #252b3b; border-radius: 10px; padding: 14px 16px; margin-bottom: 16px; }
+    .pick-num { font-size: 0.75rem; color: #9ca3af; font-weight: 600; margin-bottom: 4px; }
+    .pick-val { font-size: 1rem; font-weight: 700; }
+    .needs-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+    .need-tag { padding: 5px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; border: 1px solid; cursor: pointer; transition: all 0.15s; }
+    .need-tag.needed { background: #1a2d1a; border-color: #4ade80; color: #4ade80; }
+    .need-tag.filled { background: #1a1f2e; border-color: #374151; color: #6b7280; }
+    .need-tag.selected { background: #4ade80; border-color: #4ade80; color: #0f1117; }
+    .my-picks { max-height: 260px; overflow-y: auto; }
+    .my-pick-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; border-radius: 7px; margin-bottom: 4px; background: #0f1117; font-size: 0.85rem; }
+    .my-pick-pos { background: #252b3b; padding: 3px 8px; border-radius: 5px; font-size: 0.75rem; font-weight: 700; color: #9ca3af; }
+    .search-bar { width: 100%; padding: 10px 14px; background: #0f1117; border: 1px solid #2d3748; border-radius: 8px; color: #fff; font-size: 0.9rem; outline: none; margin-bottom: 12px; }
+    .search-bar:focus { border-color: #4ade80; }
+    .pos-filter { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+    .pos-btn { padding: 5px 13px; border-radius: 16px; border: 1px solid #2d3748; background: transparent; color: #9ca3af; font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+    .pos-btn.active { background: #4ade80; border-color: #4ade80; color: #0f1117; }
+    .player-list { max-height: 480px; overflow-y: auto; }
+    .player-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; margin-bottom: 4px; transition: background 0.15s; cursor: pointer; }
+    .player-row:hover { background: #252b3b; }
+    .player-row.drafted { opacity: 0.35; }
+    .player-row.recommended { background: #1a2d1a; border: 1px solid #4ade80; }
+    .player-rank { font-size: 0.78rem; color: #6b7280; width: 28px; flex-shrink: 0; }
+    .player-name { font-weight: 600; font-size: 0.9rem; flex: 1; }
+    .player-team { font-size: 0.78rem; color: #6b7280; }
+    .player-pos-badge { padding: 3px 8px; border-radius: 5px; font-size: 0.72rem; font-weight: 800; flex-shrink: 0; }
     .pos-QB { background: #1e3a5f; color: #60a5fa; }
     .pos-RB { background: #1a2d1a; color: #4ade80; }
-    .pos-WR { background: #2d1f3d; color: #a78bfa; }
-    .pos-TE { background: #3d2a1a; color: #fb923c; }
-    .pos-K  { background: #2d2020; color: #f87171; }
-    .adp { color: #9ca3af; }
-    .bye { color: #9ca3af; }
+    .pos-WR { background: #2d1a3a; color: #c084fc; }
+    .pos-TE { background: #3a2a1a; color: #fb923c; }
+    .pos-K { background: #2a2a1a; color: #facc15; }
+    .pos-DST { background: #1a2a2d; color: #22d3ee; }
+    .pos-DEF { background: #1a2a2d; color: #22d3ee; }
+    .pos-SP { background: #2a1a2d; color: #f472b6; }
+    .player-adp { font-size: 0.78rem; color: #6b7280; width: 36px; text-align: right; flex-shrink: 0; }
+    .pick-action { padding: 4px 10px; border-radius: 5px; border: 1px solid #374151; background: transparent; color: #9ca3af; font-size: 0.75rem; font-weight: 600; cursor: pointer; flex-shrink: 0; white-space: nowrap; }
+    .pick-action:hover { border-color: #4ade80; color: #4ade80; }
+    .pick-action.mine { background: #4ade80; border-color: #4ade80; color: #0f1117; }
+    .drafted-badge { font-size: 0.72rem; color: #6b7280; flex-shrink: 0; }
+    .round-header { padding: 6px 12px; background: #252b3b; border-radius: 6px; font-size: 0.75rem; font-weight: 700; color: #9ca3af; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .empty-state { text-align: center; color: #6b7280; padding: 24px; font-size: 0.9rem; }
+    .star { color: #4ade80; }
   </style>
 </head>
 <body>
-  <nav>
-    <a href="/" class="logo">DraftBuddy</a>
-    <a href="/dashboard" class="back-link">&#8592; Back to Dashboard</a>
-  </nav>
-  <div class="main">
-    <h1>&#128202; Player Rankings</h1>
-    <p class="subtitle">2025 Fantasy Football rankings.</p>
-    <div class="filters">
-      <button class="filter-btn active" onclick="filterPos('ALL',this)">All</button>
-      <button class="filter-btn" onclick="filterPos('QB',this)">QB</button>
-      <button class="filter-btn" onclick="filterPos('RB',this)">RB</button>
-      <button class="filter-btn" onclick="filterPos('WR',this)">WR</button>
-      <button class="filter-btn" onclick="filterPos('TE',this)">TE</button>
-      <button class="filter-btn" onclick="filterPos('K',this)">K</button>
-    </div>
-    <div class="rankings-table">
-      <div class="table-header"><span>Rank</span><span>Player</span><span>Position</span><span>ADP</span><span>Bye</span></div>
-      <div id="rankings-list"></div>
+<nav>
+  <a href="/" class="logo">DraftBuddy</a>
+  <span class="league-info" id="league-info"></span>
+  <div class="nav-right">
+    <a href="/dashboard" class="back-link">&#8592; Dashboard</a>
+  </div>
+</nav>
+<div class="main">
+  <div id="left-col">
+    <div class="panel" style="margin-bottom:20px">
+      <div class="section-title">&#127944; Available Players</div>
+      <input class="search-bar" id="search" placeholder="Search players..." oninput="filterPlayers()">
+      <div class="pos-filter" id="pos-filter"></div>
+      <div class="player-list" id="player-list"></div>
     </div>
   </div>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    const firebaseConfig = { apiKey: "AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88", authDomain: "draftbuddy-cf5c9.firebaseapp.com", projectId: "draftbuddy-cf5c9", storageBucket: "draftbuddy-cf5c9.firebasestorage.app", messagingSenderId: "861425863011", appId: "1:861425863011:web:e6b8ee8525ba71f7de6b56" };
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    onAuthStateChanged(auth, (user) => { if (!user) window.location.href = '/login'; });
-    const players = [
-      {rank:1,  name:'Christian McCaffrey', team:'SF',  pos:'RB', adp:1.2,  bye:9},
-      {rank:2,  name:'CeeDee Lamb',          team:'DAL', pos:'WR', adp:2.1,  bye:7},
-      {rank:3,  name:'Tyreek Hill',           team:'MIA', pos:'WR', adp:3.0,  bye:6},
-      {rank:4,  name:'Justin Jefferson',      team:'MIN', pos:'WR', adp:3.8,  bye:6},
-      {rank:5,  name:'Breece Hall',           team:'NYJ', pos:'RB', adp:4.5,  bye:12},
-      {rank:6,  name:"Ja'Marr Chase",         team:'CIN', pos:'WR', adp:5.2,  bye:7},
-      {rank:7,  name:'Bijan Robinson',        team:'ATL', pos:'RB', adp:6.0,  bye:11},
-      {rank:8,  name:'Amon-Ra St. Brown',     team:'DET', pos:'WR', adp:7.1,  bye:5},
-      {rank:9,  name:'Sam LaPorta',           team:'DET', pos:'TE', adp:8.0,  bye:5},
-      {rank:10, name:'Puka Nacua',            team:'LAR', pos:'WR', adp:8.8,  bye:6},
-      {rank:11, name:"De'Von Achane",         team:'MIA', pos:'RB', adp:9.5,  bye:6},
-      {rank:12, name:'Drake London',          team:'ATL', pos:'WR', adp:10.2, bye:11},
-      {rank:13, name:'Lamar Jackson',         team:'BAL', pos:'QB', adp:11.0, bye:14},
-      {rank:14, name:'Josh Allen',            team:'BUF', pos:'QB', adp:11.8, bye:12},
-      {rank:15, name:'Davante Adams',         team:'LV',  pos:'WR', adp:12.5, bye:10},
-      {rank:16, name:'Tony Pollard',          team:'TEN', pos:'RB', adp:13.0, bye:5},
-      {rank:17, name:'Travis Kelce',          team:'KC',  pos:'TE', adp:13.8, bye:10},
-      {rank:18, name:'Stefon Diggs',          team:'BUF', pos:'WR', adp:14.5, bye:12},
-      {rank:19, name:'Josh Jacobs',           team:'GB',  pos:'RB', adp:15.2, bye:10},
-      {rank:20, name:'Patrick Mahomes',       team:'KC',  pos:'QB', adp:15.9, bye:10}
-    ];
-    function renderPlayers(filter) {
-      const list = document.getElementById('rankings-list');
-      const filtered = filter === 'ALL' ? players : players.filter(p => p.pos === filter);
-      list.innerHTML = filtered.map(p =>
-        '<div class="player-row">' +
-        '<span class="rank">' + p.rank + '</span>' +
-        '<div><div class="player-name">' + p.name + '</div><div class="player-team">' + p.team + '</div></div>' +
-        '<span><span class="position pos-' + p.pos + '">' + p.pos + '</span></span>' +
-        '<span class="adp">' + p.adp + '</span>' +
-        '<span class="bye">Wk ' + p.bye + '</span>' +
-        '</div>'
-      ).join('');
+  <div id="right-col">
+    <div class="panel" style="margin-bottom:20px" id="rec-panel">
+      <div class="section-title">&#129504; AI Recommendation</div>
+      <div class="pick-info">
+        <div class="pick-num">YOUR NEXT PICK</div>
+        <div class="pick-val" id="pick-display">Round 1, Pick 1</div>
+      </div>
+      <div id="ai-rec"></div>
+    </div>
+    <div class="panel" style="margin-bottom:20px">
+      <div class="section-title">&#127919; Positional Needs</div>
+      <div class="needs-grid" id="needs-grid"></div>
+    </div>
+    <div class="panel">
+      <div class="section-title">&#9989; My Picks (<span id="pick-count">0</span>)</div>
+      <div class="my-picks" id="my-picks"><div class="empty-state">No picks yet</div></div>
+    </div>
+  </div>
+</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+const firebaseConfig = { apiKey: "AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88", authDomain: "draftbuddy-cf5c9.firebaseapp.com", projectId: "draftbuddy-cf5c9", storageBucket: "draftbuddy-cf5c9.firebasestorage.app", messagingSenderId: "861425863011", appId: "1:861425863011:web:e6b8ee8525ba71f7de6b56" };
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+onAuthStateChanged(auth, (user) => { if (!user) window.location.href = '/login'; });
+
+// ── Parse URL params ──────────────────────────────────────────────────
+const params = new URLSearchParams(window.location.search);
+const sport = params.get('sport') || 'nfl';
+const numTeams = parseInt(params.get('teams') || '10');
+const draftType = params.get('type') || 'snake';
+const scoring = params.get('scoring') || 'ppr';
+const myPick = parseInt(params.get('pick') || '1');
+const leagueName = decodeURIComponent(params.get('league') || 'My League');
+
+document.getElementById('league-info').textContent = leagueName + ' · ' + numTeams + ' teams · ' + scoring.toUpperCase() + ' · Pick ' + myPick;
+
+// ── Player Database ───────────────────────────────────────────────────
+const NFL_PLAYERS = [
+  {rank:1,name:"Christian McCaffrey",team:"SF",pos:"RB",adp:1,bye:9},
+  {rank:2,name:"CeeDee Lamb",team:"DAL",pos:"WR",adp:2,bye:7},
+  {rank:3,name:"Ja'Marr Chase",team:"CIN",pos:"WR",adp:3,bye:7},
+  {rank:4,name:"Tyreek Hill",team:"MIA",pos:"WR",adp:4,bye:6},
+  {rank:5,name:"Justin Jefferson",team:"MIN",pos:"WR",adp:5,bye:6},
+  {rank:6,name:"Breece Hall",team:"NYJ",pos:"RB",adp:6,bye:12},
+  {rank:7,name:"Amon-Ra St. Brown",team:"DET",pos:"WR",adp:7,bye:5},
+  {rank:8,name:"Garrett Wilson",team:"NYJ",pos:"WR",adp:8,bye:12},
+  {rank:9,name:"Puka Nacua",team:"LAR",pos:"WR",adp:9,bye:6},
+  {rank:10,name:"Drake London",team:"ATL",pos:"WR",adp:10,bye:12},
+  {rank:11,name:"Jaylen Waddle",team:"MIA",pos:"WR",adp:11,bye:6},
+  {rank:12,name:"Bijan Robinson",team:"ATL",pos:"RB",adp:12,bye:12},
+  {rank:13,name:"Josh Allen",team:"BUF",pos:"QB",adp:13,bye:12},
+  {rank:14,name:"Davante Adams",team:"LV",pos:"WR",adp:14,bye:10},
+  {rank:15,name:"Sam LaPorta",team:"DET",pos:"TE",adp:15,bye:5},
+  {rank:16,name:"Lamar Jackson",team:"BAL",pos:"QB",adp:16,bye:14},
+  {rank:17,name:"Stefon Diggs",team:"HOU",pos:"WR",adp:17,bye:14},
+  {rank:18,name:"Jahmyr Gibbs",team:"DET",pos:"RB",adp:18,bye:5},
+  {rank:19,name:"Tony Pollard",team:"TEN",pos:"RB",adp:19,bye:5},
+  {rank:20,name:"De'Von Achane",team:"MIA",pos:"RB",adp:20,bye:6},
+  {rank:21,name:"Tee Higgins",team:"CIN",pos:"WR",adp:21,bye:7},
+  {rank:22,name:"DJ Moore",team:"CHI",pos:"WR",adp:22,bye:7},
+  {rank:23,name:"Kyren Williams",team:"LAR",pos:"RB",adp:23,bye:6},
+  {rank:24,name:"Travis Kelce",team:"KC",pos:"TE",adp:24,bye:6},
+  {rank:25,name:"Raheem Mostert",team:"MIA",pos:"RB",adp:25,bye:6},
+  {rank:26,name:"A.J. Brown",team:"PHI",pos:"WR",adp:26,bye:5},
+  {rank:27,name:"DeVonta Smith",team:"PHI",pos:"WR",adp:27,bye:5},
+  {rank:28,name:"Jalen Hurts",team:"PHI",pos:"QB",adp:28,bye:5},
+  {rank:29,name:"Michael Pittman Jr.",team:"IND",pos:"WR",adp:29,bye:14},
+  {rank:30,name:"James Cook",team:"BUF",pos:"RB",adp:30,bye:12},
+  {rank:31,name:"Keenan Allen",team:"CHI",pos:"WR",adp:31,bye:7},
+  {rank:32,name:"Jonathan Taylor",team:"IND",pos:"RB",adp:32,bye:14},
+  {rank:33,name:"Deebo Samuel",team:"SF",pos:"WR",adp:33,bye:9},
+  {rank:34,name:"Mark Andrews",team:"BAL",pos:"TE",adp:34,bye:14},
+  {rank:35,name:"Gus Edwards",team:"LAC",pos:"RB",adp:35,bye:5},
+  {rank:36,name:"Brandon Aiyuk",team:"SF",pos:"WR",adp:36,bye:9},
+  {rank:37,name:"Chris Godwin",team:"TB",pos:"WR",adp:37,bye:11},
+  {rank:38,name:"Mike Evans",team:"TB",pos:"WR",adp:38,bye:11},
+  {rank:39,name:"Patrick Mahomes",team:"KC",pos:"QB",adp:39,bye:6},
+  {rank:40,name:"Isiah Pacheco",team:"KC",pos:"RB",adp:40,bye:6},
+  {rank:41,name:"Dak Prescott",team:"DAL",pos:"QB",adp:41,bye:7},
+  {rank:42,name:"Dalton Kincaid",team:"BUF",pos:"TE",adp:42,bye:12},
+  {rank:43,name:"David Njoku",team:"CLE",pos:"TE",adp:43,bye:5},
+  {rank:44,name:"Zay Flowers",team:"BAL",pos:"WR",adp:44,bye:14},
+  {rank:45,name:"Rhamondre Stevenson",team:"NE",pos:"RB",adp:45,bye:14},
+  {rank:46,name:"Jordan Love",team:"GB",pos:"QB",adp:46,bye:10},
+  {rank:47,name:"Rachaad White",team:"TB",pos:"RB",adp:47,bye:11},
+  {rank:48,name:"Tyjae Spears",team:"TEN",pos:"RB",adp:48,bye:5},
+  {rank:49,name:"Romeo Doubs",team:"GB",pos:"WR",adp:49,bye:10},
+  {rank:50,name:"Jake Ferguson",team:"DAL",pos:"TE",adp:50,bye:7},
+  {rank:51,name:"Trey McBride",team:"ARI",pos:"TE",adp:51,bye:11},
+  {rank:52,name:"Jaylen Warren",team:"PIT",pos:"RB",adp:52,bye:9},
+  {rank:53,name:"Tank Dell",team:"HOU",pos:"WR",adp:53,bye:14},
+  {rank:54,name:"Quentin Johnston",team:"LAC",pos:"WR",adp:54,bye:5},
+  {rank:55,name:"Diontae Johnson",team:"CAR",pos:"WR",adp:55,bye:5},
+  {rank:56,name:"C.J. Stroud",team:"HOU",pos:"QB",adp:56,bye:14},
+  {rank:57,name:"Alec Pierce",team:"IND",pos:"WR",adp:57,bye:14},
+  {rank:58,name:"Tucker Kraft",team:"GB",pos:"TE",adp:58,bye:10},
+  {rank:59,name:"Xavier Worthy",team:"KC",pos:"WR",adp:59,bye:6},
+  {rank:60,name:"Jayden Reed",team:"GB",pos:"WR",adp:60,bye:10},
+  {rank:61,name:"Derrick Henry",team:"BAL",pos:"RB",adp:61,bye:14},
+  {rank:62,name:"Chuba Hubbard",team:"CAR",pos:"RB",adp:62,bye:5},
+  {rank:63,name:"D'Andre Swift",team:"CHI",pos:"RB",adp:63,bye:7},
+  {rank:64,name:"Brian Robinson Jr.",team:"WAS",pos:"RB",adp:64,bye:14},
+  {rank:65,name:"Malik Nabers",team:"NYG",pos:"WR",adp:65,bye:11},
+  {rank:66,name:"Patrick Taylor",team:"NYG",pos:"RB",adp:66,bye:11},
+  {rank:67,name:"Bo Nix",team:"DEN",pos:"QB",adp:67,bye:14},
+  {rank:68,name:"Kimani Vidal",team:"LAC",pos:"RB",adp:68,bye:5},
+  {rank:69,name:"Khalil Shakir",team:"BUF",pos:"WR",adp:69,bye:12},
+  {rank:70,name:"Tyler Bass",team:"BUF",pos:"K",adp:70,bye:12},
+  {rank:71,name:"Harrison Butker",team:"KC",pos:"K",adp:71,bye:6},
+  {rank:72,name:"Evan McPherson",team:"CIN",pos:"K",adp:72,bye:7},
+  {rank:73,name:"Jake Elliott",team:"PHI",pos:"K",adp:73,bye:5},
+  {rank:74,name:"Ka'imi Fairbairn",team:"HOU",pos:"K",adp:74,bye:14},
+  {rank:75,name:"San Francisco 49ers",team:"SF",pos:"DST",adp:75,bye:9},
+  {rank:76,name:"Dallas Cowboys",team:"DAL",pos:"DST",adp:76,bye:7},
+  {rank:77,name:"Baltimore Ravens",team:"BAL",pos:"DST",adp:77,bye:14},
+  {rank:78,name:"Miami Dolphins",team:"MIA",pos:"DST",adp:78,bye:6},
+  {rank:79,name:"Philadelphia Eagles",team:"PHI",pos:"DST",adp:79,bye:5},
+  {rank:80,name:"New York Jets",team:"NYJ",pos:"DST",adp:80,bye:12},
+];
+
+const players = NFL_PLAYERS;
+const ROSTER = {
+  standard: {QB:1,RB:2,WR:2,TE:1,K:1,DST:1,FLEX:1},
+  ppr:      {QB:1,RB:2,WR:3,TE:1,K:1,DST:1,FLEX:1},
+  'half-ppr':{QB:1,RB:2,WR:2,TE:1,K:1,DST:1,FLEX:1}
+};
+
+const rosterNeeds = ROSTER[scoring] || ROSTER.ppr;
+const positions = Object.keys(rosterNeeds);
+
+// ── State ─────────────────────────────────────────────────────────────
+let draftedByMe = [];
+let draftedByOthers = [];
+let myPickCount = 0;
+let currentFilter = 'ALL';
+
+function getMyPickNumbers() {
+  const picks = [];
+  const rounds = numTeams * 3 + 3;
+  for (let r = 1; r <= rounds; r++) {
+    let pickInRound;
+    if (draftType === 'snake') {
+      pickInRound = (r % 2 === 1) ? myPick : (numTeams - myPick + 1);
+    } else {
+      pickInRound = myPick;
     }
-    window.filterPos = function(pos, btn) {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      renderPlayers(pos);
-    };
-    renderPlayers('ALL');
-  </script>
+    picks.push((r - 1) * numTeams + pickInRound);
+  }
+  return picks;
+}
+
+function getOverallPick() {
+  return getMyPickNumbers()[myPickCount] || null;
+}
+
+function getRoundAndPick(overall) {
+  const round = Math.ceil(overall / numTeams);
+  const pick = overall - (round - 1) * numTeams;
+  return { round, pick };
+}
+
+function getPositionNeeds() {
+  const filled = {};
+  draftedByMe.forEach(p => { filled[p.pos] = (filled[p.pos] || 0) + 1; });
+  const needs = {};
+  positions.forEach(pos => {
+    const needed = rosterNeeds[pos] || 0;
+    const have = filled[pos] || 0;
+    needs[pos] = Math.max(0, needed - have);
+  });
+  return needs;
+}
+
+function getBestRecommendation() {
+  const needs = getPositionNeeds();
+  const available = players.filter(p => !draftedByMe.includes(p) && !draftedByOthers.includes(p));
+  if (available.length === 0) return null;
+  const neededPositions = Object.keys(needs).filter(pos => needs[pos] > 0);
+  const totalRoundsLeft = Object.values(rosterNeeds).reduce((a,b) => a+b, 0) - myPickCount;
+  let best = null, bestScore = -1;
+  available.forEach(p => {
+    let score = 100 - p.rank;
+    if (neededPositions.includes(p.pos)) score += 30;
+    if (p.pos === 'K' || p.pos === 'DST') {
+      if (totalRoundsLeft > 4) score -= 40;
+    }
+    if (score > bestScore) { bestScore = score; best = p; }
+  });
+  return best;
+}
+
+function getRecommendationReason(player) {
+  const needs = getPositionNeeds();
+  const available = players.filter(p => !draftedByMe.includes(p) && !draftedByOthers.includes(p));
+  const posNeeded = needs[player.pos] > 0;
+  const rank = player.rank;
+  if (posNeeded && rank <= 20) return 'Elite talent + your team needs ' + player.pos + '. Best available at a premium position.';
+  if (posNeeded) return 'You still need a ' + player.pos + ' and this is the best one available.';
+  if (rank <= 10) return 'Top-10 overall talent — too valuable to pass up regardless of position.';
+  const nextAtPos = available.find(p => p.pos === player.pos && p.rank > player.rank);
+  if (nextAtPos && nextAtPos.rank - player.rank > 12) return 'Significant drop-off at ' + player.pos + ' after this pick. Grab the value now.';
+  return 'Strong overall value with good upside at pick ' + getOverallPick() + '.';
+}
+
+// ── Render Functions ──────────────────────────────────────────────────
+function renderPosFilter() {
+  const el = document.getElementById('pos-filter');
+  const allPositions = ['ALL', ...new Set(players.map(p => p.pos))];
+  el.innerHTML = allPositions.map(pos =>
+    '<button class="pos-btn' + (currentFilter === pos ? ' active' : '') + '" onclick="setFilter('' + pos + '')">' + pos + '</button>'
+  ).join('');
+}
+
+function renderNeeds() {
+  const needs = getPositionNeeds();
+  const el = document.getElementById('needs-grid');
+  el.innerHTML = positions.map(pos => {
+    const n = needs[pos];
+    const filled = (rosterNeeds[pos] || 0) - n;
+    let html = '<span class="need-tag ' + (n > 0 ? 'needed' : 'filled') + '" onclick="setFilter('' + pos + '')" title="' + filled + '/' + rosterNeeds[pos] + ' filled">';
+    html += pos + ' ' + (n > 0 ? '(' + n + ')' : '&#10003;') + '</span>';
+    return html;
+  }).join('');
+}
+
+function renderPickInfo() {
+  const overall = getOverallPick();
+  if (overall === null) {
+    document.getElementById('pick-display').textContent = 'Draft complete!';
+    return;
+  }
+  const { round, pick } = getRoundAndPick(overall);
+  document.getElementById('pick-display').textContent = 'Round ' + round + ', Pick ' + pick + ' (Overall #' + overall + ')';
+}
+
+function renderAIRec() {
+  const rec = getBestRecommendation();
+  const el = document.getElementById('ai-rec');
+  if (!rec) { el.innerHTML = '<div class="empty-state">Draft complete!</div>'; return; }
+  const reason = getRecommendationReason(rec);
+  el.innerHTML = '<div class="rec-card">' +
+    '<div class="rec-label">&#9733; BEST AVAILABLE</div>' +
+    '<div class="rec-player">' + rec.name + '</div>' +
+    '<div class="rec-pos">' + rec.pos + ' · ' + rec.team + ' · BYE ' + rec.bye + ' · Rank #' + rec.rank + '</div>' +
+    '<div class="rec-why">' + reason + '</div>' +
+    '<div style="margin-top:12px"><button class="draft-btn" onclick="draftPlayer(' + rec.rank + ', true)">Draft ' + rec.name.split(' ').pop() + ' &#10003;</button></div>' +
+    '</div>';
+}
+
+function renderMyPicks() {
+  const el = document.getElementById('my-picks');
+  document.getElementById('pick-count').textContent = draftedByMe.length;
+  if (draftedByMe.length === 0) { el.innerHTML = '<div class="empty-state">No picks yet</div>'; return; }
+  el.innerHTML = draftedByMe.map((p, i) => {
+    const overall = getMyPickNumbers()[i];
+    const { round } = getRoundAndPick(overall || 1);
+    return '<div class="my-pick-item">' +
+      '<span class="my-pick-pos">' + p.pos + '</span>' +
+      '<span style="flex:1;padding:0 10px">' + p.name + '</span>' +
+      '<span style="font-size:0.75rem;color:#6b7280">R' + round + '</span>' +
+      '</div>';
+  }).join('');
+}
+
+function renderPlayerList() {
+  const search = document.getElementById('search').value.toLowerCase();
+  const filtered = players.filter(p => {
+    const matchPos = currentFilter === 'ALL' || p.pos === currentFilter;
+    const matchSearch = p.name.toLowerCase().includes(search) || p.team.toLowerCase().includes(search);
+    return matchPos && matchSearch;
+  });
+  const rec = getBestRecommendation();
+  const el = document.getElementById('player-list');
+  if (filtered.length === 0) { el.innerHTML = '<div class="empty-state">No players found</div>'; return; }
+  el.innerHTML = filtered.map(p => {
+    const isDraftedByMe = draftedByMe.includes(p);
+    const isDraftedByOther = draftedByOthers.includes(p);
+    const isDrafted = isDraftedByMe || isDraftedByOther;
+    const isRec = rec && rec.rank === p.rank && !isDrafted;
+    let rowClass = 'player-row';
+    if (isDrafted) rowClass += ' drafted';
+    if (isRec) rowClass += ' recommended';
+    let actionBtn = '';
+    if (isDraftedByMe) {
+      actionBtn = '<span class="drafted-badge">Your pick</span>';
+    } else if (isDraftedByOther) {
+      actionBtn = '<span class="drafted-badge">Drafted</span>';
+    } else {
+      actionBtn = '<button class="pick-action mine" onclick="draftPlayer(' + p.rank + ', true)">My Pick</button>' +
+        ' <button class="pick-action" onclick="draftPlayer(' + p.rank + ', false)">Opponent</button>';
+    }
+    return '<div class="' + rowClass + '">' +
+      '<span class="player-rank">' + (isRec ? '&#11088;' : p.rank) + '</span>' +
+      '<span class="player-pos-badge pos-' + p.pos + '">' + p.pos + '</span>' +
+      '<span class="player-name">' + p.name + '<br><span class="player-team">' + p.team + ' · BYE ' + p.bye + '</span></span>' +
+      '<span class="player-adp">ADP ' + p.adp + '</span>' +
+      actionBtn +
+      '</div>';
+  }).join('');
+}
+
+function renderAll() {
+  renderPosFilter();
+  renderNeeds();
+  renderPickInfo();
+  renderAIRec();
+  renderMyPicks();
+  renderPlayerList();
+}
+
+// ── Actions ───────────────────────────────────────────────────────────
+window.draftPlayer = function(rank, isMyPick) {
+  const player = players.find(p => p.rank === rank);
+  if (!player) return;
+  if (draftedByMe.includes(player) || draftedByOthers.includes(player)) return;
+  if (isMyPick) {
+    draftedByMe.push(player);
+    myPickCount++;
+  } else {
+    draftedByOthers.push(player);
+  }
+  renderAll();
+};
+
+window.setFilter = function(pos) {
+  currentFilter = pos;
+  renderAll();
+};
+
+window.filterPlayers = renderPlayerList;
+
+// ── Init ──────────────────────────────────────────────────────────────
+renderAll();
+</script>
 </body>
 </html>
