@@ -1,98 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hockey Draft - DraftBuddy</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1117; color: #fff; min-height: 100vh; }
-    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid #1e2433; }
-    .logo { font-size: 1.5rem; font-weight: 800; color: #4ade80; letter-spacing: -0.5px; text-decoration: none; }
-    .back-link { color: #9ca3af; text-decoration: none; font-size: 0.9rem; }
-    .back-link:hover { color: #fff; }
-    .main { padding: 60px 40px; max-width: 860px; margin: 0 auto; }
-    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
-    .subtitle { color: #6b7280; margin-bottom: 40px; }
-    .form-card { background: #1a1f2e; border: 1px solid #2d3748; border-radius: 16px; padding: 40px; }
-    .form-group { margin-bottom: 22px; }
-    .form-group label { display: block; font-size: 0.9rem; font-weight: 600; color: #9ca3af; margin-bottom: 8px; }
-    .form-group input, .form-group select { width: 100%; padding: 12px 14px; background: #0f1117; border: 1px solid #2d3748; border-radius: 8px; color: #fff; font-size: 0.95rem; }
-    .form-group input:focus, .form-group select:focus { border-color: #4ade80; outline: none; }
-    select option { background: #1a1f2e; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .submit-btn { width: 100%; padding: 14px; background: #4ade80; color: #0f1117; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 10px; }
-    .submit-btn:hover { background: #22c55e; }
-    .success-banner { display: none; background: #1a2d1a; border: 1px solid #4ade80; color: #4ade80; padding: 16px; border-radius: 8px; margin-top: 20px; text-align: center; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NHL Hockey Draft Setup - DraftBuddy</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0f172a;color:#e2e8f0;font-family:'Segoe UI',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.card{background:#1e293b;border-radius:16px;padding:32px;width:100%;max-width:480px;border:1px solid #334155}
+h1{color:#4ade80;font-size:1.5rem;margin-bottom:8px}
+p{color:#94a3b8;font-size:.9rem;margin-bottom:24px}
+label{display:block;color:#94a3b8;font-size:.85rem;margin-bottom:6px;margin-top:16px}
+input,select{width:100%;background:#0f172a;border:1px solid #334155;color:#e2e8f0;padding:10px 14px;border-radius:8px;font-size:.95rem}
+input:focus,select:focus{outline:none;border-color:#4ade80}
+.btn{width:100%;background:#4ade80;color:#0f172a;border:none;padding:14px;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:24px}
+.btn:hover{background:#22c55e}
+.back-link{color:#4ade80;font-size:.85rem;display:block;text-align:center;margin-top:16px;text-decoration:none}
+.back-link:hover{text-decoration:underline}
+</style>
 </head>
 <body>
-  <nav>
-    <a href="/dashboard" class="logo">DraftBuddy</a>
-    <a href="/dashboard" class="back-link">Back to Dashboard</a>
-  </nav>
-  <div class="main">
-    <h1>Hockey Draft Setup</h1>
-    <p class="subtitle">Configure your NHL fantasy draft</p>
-    <div class="form-card">
-      <form id="draftForm">
-        <div class="form-group">
-          <label>League Name</label>
-          <input type="text" id="leagueName" placeholder="e.g. Stanley Cup Fantasy" required>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Number of Teams</label>
-            <select id="numTeams">
-              <option value="8">8 Teams</option>
-              <option value="10" selected>10 Teams</option>
-              <option value="12">12 Teams</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Roster Size</label>
-            <select id="rosterSize">
-              <option value="16">16 Players</option>
-              <option value="18" selected>18 Players</option>
-              <option value="20">20 Players</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Draft Type</label>
-            <select id="draftType">
-              <option value="snake" selected>Snake Draft</option>
-              <option value="auction">Auction Draft</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Scoring Format</label>
-            <select id="scoringFormat">
-              <option value="standard" selected>Standard</option>
-              <option value="categories">Categories</option>
-              <option value="points">Points</option>
-            </select>
-          </div>
-        </div>
-        <button type="submit" class="submit-btn">Create Hockey Draft</button>
-      </form>
-      <div class="success-banner" id="successBanner">
-        Draft created! Head to <a href="/hockey-rankings" style="color:#4ade80">Rankings</a> to start picking.
-      </div>
-    </div>
-  </div>
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-    const firebaseConfig = { apiKey: "AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88", authDomain: "draftbuddy-cf5c9.firebaseapp.com", projectId: "draftbuddy-cf5c9", storageBucket: "draftbuddy-cf5c9.firebasestorage.app", messagingSenderId: "1074688049754", appId: "1:1074688049754:web:3ab7dedeec01d4490a3741" };
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    onAuthStateChanged(auth, user => { if (!user) window.location.href = '/login'; });
-    document.getElementById('draftForm').addEventListener('submit', e => {
-      e.preventDefault();
-      document.getElementById('successBanner').style.display = 'block';
-    });
-  </script>
+<div class="card">
+  <h1>🏒 NHL Hockey Draft</h1>
+  <p>Configure your league settings to activate the AI draft assistant.</p>
+  <form id="draftForm">
+    <label>League Name</label>
+    <input type="text" id="leagueName" placeholder="My NHL Hockey League">
+    <label>Number of Teams</label>
+    <select id="numTeams">
+      <option value="8">8 Teams</option>
+      <option value="10" selected>10 Teams</option>
+      <option value="12">12 Teams</option>
+      <option value="14">14 Teams</option>
+    </select>
+    <label>Draft Type</label>
+    <select id="draftType">
+      <option value="snake" selected>Snake Draft</option>
+      <option value="linear">Linear Draft</option>
+      <option value="auction">Auction Draft</option>
+    </select>
+    <label>Scoring Format</label>
+    <select id="scoring">
+      <option value="standard" selected>Standard (G/A/+/-/PIM/PPP)</option>
+      <option value="categories">Categories</option>
+      <option value="points">Points League</option>
+    </select>
+    <label>Your Draft Position</label>
+    <select id="draftPosition">
+      <option value="1">1 (1st pick)</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option>
+    </select>
+    <button type="submit" class="btn">Start Draft →</button>
+  </form>
+  <a class="back-link" href="/dashboard">← Back to Dashboard</a>
+</div>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+const firebaseConfig = {apiKey:"AIzaSyBv7NdNGq7UGe9jqFuPsPV_4nrSlO_gWrA",authDomain:"draftbuddy-cf5c9.firebaseapp.com",projectId:"draftbuddy-cf5c9",storageBucket:"draftbuddy-cf5c9.appspot.com",messagingSenderId:"822764808554",appId:"1:822764808554:web:1f7eb56e52543abd96c1fb"};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+onAuthStateChanged(auth, user => { if (!user) window.location.href = '/login'; });
+document.getElementById('draftForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const numTeams = document.getElementById('numTeams').value;
+  const draftType = document.getElementById('draftType').value;
+  const scoring = document.getElementById('scoring').value;
+  const pick = document.getElementById('draftPosition').value;
+  const league = encodeURIComponent(document.getElementById('leagueName').value || 'NHL Hockey League');
+  window.location.href = '/rankings?sport=hockey&teams=' + numTeams + '&type=' + draftType + '&scoring=' + scoring + '&pick=' + pick + '&league=' + league;
+});
+</script>
 </body>
-</html
+</html>
