@@ -1,70 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Baseball Draft - DraftBuddy</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1117; color: #fff; min-height: 100vh; }
-    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid #1e2433; }
-    .logo { font-size: 1.5rem; font-weight: 800; color: #4ade80; letter-spacing: -0.5px; text-decoration: none; }
-    .back-link { color: #9ca3af; text-decoration: none; font-size: 0.9rem; }
-    .back-link:hover { color: #fff; }
-    .main { padding: 60px 40px; max-width: 860px; margin: 0 auto; }
-    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
-    .subtitle { color: #6b7280; margin-bottom: 40px; }
-    .form-card { background: #1a1f2e; border: 1px solid #2d3748; border-radius: 16px; padding: 40px; }
-    .form-group { margin-bottom: 22px; }
-    .form-group label { display: block; font-size: 0.9rem; font-weight: 600; color: #9ca3af; margin-bottom: 8px; }
-    .form-group input, .form-group select { width: 100%; padding: 12px 14px; background: #0f1117; border: 1px solid #2d3748; border-radius: 8px; color: #fff; font-size: 1rem; outline: none; transition: border-color 0.2s; }
-    .form-group input:focus, .form-group select:focus { border-color: #4ade80; }
-    select option { background: #1a1f2e; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .submit-btn { width: 100%; padding: 14px; background: #4ade80; color: #0f1117; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 8px; transition: background 0.2s; }
-    .submit-btn:hover { background: #22c55e; }
-    .success-banner { background: #1a2d1a; border: 1px solid #4ade80; color: #4ade80; padding: 16px; border-radius: 8px; margin-bottom: 24px; display: none; font-weight: 600; }
-    .filters { display: flex; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
-    .filter-btn { padding: 8px 18px; border-radius: 20px; border: 1px solid #2d3748; background: transparent; color: #9ca3af; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
-    .filter-btn.active, .filter-btn:hover { background: #4ade80; color: #0f1117; border-color: #4ade80; font-weight: 600; }
-    .rankings-table { background: #1a1f2e; border: 1px solid #2d3748; border-radius: 16px; overflow: hidden; }
-    .table-header { display: grid; padding: 14px 24px; background: #0f1117; color: #6b7280; font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
-    .player-row { display: grid; padding: 15px 24px; border-top: 1px solid #1e2433; align-items: center; transition: background 0.15s; }
-    .player-row:hover { background: #1e2535; }
-    .rank { font-weight: 700; color: #4ade80; }
-    .pname { font-weight: 600; }
-    .pteam { color: #6b7280; font-size: 0.85rem; margin-top: 2px; }
-    .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.78rem; font-weight: 700; }
-    .bb { background: #1e3a5f; color: #60a5fa; }
-    .bg { background: #1a2d1a; color: #4ade80; }
-    .bp { background: #2d1f3d; color: #a78bfa; }
-    .bo { background: #3d2a1a; color: #fb923c; }
-    .br { background: #2d1a1a; color: #f87171; }
-    .muted { color: #9ca3af; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MLB Baseball Draft Setup - DraftBuddy</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0f172a;color:#e2e8f0;font-family:'Segoe UI',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.card{background:#1e293b;border-radius:16px;padding:32px;width:100%;max-width:480px;border:1px solid #334155}
+h1{color:#4ade80;font-size:1.5rem;margin-bottom:8px}
+p{color:#94a3b8;font-size:.9rem;margin-bottom:24px}
+label{display:block;color:#94a3b8;font-size:.85rem;margin-bottom:6px;margin-top:16px}
+input,select{width:100%;background:#0f172a;border:1px solid #334155;color:#e2e8f0;padding:10px 14px;border-radius:8px;font-size:.95rem}
+input:focus,select:focus{outline:none;border-color:#4ade80}
+.btn{width:100%;background:#4ade80;color:#0f172a;border:none;padding:14px;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:24px}
+.btn:hover{background:#22c55e}
+.back-link{color:#4ade80;font-size:.85rem;display:block;text-align:center;margin-top:16px;text-decoration:none}
+.back-link:hover{text-decoration:underline}
+.banner{background:#14532d;color:#4ade80;padding:12px 16px;border-radius:8px;margin-top:16px;display:none;text-align:center}
+</style>
 </head>
 <body>
-  <nav>
-    <a href="/" class="logo">DraftBuddy</a>
-    <a href="/dashboard" class="back-link">&#8592; Back to Dashboard</a>
-  </nav>
-  <div class="main"><h1>&#9918; New Baseball Draft</h1>
-<p class="subtitle">Set up your league and start your AI-powered draft.</p>
-<div class="success-banner" id="banner">&#9989; Draft setup saved!</div>
-<div class="form-card"><form onsubmit="handleSubmit(event)">
-<div class="form-group"><label>League Name</label><input type="text" placeholder="Enter league name" required></div>
-<div class="form-row"><div class="form-group"><label>Format</label><select><option>Rotisserie</option><option>H2H Categories</option><option>H2H Points</option></select></div><div class="form-group"><label>Teams</label><select><option>8</option><option>10</option><option>12</option><option>14</option></select></div></div><div class="form-row"><div class="form-group"><label>Scoring</label><select><option>5x5 Categories</option><option>6x6 Categories</option><option>Points</option></select></div><div class="form-group"><label>Draft Type</label><select><option>Snake</option><option>Auction</option></select></div></div>
-<div class="form-group"><label>Draft Position</label><select><option value="1">Pick 1</option><option value="2">Pick 2</option><option value="3">Pick 3</option><option value="4">Pick 4</option><option value="5">Pick 5</option><option value="6">Pick 6</option><option value="7">Pick 7</option><option value="8">Pick 8</option><option value="9">Pick 9</option><option value="10">Pick 10</option><option value="11">Pick 11</option><option value="12">Pick 12</option></select></div>
-<button type="submit" class="submit-btn">Start Draft Assistant &#9889;</button>
-</form></div>
-<script>window.handleSubmit=function(e){e.preventDefault();document.getElementById('banner').style.display='block';window.scrollTo({top:0,behavior:'smooth'});}</script></div>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    const firebaseConfig = { apiKey: "AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88", authDomain: "draftbuddy-cf5c9.firebaseapp.com", projectId: "draftbuddy-cf5c9", storageBucket: "draftbuddy-cf5c9.firebasestorage.app", messagingSenderId: "861425863011", appId: "1:861425863011:web:e6b8ee8525ba71f7de6b56" };
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    onAuthStateChanged(auth, (user) => { if (!user) window.location.href = '/login'; });
-  </script>
+<div class="card">
+  <h1>⚾ MLB Baseball Draft</h1>
+  <p>Configure your league settings to activate the AI draft assistant.</p>
+  <form id="draftForm">
+    <label>League Name</label>
+    <input type="text" id="leagueName" placeholder="My MLB Baseball League">
+    <label>Number of Teams</label>
+    <select id="numTeams">
+      <option value="8">8 Teams</option>
+      <option value="10" selected>10 Teams</option>
+      <option value="12">12 Teams</option>
+      <option value="14">14 Teams</option>
+      <option value="16">16 Teams</option>
+    </select>
+    <label>Draft Type</label>
+    <select id="draftType">
+      <option value="snake" selected>Snake Draft</option>
+      <option value="linear">Linear Draft</option>
+      <option value="auction">Auction Draft</option>
+    </select>
+    <label>Scoring Format</label>
+    <select id="scoring">
+      <option value="standard" selected>Standard (R/HR/RBI/SB/AVG)</option>
+      <option value="roto">Rotisserie</option>
+      <option value="points">Points League</option>
+    </select>
+    <label>Your Draft Position</label>
+    <select id="draftPosition">
+      <option value="1">1 (1st pick)</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option>
+    </select>
+    
+    <button type="submit" class="btn">Start Draft →</button>
+  </form>
+  <div class="banner" id="banner"></div>
+  <a class="back-link" href="/dashboard">← Back to Dashboard</a>
+</div>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+const firebaseConfig = {apiKey:"AIzaSyBv7NdNGq7UGe9jqFuPsPV_4nrSlO_gWrA",authDomain:"draftbuddy-cf5c9.firebaseapp.com",projectId:"draftbuddy-cf5c9",storageBucket:"draftbuddy-cf5c9.appspot.com",messagingSenderId:"822764808554",appId:"1:822764808554:web:1f7eb56e52543abd96c1fb"};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+onAuthStateChanged(auth, user => { if (!user) window.location.href = '/login'; });
+document.getElementById('draftForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const numTeams = document.getElementById('numTeams').value;
+  const draftType = document.getElementById('draftType').value;
+  const scoring = document.getElementById('scoring').value;
+  const pick = document.getElementById('draftPosition').value;
+  const league = encodeURIComponent(document.getElementById('leagueName').value || 'MLB Baseball League');
+  window.location.href = '/rankings?sport=baseball&teams=' + numTeams + '&type=' + draftType + '&scoring=' + scoring + '&pick=' + pick + '&league=' + league;
+});
+</script>
 </body>
 </html>
