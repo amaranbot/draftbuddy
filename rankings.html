@@ -179,7 +179,11 @@ onAuthStateChanged(auth, u => { if (!u) window.location.href = '/login'; });
 
 // ===== URL PARAMS =====
 const P = new URLSearchParams(window.location.search);
-const SPORT = (P.get('sport') || 'football').toLowerCase();
+const _rawSport = (P.get('sport') || 'football').toLowerCase();
+const SPORT_MAP = {'nfl':'football','nba':'basketball','mlb':'baseball','nhl':'hockey','march_madness':'marchmadness','mm':'marchmadness','march madness':'marchmadness'};
+const _rawSport = (P.get('sport') || 'football').toLowerCase();
+const SPORT_MAP = {'nfl':'football','nba':'basketball','mlb':'baseball','nhl':'hockey','march_madness':'marchmadness','mm':'marchmadness'};
+const SPORT = SPORT_MAP[_rawSport] || _rawSport;
 const NUM_TEAMS = parseInt(P.get('teams') || '10');
 const DRAFT_TYPE = (P.get('type') || 'snake').toLowerCase();
 const SCORING = (P.get('scoring') || 'ppr').toLowerCase();
