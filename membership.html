@@ -1,1 +1,152 @@
-test
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Membership - DraftBuddy</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--green:#4ade80;--green-dark:#22c55e;--bg:#0f172a;--bg2:#1e293b;--bg3:#334155;--text:#e2e8f0;--muted:#94a3b8;--red:#f87171}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+.topnav{background:var(--bg2);border-bottom:1px solid rgba(74,222,128,.15);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.topnav-logo{font-size:1.2rem;font-weight:800;color:var(--text);text-decoration:none}
+.topnav-logo span{color:var(--green)}
+.btn-sm{background:var(--green);color:#0f172a;padding:6px 14px;border-radius:6px;font-weight:700;font-size:.85rem;text-decoration:none;cursor:pointer;border:none}
+.page{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 60px)}
+.sidebar{background:var(--bg2);border-right:1px solid var(--bg3);padding:20px 12px;display:flex;flex-direction:column;gap:4px}
+.sidebar-section{font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding:12px 12px 6px;margin-top:8px}
+.sidebar-section:first-child{margin-top:0}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;cursor:pointer;text-decoration:none;color:var(--muted);font-size:.9rem;font-weight:500;transition:all .2s}
+.nav-item:hover{background:var(--bg3);color:var(--text)}
+.nav-item.active{background:rgba(74,222,128,.12);color:var(--green)}
+.main{padding:32px;max-width:960px}
+h1{font-size:2rem;font-weight:800;margin-bottom:8px}
+.subtitle{color:var(--muted);margin-bottom:40px;font-size:1.05rem}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:40px}
+.plan{background:var(--bg2);border:1px solid var(--bg3);border-radius:16px;padding:32px;position:relative}
+.plan.featured{border-color:var(--green);box-shadow:0 0 30px rgba(74,222,128,.15)}
+.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--green);color:#0f172a;font-size:.75rem;font-weight:800;padding:4px 14px;border-radius:20px;white-space:nowrap}
+.plan-name{font-size:1.2rem;font-weight:700;margin-bottom:4px}
+.plan-price{font-size:2.4rem;font-weight:800;color:var(--green);margin:16px 0 4px}
+.plan-price span{font-size:1rem;color:var(--muted);font-weight:400}
+.plan-desc{color:var(--muted);font-size:.9rem;margin-bottom:24px}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.plan-features li{display:flex;align-items:flex-start;gap:10px;font-size:.9rem}
+.plan-features li::before{content:'v';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
+.plan-btn{width:100%;padding:13px;border-radius:10px;font-weight:700;font-size:1rem;cursor:pointer;border:none;transition:all .2s}
+.plan-btn.primary{background:var(--green);color:#0f172a}
+.plan-btn.secondary{background:transparent;color:var(--green);border:2px solid var(--green)}
+.guarantee{background:var(--bg2);border:1px solid var(--bg3);border-radius:12px;padding:20px 28px;display:flex;align-items:center;gap:16px;margin-bottom:40px}
+.guarantee-icon{font-size:2rem;flex-shrink:0}
+.guarantee h3{font-size:1rem;font-weight:700;margin-bottom:4px}
+.guarantee p{color:var(--muted);font-size:.9rem}
+.faq{margin-bottom:40px}
+.faq h2{font-size:1.4rem;font-weight:700;margin-bottom:20px}
+.faq-item{background:var(--bg2);border:1px solid var(--bg3);border-radius:10px;margin-bottom:10px}
+.faq-q{padding:16px 20px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.faq-q::after{content:'+';color:var(--muted);font-size:1.2rem}
+.faq-a{padding:0 20px 16px;color:var(--muted);font-size:.9rem;line-height:1.6;display:none}
+.faq-a.open{display:block}
+@media(max-width:768px){.page{grid-template-columns:1fr}.sidebar{display:none}.main{padding:20px}.plans{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="topnav">
+  <a href="/" class="topnav-logo">Draft<span>Buddy</span></a>
+  <button class="btn-sm" onclick="signOutUser()">Sign Out</button>
+</div>
+<div class="page">
+  <aside class="sidebar">
+    <div class="sidebar-section">Main</div>
+    <a href="/dashboard" class="nav-item">Dashboard</a>
+    <a href="/settings" class="nav-item">Settings</a>
+    <div class="sidebar-section">Sports</div>
+    <a href="/draft" class="nav-item">NFL Draft</a>
+    <a href="/baseball-draft" class="nav-item">MLB Draft</a>
+    <a href="/basketball-draft" class="nav-item">NBA Draft</a>
+    <a href="/hockey-draft" class="nav-item">NHL Draft</a>
+    <a href="/womens-draft" class="nav-item">WNBA Draft</a>
+    <a href="/bracket" class="nav-item">March Madness</a>
+    <div class="sidebar-section">Account</div>
+    <a href="/draft-assistant" class="nav-item">Draft Assistant</a>
+    <a href="/membership" class="nav-item active">Membership</a>
+  </aside>
+  <div class="main">
+    <h1>Choose Your Plan</h1>
+    <p class="subtitle">Unlock the full power of DraftBuddy and dominate your leagues</p>
+    <div class="plans">
+      <div class="plan">
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">$9.99<span>/month</span></div>
+        <div class="plan-desc">Everything you need to win your fantasy leagues</div>
+        <ul class="plan-features">
+          <li>AI-powered trade analyzer</li>
+          <li>Waiver wire recommendations</li>
+          <li>Injury impact analysis</li>
+          <li>Multi-league support up to 5 leagues</li>
+          <li>Priority data refresh</li>
+          <li>Season-long coaching insights</li>
+          <li>Draft grade report</li>
+          <li>Draft Assistant sidekick overlay</li>
+        </ul>
+        <button class="plan-btn secondary" onclick="selectPlan('pro')">Get Started</button>
+      </div>
+      <div class="plan featured">
+        <div class="plan-badge">Most Popular</div>
+        <div class="plan-name">Champion</div>
+        <div class="plan-price">$24.99<span>/month</span></div>
+        <div class="plan-desc">Maximum edge for serious fantasy players</div>
+        <ul class="plan-features">
+          <li>Everything in Pro</li>
+          <li>DFS optimizer for DraftKings and FanDuel</li>
+          <li>Prop bet analysis</li>
+          <li>Playoff optimizer</li>
+          <li>Unlimited leagues</li>
+          <li>ESPN Yahoo and Sleeper integrations</li>
+          <li>Private Discord community</li>
+          <li>Monthly strategy session</li>
+        </ul>
+        <button class="plan-btn primary" onclick="selectPlan('champion')">Get Champion</button>
+      </div>
+    </div>
+    <div class="guarantee">
+      <div class="guarantee-icon">&#128737;</div>
+      <div>
+        <h3>30-Day Money-Back Guarantee</h3>
+        <p>Not happy? Get a full refund within 30 days, no questions asked.</p>
+      </div>
+    </div>
+    <div class="faq">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.nextElementSibling.classList.toggle('open')">Can I cancel anytime?</div>
+        <div class="faq-a">Yes, cancel your subscription anytime from your account settings. No lock-in contracts.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.nextElementSibling.classList.toggle('open')">Which fantasy platforms are supported?</div>
+        <div class="faq-a">We support ESPN Fantasy, Yahoo Fantasy, Sleeper, NFL.com, CBS Sports, and more. Champion plan includes direct integrations.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.nextElementSibling.classList.toggle('open')">Does the Draft Assistant work during live drafts?</div>
+        <div class="faq-a">Yes! The Draft Assistant is a floating sidekick overlay you can open while you draft on any platform.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.nextElementSibling.classList.toggle('open')">What sports are covered?</div>
+        <div class="faq-a">NFL, MLB, NBA, NHL, and WNBA fantasy leagues are all supported.</div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+const app = initializeApp({apiKey:"AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88",authDomain:"draftbuddy-cf5c9.firebaseapp.com",projectId:"draftbuddy-cf5c9",storageBucket:"draftbuddy-cf5c9.appspot.com",messagingSenderId:"822764808554",appId:"1:861425863011:web:e6b8ee8525ba71f7de6b56"});
+const auth = getAuth(app);
+onAuthStateChanged(auth, user => { if (!user) { window.location.href = '/login'; return; } });
+window.signOutUser = () => signOut(auth).then(() => window.location.href = '/login');
+</script>
+<script>
+function selectPlan(p){alert('Plan selection coming soon! Setting up secure payment for the '+(p==='champion'?'Champion':'Pro')+' plan.');}
+</script>
+</body>
+</html>
