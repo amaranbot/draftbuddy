@@ -64,21 +64,21 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 
 <div class="topnav">
   <a href="/" class="topnav-logo">Draft<span>Buddy</span></a>
-  <a href="/dashboard" class="btn-sm">Ã¢ÂÂ Dashboard</a>
+  <a href="/dashboard" class="btn-sm">â Dashboard</a>
 </div>
 
 <div class="page">
   <aside class="sidebar">
     <div class="sidebar-section">Main</div>
-    <a href="/dashboard" class="nav-item">Ã°ÂÂÂ  Dashboard</a>
-    <a href="/settings" class="nav-item active">Ã¢ÂÂÃ¯Â¸Â Settings</a>
+    <a href="/dashboard" class="nav-item">  Dashboard</a>
+    <a href="/settings" class="nav-item active">âï¸ Settings</a>
     <div class="sidebar-section">Sports</div>
-    <a href="/draft" class="nav-item">Ã°ÂÂÂ NFL Draft</a>
-    <a href="/baseball-draft" class="nav-item">Ã¢ÂÂ¾ MLB Draft</a>
-    <a href="/basketball-draft" class="nav-item">Ã°ÂÂÂ NBA Draft</a>
-    <a href="/hockey-draft" class="nav-item">Ã°ÂÂÂ NHL Draft</a>
-    <a href="/womens-draft" class="nav-item">Ã°ÂÂÂ WNBA Draft</a>
-    <a href="/bracket" class="nav-item">Ã°ÂÂÂÃ¯Â¸Â March Madness</a>
+    <a href="/draft" class="nav-item"> NFL Draft</a>
+    <a href="/baseball-draft" class="nav-item">â¾ MLB Draft</a>
+    <a href="/basketball-draft" class="nav-item"> NBA Draft</a>
+    <a href="/hockey-draft" class="nav-item"> NHL Draft</a>
+    <a href="/womens-draft" class="nav-item"> WNBA Draft</a>
+    <a href="/bracket" class="nav-item"> March Madness</a>
   </aside>
 
   <div class="main">
@@ -88,13 +88,13 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
     </div>
 
     <div class="save-bar" id="saveBar" style="display:none">
-      <p>Ã¢ÂÂ Ã¯Â¸Â You have unsaved changes</p>
+      <p>â ï¸ You have unsaved changes</p>
       <button class="btn-primary" onclick="saveSettings()">Save Changes</button>
     </div>
 
     <!-- Account -->
     <div class="settings-section">
-      <div class="settings-section-header"><span class="icon">Ã°ÂÂÂ¤</span><h2>Account</h2></div>
+      <div class="settings-section-header"><h2>Account</h2></div>
       <div class="account-info">
         <div class="account-avatar" id="settingsAvatar">?</div>
         <div>
@@ -124,7 +124,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 
     <!-- Draft Defaults -->
     <div class="settings-section">
-      <div class="settings-section-header"><span class="icon">Ã°ÂÂÂ</span><h2>Draft Defaults</h2></div>
+      <div class="settings-section-header"><h2>Draft Defaults</h2></div>
       <div class="setting-row">
         <div class="setting-info">
           <div class="setting-label">Default Scoring Format (NFL)</div>
@@ -168,7 +168,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 
     <!-- Display Preferences -->
     <div class="settings-section">
-      <div class="settings-section-header"><span class="icon">Ã°ÂÂÂ¨</span><h2>Display</h2></div>
+      <div class="settings-section-header"><h2>Display</h2></div>
       <div class="setting-row">
         <div class="setting-info">
           <div class="setting-label">Show Injury Status</div>
@@ -209,14 +209,14 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 
     <!-- Data -->
     <div class="settings-section">
-      <div class="settings-section-header"><span class="icon">Ã°ÂÂÂ¡</span><h2>Data</h2></div>
+      <div class="settings-section-header"><h2>Data</h2></div>
       <div class="setting-row">
         <div class="setting-info">
           <div class="setting-label">Live Data Sources</div>
-          <div class="setting-desc">NFL/NBA: Sleeper API ÃÂ· MLB: MLB Stats API ÃÂ· NHL: NHL API ÃÂ· Always fetched fresh on page load</div>
+          <div class="setting-desc">NFL/NBA: Sleeper API &middot; MLB: MLB Stats API &middot; NHL: NHL API &middot; Always fetched fresh on page load</div>
         </div>
         <div class="setting-control">
-          <span style="font-size:.8rem;background:rgba(74,222,128,.1);color:var(--green);border:1px solid rgba(74,222,128,.2);padding:3px 10px;border-radius:10px">Ã°ÂÂÂ¢ Active</span>
+          <span style="font-size:.8rem;background:rgba(74,222,128,.1);color:var(--green);border:1px solid rgba(74,222,128,.2);padding:3px 10px;border-radius:10px"> Active</span>
         </div>
       </div>
       <div class="setting-row">
@@ -231,18 +231,19 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
     </div>
 
     <div style="display:flex;justify-content:flex-end;margin-top:8px">
-      <button class="btn-primary" onclick="saveSettings()" id="mainSaveBtn">Ã°ÂÂÂ¾ Save Settings</button>
+      <button class="btn-primary" onclick="saveSettings()" id="mainSaveBtn"> Save Settings</button>
     </div>
   </div>
 </div>
 
-<div class="toast" id="toast">Ã¢ÂÂ Settings saved!</div>
+<div class="toast" id="toast">â Settings saved!</div>
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
-import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+import { getAuth, setPersistence, browserLocalPersistence, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
 const FB = {apiKey:"AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88",authDomain:"draftbuddy-cf5c9.firebaseapp.com",projectId:"draftbuddy-cf5c9",storageBucket:"draftbuddy-cf5c9.appspot.com",messagingSenderId:"822764808554",appId:"1:861425863011:web:e6b8ee8525ba71f7de6b56"};
 const auth = getAuth(initializeApp(FB));
+    setPersistence(auth,browserLocalPersistence).catch(function(){});
     setPersistence(auth,browserLocalPersistence).catch(function(){});
 let currentUser = null;
 
