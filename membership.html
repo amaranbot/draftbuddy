@@ -141,9 +141,10 @@ h1{font-size:2rem;font-weight:800;margin-bottom:8px}
 </div>
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 const app = initializeApp({apiKey:"AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88",authDomain:"draftbuddy-cf5c9.firebaseapp.com",projectId:"draftbuddy-cf5c9",storageBucket:"draftbuddy-cf5c9.appspot.com",messagingSenderId:"822764808554",appId:"1:861425863011:web:e6b8ee8525ba71f7de6b56"});
 const auth = getAuth(app);
+    setPersistence(auth, browserLocalPersistence).catch(function(){});
 onAuthStateChanged(auth, user => { if (!user) { window.location.href = '/login'; return; } });
 window.signOutUser = () => signOut(auth).then(() => window.location.href = '/login');
 </script>
