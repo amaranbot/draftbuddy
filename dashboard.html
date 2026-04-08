@@ -70,7 +70,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
       <div class="user-avatar" id="userInitials">?</div>
       <span id="userEmail" style="color:var(--text);font-size:.85rem">Loading...</span>
     </div>
-    <a href="/settings" class="btn-sm btn-outline">âï¸ Settings</a>
+    <a href="/settings" class="btn-sm btn-outline">⚙️ Settings</a>
     <button class="btn-sm btn-danger" id="signOutBtn">Sign Out</button>
   </div>
 </div>
@@ -139,7 +139,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 
       <div class="sport-card">
         <div class="card-header">
-          <div class="card-emoji">â¾</div>
+          <div class="card-emoji">⚾</div>
           <div>
             <div class="card-title">MLB Baseball</div>
             <div class="card-subtitle">Roto &middot; H2H &middot; Points League</div>
@@ -202,7 +202,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
           <div class="card-emoji"></div>
           <div>
             <div class="card-title">March Madness</div>
-            <div class="card-subtitle">AI Bracket Predictions â 2025</div>
+            <div class="card-subtitle">AI Bracket Predictions — 2025</div>
             <span class="card-badge">64 Teams &middot; 4 Regions</span>
           </div>
         </div>
@@ -218,9 +218,10 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
-import { getAuth, setPersistence, browserLocalPersistence, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+import { getAuth, setPersistence, browserLocalPersistence, setPersistence, browserLocalPersistence, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
 const FB = {apiKey:"AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88",authDomain:"draftbuddy-cf5c9.firebaseapp.com",projectId:"draftbuddy-cf5c9",storageBucket:"draftbuddy-cf5c9.appspot.com",messagingSenderId:"822764808554",appId:"1:861425863011:web:e6b8ee8525ba71f7de6b56"};
 const auth = getAuth(initializeApp(FB));
+    setPersistence(auth,browserLocalPersistence).catch(function(){});
     setPersistence(auth,browserLocalPersistence).catch(function(){});
     setPersistence(auth, browserLocalPersistence).catch(function(){});
 onAuthStateChanged(auth, user => {
