@@ -57,37 +57,36 @@ input::placeholder{color:#475569}
 <div class="topnav">
   <a href="/" class="topnav-logo">Draft<span>Buddy</span></a>
   <div class="nav-links">
-    <a href="/dashboard" class="btn-sm">Ã¢ÂÂ Dashboard</a>
+    <a href="/dashboard" class="btn-sm">â Dashboard</a>
   </div>
 </div>
 
 <div class="page">
   <aside class="sidebar">
     <div class="sidebar-section">NFL</div>
-    <a href="/draft" class="nav-item active">Ã°ÂÂÂ Setup Draft</a>
-    <a href="/rankings?sport=nfl" class="nav-item">Ã°ÂÂÂ Rankings</a>
+    <a href="/draft" class="nav-item active"> Setup Draft</a>
+    <a href="/rankings?sport=nfl" class="nav-item"> Rankings</a>
     <div class="sidebar-section">Other Sports</div>
-    <a href="/baseball-draft" class="nav-item">Ã¢ÂÂ¾ Baseball</a>
-    <a href="/basketball-draft" class="nav-item">Ã°ÂÂÂ Basketball</a>
-    <a href="/hockey-draft" class="nav-item">Ã°ÂÂÂ Hockey</a>
-    <a href="/womens-draft" class="nav-item">Ã°ÂÂÂ WNBA</a>
-    <a href="/bracket" class="nav-item">Ã°ÂÂÂÃ¯Â¸Â March Madness</a>
+    <a href="/baseball-draft" class="nav-item">â¾ Baseball</a>
+    <a href="/basketball-draft" class="nav-item"> Basketball</a>
+    <a href="/hockey-draft" class="nav-item"> Hockey</a>
+    <a href="/womens-draft" class="nav-item"> WNBA</a>
+    <a href="/bracket" class="nav-item"> March Madness</a>
   </aside>
 
   <div class="main">
     <div class="form-wrap">
       <div class="page-header">
-        <h1>Ã°ÂÂÂ NFL Draft Setup</h1>
+        <h1> NFL Draft Setup</h1>
         <p>Configure your league settings to get personalized AI draft recommendations</p>
       </div>
 
-      <div class="tip-box">
-        Ã°ÂÂÂ¡ <strong>Tip:</strong> The more accurately you configure your league, the smarter the AI recommendations will be. Make sure your scoring format and roster settings match your league exactly.
+      <div class="tip-box"> <strong>Tip:</strong> The more accurately you configure your league, the smarter the AI recommendations will be. Make sure your scoring format and roster settings match your league exactly.
       </div>
 
       <form id="draftForm">
         <div class="section-card">
-          <h2>Ã°ÂÂÂ League Info</h2>
+          <h2> League Info</h2>
           <div class="form-grid">
             <div class="form-group full">
               <label>League Name</label>
@@ -115,7 +114,7 @@ input::placeholder{color:#475569}
         </div>
 
         <div class="section-card">
-          <h2>Ã°ÂÂÂ Scoring Format</h2>
+          <h2> Scoring Format</h2>
           <div class="scoring-opts" id="scoringOpts">
             <div class="scoring-opt selected" data-val="ppr" onclick="selectScoring('ppr',this)">
               <div class="score-label">PPR</div>
@@ -134,14 +133,13 @@ input::placeholder{color:#475569}
         </div>
 
         <div class="section-card">
-          <h2>Ã°ÂÂÂ Your Draft Position</h2>
+          <h2> Your Draft Position</h2>
           <p style="font-size:.82rem;color:var(--muted);margin-bottom:10px">Which pick are you in the first round?</p>
           <div class="pick-selector" id="pickSelector"></div>
           <input type="hidden" id="draftPosition" value="1">
         </div>
 
-        <button type="submit" class="btn-submit" id="submitBtn">
-          Ã°ÂÂ¤Â Launch AI Draft Assistant Ã¢ÂÂ
+        <button type="submit" class="btn-submit" id="submitBtn"> Launch AI Draft Assistant â
         </button>
       </form>
     </div>
@@ -150,9 +148,10 @@ input::placeholder{color:#475569}
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
-import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+import { getAuth, setPersistence, browserLocalPersistence, setPersistence, browserLocalPersistence, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
 const FB = {apiKey:"AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88",authDomain:"draftbuddy-cf5c9.firebaseapp.com",projectId:"draftbuddy-cf5c9",storageBucket:"draftbuddy-cf5c9.appspot.com",messagingSenderId:"822764808554",appId:"1:861425863011:web:e6b8ee8525ba71f7de6b56"};
 const auth = getAuth(initializeApp(FB));
+    setPersistence(auth,browserLocalPersistence).catch(function(){});
     setPersistence(auth,browserLocalPersistence).catch(function(){});
 onAuthStateChanged(auth, u => { if (!u) window.location.href = '/login'; });
 
@@ -188,7 +187,7 @@ window.selectScoring = function(val, el) {
 document.getElementById('draftForm').addEventListener('submit', (e) => {
   e.preventDefault();
   const btn = document.getElementById('submitBtn');
-  btn.textContent = 'Ã¢ÂÂ³ Loading draft...';
+  btn.textContent = 'â³ Loading draft...';
   btn.disabled = true;
   const numTeams = document.getElementById('numTeams').value;
   const draftType = document.getElementById('draftType').value;
