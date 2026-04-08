@@ -61,7 +61,7 @@
   <body>
       <div class="left">
             <div class="left-content">
-                    <a href="/" class="back-link">â Back to DraftBuddy</a>
+                    <a href="/" class="back-link">&larr; Back to DraftBuddy</a>
                     <div class="logo">Draft<span>Buddy</span></div>
                   <h1 id="formTitle">Welcome back</h1>
                   <p class="subtitle" id="formSubtitle">Sign in to access your draft assistant</p>
@@ -88,13 +88,13 @@
                           </div>
                           <div class="form-group">
                                     <label>Password</label>
-                                    <input type="password" id="passwordInput" placeholder="â¢â¢â¢â¢â¢â¢â¢â¢" required minlength="6">
+                                    <input type="password" id="passwordInput" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" required minlength="6">
                           </div>
                           <div class="form-group" id="confirmRow" style="display:none">
                                     <label>Confirm Password</label>
-                                    <input type="password" id="confirmInput" placeholder="â¢â¢â¢â¢â¢â¢â¢â¢" minlength="6">
+                                    <input type="password" id="confirmInput" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" minlength="6">
                           </div>
-                          <button type="submit" class="btn-submit" id="submitBtn">ð Sign In</button>
+                          <button type="submit" class="btn-submit" id="submitBtn">Sign In</button>
                   </form>
             
                   <div class="divider">or</div>
@@ -113,19 +113,19 @@
     <div class="right">
         <div class="right-inner">
               <h2>The <span class="accent">smartest</span> way to dominate your fantasy draft</h2>
-              <p>Real-time AI recommendations, live player data, and multi-sport support â powered by AI, premium plans only.</p>
+              <p>Real-time AI recommendations, live player data, and multi-sport support &mdash; powered by AI, premium plans only.</p>
               <ul class="feature-list">
-                      <li><span class="check">â</span><span>AI picks based on your exact positional needs</span></li>
-                      <li><span class="check">â</span><span>Live NFL, MLB, NBA & NHL rosters updated in real-time</span></li>
-                      <li><span class="check">â</span><span>Snake draft aware â tracks whose pick it is every round</span></li>
-                      <li><span class="check">â</span><span>March Madness bracket AI with upset predictions</span></li>
-                      <li><span class="check">â</span><span>Pro & Champion plans — pick yours</span></li>
+                      <li><span class="check">&#10003;</span><span>AI picks based on your exact positional needs</span></li>
+                      <li><span class="check">&#10003;</span><span>Live NFL, MLB, NBA & NHL rosters updated in real-time</span></li>
+                      <li><span class="check">&#10003;</span><span>Snake draft aware &mdash; tracks whose pick it is every round</span></li>
+                      <li><span class="check">&#10003;</span><span>March Madness bracket AI with upset predictions</span></li>
+                      <li><span class="check">&#10003;</span><span>Pro & Champion plans â pick yours</span></li>
               </ul>
               <div class="testimonial">
                       <p>"DraftBuddy's AI told me to take Jahmyr Gibbs in Round 3 when everyone was sleeping on him. Finished the season in first place."</p>
                       <div class="testimonial-author">
                                 <div class="t-avatar">MR</div>
-                                <div><div class="t-name">Mike R.</div><div class="t-role">Fantasy Football â 12-team PPR</div></div>
+                                <div><div class="t-name">Mike R.</div><div class="t-role">Fantasy Football &mdash; 12-team PPR</div></div>
                       </div>
               </div>
         </div>
@@ -185,16 +185,13 @@
           } catch(err) {
             isHandlingAuth = false;
             document.getElementById('submitBtn').textContent = mode==='login' ? 'Sign In' : 'Create Account';
-            const msgs = {'auth/user-not-found':'No account found with that email.','auth/wrong-password':'Incorrect password.','auth/invalid-credential':'Invalid email or password.','auth/email-already-in-use':'Account already exists with this email.','auth/weak-password':'Password needs at least 6 characters.','auth/invalid-email':'Please enter a valid email address.'};
+            const msgs = {'auth/user-not-found':'No account found.','auth/wrong-password':'Incorrect password.','auth/invalid-credential':'Invalid email or password.','auth/email-already-in-use':'Account already exists.','auth/weak-password':'Password needs 6+ chars.','auth/invalid-email':'Invalid email.'};
             showError(msgs[err.code] || 'Something went wrong. Please try again.');
           }
         });
         document.getElementById('googleBtn').addEventListener('click', async () => {
-          try {
-            await signInWithRedirect(auth, new GoogleAuthProvider());
-          } catch(err) {
-            showError('Google sign-in failed. Please try again.');
-          }
+          try { await signInWithRedirect(auth, new GoogleAuthProvider()); }
+          catch(err) { showError('Google sign-in failed.'); }
         });
         window.signOutUser = () => { auth.signOut().then(() => window.location.href = '/'); };
 </script>
