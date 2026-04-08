@@ -51,28 +51,28 @@ input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(74,
 <body>
 <div class="topnav">
   <a href="/" class="topnav-logo">Draft<span>Buddy</span></a>
-  <div class="nav-links"><a href="/dashboard" class="btn-sm">â Dashboard</a></div>
+  <div class="nav-links"><a href="/dashboard" class="btn-sm">Ã¢ÂÂ Dashboard</a></div>
 </div>
 <div class="page">
   <aside class="sidebar">
     <div class="sidebar-section">NFL</div>
-    <a href="/draft" class="nav-item">ð Football</a>
+    <a href="/draft" class="nav-item">Ã°ÂÂÂ Football</a>
     <div class="sidebar-section">Other Sports</div>
-    <a href="/baseball-draft" class="nav-item active">â¾ Baseball</a>
-    <a href="/basketball-draft" class="nav-item">ð Basketball</a>
-    <a href="/hockey-draft" class="nav-item">ð Hockey</a>
-    <a href="/womens-draft" class="nav-item">ð WNBA</a>
-    <a href="/bracket" class="nav-item">ðï¸ March Madness</a>
+    <a href="/baseball-draft" class="nav-item active">Ã¢ÂÂ¾ Baseball</a>
+    <a href="/basketball-draft" class="nav-item">Ã°ÂÂÂ Basketball</a>
+    <a href="/hockey-draft" class="nav-item">Ã°ÂÂÂ Hockey</a>
+    <a href="/womens-draft" class="nav-item">Ã°ÂÂÂ WNBA</a>
+    <a href="/bracket" class="nav-item">Ã°ÂÂÂÃ¯Â¸Â March Madness</a>
   </aside>
   <div class="main">
     <div class="form-wrap">
       <div class="page-header">
-        <h1>â¾ MLB Baseball Draft</h1>
+        <h1>Ã¢ÂÂ¾ MLB Baseball Draft</h1>
         <p>Configure your league settings for AI draft recommendations</p>
       </div>
       <form id="draftForm">
         <div class="section-card">
-          <h2>ð League Info</h2>
+          <h2>Ã°ÂÂÂ League Info</h2>
           <div class="form-grid">
             <div class="form-group full">
               <label>League Name</label>
@@ -98,7 +98,7 @@ input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(74,
           </div>
         </div>
         <div class="section-card">
-          <h2>ð Scoring Format</h2>
+          <h2>Ã°ÂÂÂ Scoring Format</h2>
           <div class="scoring-opts" id="scoringOpts">
             <div class="scoring-opt selected" data-val="standard"><div class="score-label">Standard</div><div class="score-desc">R/HR/RBI/SB/AVG</div></div>
             <div class="scoring-opt" data-val="roto"><div class="score-label">Rotisserie</div><div class="score-desc">Category rankings</div></div>
@@ -107,21 +107,22 @@ input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(74,
           <input type="hidden" id="scoring" value="standard">
         </div>
         <div class="section-card">
-          <h2>ð Your Draft Position</h2>
+          <h2>Ã°ÂÂÂ Your Draft Position</h2>
           <p style="font-size:.82rem;color:var(--muted);margin-bottom:10px">Which pick are you in the first round?</p>
           <div class="pick-selector" id="pickSelector"></div>
           <input type="hidden" id="draftPosition" value="1">
         </div>
         
-        <button type="submit" class="btn-submit">ð¤ Launch AI Draft Assistant â</button>
+        <button type="submit" class="btn-submit">Ã°ÂÂ¤Â Launch AI Draft Assistant Ã¢ÂÂ</button>
       </form>
     </div>
   </div>
 </div>
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
-import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
 const auth = getAuth(initializeApp({apiKey:"AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88",authDomain:"draftbuddy-cf5c9.firebaseapp.com",projectId:"draftbuddy-cf5c9",storageBucket:"draftbuddy-cf5c9.appspot.com",messagingSenderId:"822764808554",appId:"1:861425863011:web:e6b8ee8525ba71f7de6b56"}));
+    setPersistence(auth,browserLocalPersistence).catch(function(){});
 onAuthStateChanged(auth, u => { if (!u) window.location.href = '/login'; });
 const numTeamsEl = document.getElementById('numTeams');
 function buildPickSelector() {
