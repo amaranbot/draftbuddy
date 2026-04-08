@@ -133,92 +133,100 @@
   
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
-        import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+        import { getAuth, setPersistence, browserLocalPersistence, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+
         const FB = {apiKey:"AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88",authDomain:"draftbuddy-cf5c9.firebaseapp.com",projectId:"draftbuddy-cf5c9",storageBucket:"draftbuddy-cf5c9.appspot.com",messagingSenderId:"822764808554",appId:"1:861425863011:web:e6b8ee8525ba71f7de6b56"};
-        const auth = getAuth(initializeApp(FB));
-    const getRedirectUrl = function() { var p = new URLSearchParams(window.location.search); var r = p.get("returnUrl"); return (r && r.startsWith("/")) ? r : "/membership"; };
-    setPersistence(auth, browserLocalPersistence).catch(function(){});
-    
-    
+        const app = initializeApp(FB);
+        const auth = getAuth(app);
+
+        // Get redirect URL — default is /membership after sign-in
+        function getRedirectUrl() {
+          const params = new URLSearchParams(window.location.search);
+          return params.get('returnUrl') || '/membership';
+        }
+
+        // Keep user logged in across sessions
+        setPersistence(auth, browserLocalPersistence).catch(() => {});
+
         let isHandlingAuth = false;
+
+        // Handle Google redirect result (fires after Google OAuth)
         getRedirectResult(auth).then(result => {
-            if (result && result.user) window.location.href = getRedirectUrl();
+          if (result && result.user) {
+            const hasPaid = localStorage.getItem('db_paid') === 'true';
+            window.location.href = hasPaid ? '/dashboard' : getRedirectUrl();
+          }
         }).catch(() => {});
-        onAuthStateChanged(auth, u => {
-                if (u && !isHandlingAuth) window.location.href = getRedirectUrl();
-        });
-    
+
+        // Login page always shows the form — no auto-redirect for already-logged-in users
+        // Users must explicitly sign in here
+
         let mode = 'login';
         window.switchTab = function(m) {
-                mode = m;
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                document.getElementById('tab' + (m === 'login' ? 'Login' : 'Signup')).classList.add('active');
-                document.getElementById('nameRow').style.display = m === 'signup' ? 'grid' : 'none';
-                document.getElementById('confirmRow').style.display = m === 'signup' ? 'block' : 'none';
-                document.getElementById('formTitle').textContent = m === 'login' ? 'Welcome back' : 'Create account';
-                document.getElementById('formSubtitle').textContent = m === 'login' ? 'Sign in to access your draft assistant' : 'Join DraftBuddy';
-                document.getElementById('submitBtn').textContent = m === 'login' ? 'ð Sign In' : 'ð Create Account';
-                document.getElementById('errorMsg').style.display = 'none';
-                document.getElementById('successMsg').style.display = 'none';
+          mode = m;
+          document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === m));
+          document.getElementById('formLogin').style.display = m === 'login' ? 'block' : 'none';
+          document.getElementById('formSignup').style.display = m === 'signup' ? 'block' : 'none';
+          document.getElementById('errorMsg').textContent = '';
+          document.getElementById('submitBtn').textContent = m === 'login' ? '\uD83D\uDD12 Sign In' : '\uD83C\uDF31 Create Account';
         };
-    
+
         function showError(msg) {
-                const el = document.getElementById('errorMsg');
-                el.textContent = msg; el.style.display = 'block';
-                document.getElementById('successMsg').style.display = 'none';
+          const el = document.getElementById('errorMsg');
+          el.textContent = msg;
+          el.style.display = 'block';
         }
-    
-        function showSuccess(msg) {
-                const el = document.getElementById('successMsg');
-                el.textContent = msg; el.style.display = 'block';
-                document.getElementById('errorMsg').style.display = 'none';
-        }
-    
-        document.getElementById('authForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const email = document.getElementById('emailInput').value.trim();
-                const pass = document.getElementById('passwordInput').value;
-                const btn = document.getElementById('submitBtn');
-                btn.disabled = true;
-                btn.textContent = 'Please wait...';
-                try {
-                          if (mode === 'login') {
-                                      isHandlingAuth = true;
-                                      await signInWithEmailAndPassword(auth, email, pass);
-                                      window.location.href = getRedirectUrl();
-                          } else {
-                                      const confirm = document.getElementById('confirmInput').value;
-                                      if (pass !== confirm) { showError('Passwords do not match.'); btn.disabled = false; btn.textContent = 'ð Create Account'; return; }
-                            const firstName = document.getElementById('firstName').value.trim();
-                                      const lastName = document.getElementById('lastName').value.trim();
-                                                                       isHandlingAuth = true;
-                                      const cred = await createUserWithEmailAndPassword(auth, email, pass);
-                                      if (firstName || lastName) await updateProfile(cred.user, { displayName: (firstName + ' ' + lastName).trim() });
-                                                  window.location.href = getRedirectUrl();
-                          }
-                } catch(err) {
-                          isHandlingAuth = false;
-                          const msgs = {
-                                      'auth/user-not-found': 'No account found with this email.',
-                                      'auth/wrong-password': 'Incorrect password. Please try again.',
-                                      'auth/invalid-credential': 'Incorrect email or password. Please try again.',
-                            'auth/invalid-login-credentials': 'Incorrect email or password. Please try again.',
-                                      'auth/email-already-in-use': 'An account with this email already exists.',
-                                      'auth/weak-password': 'Password must be at least 6 characters.',
-                                      'auth/invalid-email': 'Please enter a valid email address.',
-                                      'auth/too-many-requests': 'Too many attempts. Please wait a moment and try again.',
-                                      'auth/network-request-failed': 'Network error. Please check your connection and try again.'
-                          };
-                          showError(msgs[err.code] || 'Something went wrong. Please try again.');
-                          btn.disabled = false;
-                          btn.textContent = mode === 'login' ? 'ð Sign In' : 'ð Create Account';
-                }
+
+        document.getElementById('authForm').addEventListener('submit', async e => {
+          e.preventDefault();
+          if (isHandlingAuth) return;
+          isHandlingAuth = true;
+          document.getElementById('submitBtn').textContent = 'Please wait...';
+          document.getElementById('errorMsg').textContent = '';
+
+          try {
+            if (mode === 'login') {
+              const email = document.getElementById('loginEmail').value.trim();
+              const pass = document.getElementById('loginPass').value;
+              await signInWithEmailAndPassword(auth, email, pass);
+              // After sign-in: if already paid, go to dashboard; otherwise go to membership
+              const hasPaid = localStorage.getItem('db_paid') === 'true';
+              window.location.href = hasPaid ? '/dashboard' : getRedirectUrl();
+            } else {
+              const name = document.getElementById('signupName').value.trim();
+              const email = document.getElementById('signupEmail').value.trim();
+              const pass = document.getElementById('signupPass').value;
+              const cred = await createUserWithEmailAndPassword(auth, email, pass);
+              if (name) await updateProfile(cred.user, {displayName: name});
+              window.location.href = getRedirectUrl();
+            }
+          } catch(err) {
+            isHandlingAuth = false;
+            document.getElementById('submitBtn').textContent = mode === 'login' ? '\uD83D\uDD12 Sign In' : '\uD83C\uDF31 Create Account';
+            const msgs = {
+              'auth/user-not-found': 'No account found with that email.',
+              'auth/wrong-password': 'Incorrect password. Please try again.',
+              'auth/invalid-credential': 'Invalid email or password.',
+              'auth/email-already-in-use': 'An account already exists with this email.',
+              'auth/weak-password': 'Password must be at least 6 characters.',
+              'auth/invalid-email': 'Please enter a valid email address.'
+            };
+            showError(msgs[err.code] || 'Something went wrong. Please try again.');
+          }
         });
-    
-                                document.getElementById('googleBtn').addEventListener('click', () => {
-            isHandlingAuth = true;
-            signInWithRedirect(auth, new GoogleAuthProvider());
+
+        document.getElementById('googleBtn').addEventListener('click', async () => {
+          try {
+            const provider = new GoogleAuthProvider();
+            await signInWithRedirect(auth, provider);
+          } catch(err) {
+            showError('Google sign-in failed. Please try again.');
+          }
         });
-    </script>
-  </body>
+
+        window.signOutUser = () => {
+          auth.signOut().then(() => window.location.href = '/');
+        };
+</script>
+</body>
 </html>
