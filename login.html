@@ -61,7 +61,7 @@
   <body>
       <div class="left">
             <div class="left-content">
-                    <a href="/" class="back-link">← Back to DraftBuddy</a>
+                    <a href="/" class="back-link">â Back to DraftBuddy</a>
                     <div class="logo">Draft<span>Buddy</span></div>
                   <h1 id="formTitle">Welcome back</h1>
                   <p class="subtitle" id="formSubtitle">Sign in to access your draft assistant</p>
@@ -88,13 +88,13 @@
                           </div>
                           <div class="form-group">
                                     <label>Password</label>
-                                    <input type="password" id="passwordInput" placeholder="••••••••" required minlength="6">
+                                    <input type="password" id="passwordInput" placeholder="â¢â¢â¢â¢â¢â¢â¢â¢" required minlength="6">
                           </div>
                           <div class="form-group" id="confirmRow" style="display:none">
                                     <label>Confirm Password</label>
-                                    <input type="password" id="confirmInput" placeholder="••••••••" minlength="6">
+                                    <input type="password" id="confirmInput" placeholder="â¢â¢â¢â¢â¢â¢â¢â¢" minlength="6">
                           </div>
-                          <button type="submit" class="btn-submit" id="submitBtn">🚀 Sign In</button>
+                          <button type="submit" class="btn-submit" id="submitBtn">ð Sign In</button>
                   </form>
             
                   <div class="divider">or</div>
@@ -113,19 +113,19 @@
     <div class="right">
         <div class="right-inner">
               <h2>The <span class="accent">smartest</span> way to dominate your fantasy draft</h2>
-              <p>Real-time AI recommendations, live player data, and multi-sport support — all free, no credit card needed.</p>
+              <p>Real-time AI recommendations, live player data, and multi-sport support â all free, no credit card needed.</p>
               <ul class="feature-list">
-                      <li><span class="check">✓</span><span>AI picks based on your exact positional needs</span></li>
-                      <li><span class="check">✓</span><span>Live NFL, MLB, NBA & NHL rosters updated in real-time</span></li>
-                      <li><span class="check">✓</span><span>Snake draft aware — tracks whose pick it is every round</span></li>
-                      <li><span class="check">✓</span><span>March Madness bracket AI with upset predictions</span></li>
-                      <li><span class="check">✓</span><span>100% free, no credit card, no hidden fees</span></li>
+                      <li><span class="check">â</span><span>AI picks based on your exact positional needs</span></li>
+                      <li><span class="check">â</span><span>Live NFL, MLB, NBA & NHL rosters updated in real-time</span></li>
+                      <li><span class="check">â</span><span>Snake draft aware â tracks whose pick it is every round</span></li>
+                      <li><span class="check">â</span><span>March Madness bracket AI with upset predictions</span></li>
+                      <li><span class="check">â</span><span>100% free, no credit card, no hidden fees</span></li>
               </ul>
               <div class="testimonial">
                       <p>"DraftBuddy's AI told me to take Jahmyr Gibbs in Round 3 when everyone was sleeping on him. Finished the season in first place."</p>
                       <div class="testimonial-author">
                                 <div class="t-avatar">MR</div>
-                                <div><div class="t-name">Mike R.</div><div class="t-role">Fantasy Football — 12-team PPR</div></div>
+                                <div><div class="t-name">Mike R.</div><div class="t-role">Fantasy Football â 12-team PPR</div></div>
                       </div>
               </div>
         </div>
@@ -133,16 +133,19 @@
   
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
-        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+        import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
         const FB = {apiKey:"AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88",authDomain:"draftbuddy-cf5c9.firebaseapp.com",projectId:"draftbuddy-cf5c9",storageBucket:"draftbuddy-cf5c9.appspot.com",messagingSenderId:"822764808554",appId:"1:861425863011:web:e6b8ee8525ba71f7de6b56"};
         const auth = getAuth(initializeApp(FB));
+    const getRedirectUrl = function() { var p = new URLSearchParams(window.location.search); var r = p.get("returnUrl"); return (r && r.startsWith("/")) ? r : "/membership"; };
+    setPersistence(auth, browserLocalPersistence).catch(function(){});
+    
     
         let isHandlingAuth = false;
         getRedirectResult(auth).then(result => {
-            if (result && result.user) window.location.href = '/membership';
+            if (result && result.user) window.location.href = getRedirectUrl();
         }).catch(() => {});
         onAuthStateChanged(auth, u => {
-                if (u && !isHandlingAuth) window.location.href = '/membership';
+                if (u && !isHandlingAuth) window.location.href = getRedirectUrl();
         });
     
         let mode = 'login';
@@ -154,7 +157,7 @@
                 document.getElementById('confirmRow').style.display = m === 'signup' ? 'block' : 'none';
                 document.getElementById('formTitle').textContent = m === 'login' ? 'Welcome back' : 'Create account';
                 document.getElementById('formSubtitle').textContent = m === 'login' ? 'Sign in to access your draft assistant' : 'Join DraftBuddy for free';
-                document.getElementById('submitBtn').textContent = m === 'login' ? '🚀 Sign In' : '🎉 Create Account';
+                document.getElementById('submitBtn').textContent = m === 'login' ? 'ð Sign In' : 'ð Create Account';
                 document.getElementById('errorMsg').style.display = 'none';
                 document.getElementById('successMsg').style.display = 'none';
         };
@@ -182,16 +185,16 @@
                           if (mode === 'login') {
                                       isHandlingAuth = true;
                                       await signInWithEmailAndPassword(auth, email, pass);
-                                      window.location.href = '/membership';
+                                      window.location.href = getRedirectUrl();
                           } else {
                                       const confirm = document.getElementById('confirmInput').value;
-                                      if (pass !== confirm) { showError('Passwords do not match.'); btn.disabled = false; btn.textContent = '🎉 Create Account'; return; }
+                                      if (pass !== confirm) { showError('Passwords do not match.'); btn.disabled = false; btn.textContent = 'ð Create Account'; return; }
                             const firstName = document.getElementById('firstName').value.trim();
                                       const lastName = document.getElementById('lastName').value.trim();
                                                                        isHandlingAuth = true;
                                       const cred = await createUserWithEmailAndPassword(auth, email, pass);
                                       if (firstName || lastName) await updateProfile(cred.user, { displayName: (firstName + ' ' + lastName).trim() });
-                                                  window.location.href = '/membership';
+                                                  window.location.href = getRedirectUrl();
                           }
                 } catch(err) {
                           isHandlingAuth = false;
@@ -208,7 +211,7 @@
                           };
                           showError(msgs[err.code] || 'Something went wrong. Please try again.');
                           btn.disabled = false;
-                          btn.textContent = mode === 'login' ? '🚀 Sign In' : '🎉 Create Account';
+                          btn.textContent = mode === 'login' ? 'ð Sign In' : 'ð Create Account';
                 }
         });
     
