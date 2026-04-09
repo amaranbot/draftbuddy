@@ -8,193 +8,168 @@
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--green:#4ade80;--green-dark:#22c55e;--bg:#0f172a;--bg2:#1e293b;--bg3:#334155;--text:#e2e8f0;--muted:#94a3b8}
 body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
-.topnav{background:var(--bg2);border-bottom:1px solid rgba(74,222,128,.15);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
-.topnav-logo{font-size:1.2rem;font-weight:800;color:var(--green);text-decoration:none}
-.topnav-logo span{color:var(--text)}
-.nav-links{display:flex;gap:8px}
-.btn-sm{padding:7px 14px;border-radius:8px;border:1px solid var(--bg3);background:transparent;color:var(--muted);font-size:.85rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all .15s}
-.btn-sm:hover{color:var(--text);border-color:rgba(74,222,128,.3)}
-.page{display:flex;min-height:calc(100vh - 56px)}
-.sidebar{width:200px;background:var(--bg2);border-right:1px solid var(--bg3);padding:16px 10px;display:flex;flex-direction:column;gap:4px}
-.sidebar-section{font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding:10px 10px 4px;margin-top:4px}
-.nav-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:7px;cursor:pointer;text-decoration:none;color:var(--muted);font-size:.88rem;font-weight:500;transition:all .15s}
-.nav-item:hover{background:rgba(74,222,128,.08);color:var(--text)}
-.nav-item.active{background:rgba(74,222,128,.12);color:var(--green);font-weight:600}
-.main{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px}
-.form-wrap{width:100%;max-width:640px}
-.page-header{margin-bottom:28px}
-.page-header h1{font-size:1.6rem;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:10px}
-.page-header p{color:var(--muted);font-size:.9rem}
-.section-card{background:var(--bg2);border:1px solid var(--bg3);border-radius:14px;padding:22px;margin-bottom:16px}
-.section-card h2{font-size:.85rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px;display:flex;align-items:center;gap:6px}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
-.form-group{display:flex;flex-direction:column;gap:6px}
-.form-group.full{grid-column:1/-1}
-label{font-size:.82rem;font-weight:600;color:var(--muted)}
-input,select{background:var(--bg);border:1px solid var(--bg3);color:var(--text);padding:10px 12px;border-radius:8px;font-size:.9rem;outline:none;transition:border-color .2s;width:100%}
-input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(74,222,128,.08)}
-input::placeholder{color:#475569}
-.pick-selector{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:2px}
-.pick-btn{padding:8px 4px;border-radius:7px;border:1px solid var(--bg3);background:var(--bg);color:var(--muted);font-size:.82rem;font-weight:600;cursor:pointer;text-align:center;transition:all .15s}
-.pick-btn:hover{border-color:rgba(74,222,128,.4);color:var(--text)}
-.pick-btn.selected{background:rgba(74,222,128,.15);border-color:var(--green);color:var(--green)}
-.scoring-opts{display:flex;gap:8px}
-.scoring-opt{flex:1;padding:10px;border-radius:8px;border:1px solid var(--bg3);background:var(--bg);cursor:pointer;text-align:center;transition:all .15s}
-.scoring-opt:hover{border-color:rgba(74,222,128,.3)}
-.scoring-opt.selected{background:rgba(74,222,128,.12);border-color:var(--green)}
-.scoring-opt .score-label{font-size:.82rem;font-weight:700;color:var(--text)}
-.scoring-opt .score-desc{font-size:.72rem;color:var(--muted);margin-top:2px}
-.btn-submit{width:100%;background:var(--green);color:#0f172a;border:none;padding:14px;border-radius:11px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:8px;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-submit:hover{background:var(--green-dark);transform:translateY(-1px);box-shadow:0 6px 20px rgba(74,222,128,.3)}
-.tip-box{background:rgba(74,222,128,.05);border:1px solid rgba(74,222,128,.15);border-radius:10px;padding:12px 14px;font-size:.82rem;color:var(--muted);line-height:1.5;margin-bottom:16px}
-.tip-box strong{color:var(--green)}
-@media(max-width:700px){.sidebar{display:none}.form-grid{grid-template-columns:1fr}.form-grid-3{grid-template-columns:1fr 1fr}.pick-selector{grid-template-columns:repeat(8,1fr)}}
+.topnav{background:var(--bg2);border-bottom:1px solid var(--bg3);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.topnav-logo{font-size:1.4rem;font-weight:900;color:var(--text);text-decoration:none}
+.topnav-logo span{color:var(--green)}
+.btn-sm{padding:7px 14px;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;text-decoration:none;border:none;transition:all .15s}
+.btn-back{background:transparent;color:var(--muted);border:1px solid var(--bg3)}
+.btn-back:hover{color:var(--text)}
+.layout{display:flex;min-height:calc(100vh - 60px)}
+.sidebar{width:200px;background:var(--bg2);border-right:1px solid var(--bg3);padding:20px 0;flex-shrink:0;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto}
+.sidebar-section{font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:14px 20px 6px}
+.nav-item{display:block;padding:9px 20px;color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:500;transition:all .15s;border-left:3px solid transparent}
+.nav-item:hover{background:rgba(74,222,128,.07);color:var(--text)}
+.nav-item.active{background:rgba(74,222,128,.12);color:var(--green);border-left-color:var(--green);font-weight:600}
+.main{flex:1;padding:40px;max-width:780px}
+.page-title{font-size:2rem;font-weight:800;margin-bottom:6px}
+.page-sub{color:var(--muted);font-size:1rem;margin-bottom:28px}
+.card{background:var(--bg2);border:1px solid var(--bg3);border-radius:16px;padding:28px;margin-bottom:20px}
+.card-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--green);margin-bottom:20px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.field:last-child{margin-bottom:0}
+.field label{font-size:.85rem;font-weight:600;color:var(--muted)}
+.field input,.field select{background:var(--bg);border:1.5px solid var(--bg3);border-radius:10px;padding:12px 14px;color:var(--text);font-size:.95rem;outline:none;transition:all .15s;width:100%}
+.field input:focus,.field select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(74,222,128,.12)}
+.field select option{background:var(--bg2)}
+.scoring-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.score-opt{background:var(--bg);border:2px solid var(--bg3);border-radius:12px;padding:16px;cursor:pointer;transition:all .2s;text-align:center}
+.score-opt:hover{border-color:rgba(74,222,128,.4)}
+.score-opt.selected{background:rgba(74,222,128,.1);border-color:var(--green)}
+.score-opt .score-name{font-weight:700;font-size:1rem;color:var(--text);margin-bottom:4px}
+.score-opt .score-desc{font-size:.78rem;color:var(--muted)}
+.pos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:10px}
+.pos-btn{background:var(--bg);border:2px solid var(--bg3);border-radius:10px;padding:12px 8px;cursor:pointer;text-align:center;transition:all .2s;font-weight:700;font-size:.95rem;color:var(--muted)}
+.pos-btn:hover{border-color:rgba(74,222,128,.4);color:var(--text)}
+.pos-btn.selected{background:rgba(74,222,128,.12);border-color:var(--green);color:var(--green)}
+.tip{background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.2);border-radius:12px;padding:14px 18px;margin-bottom:24px;font-size:.88rem;color:var(--muted);line-height:1.6}
+.tip strong{color:var(--green)}
+.btn-submit{width:100%;background:var(--green);color:#0f172a;border:none;padding:16px;border-radius:12px;font-size:1.05rem;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;margin-top:4px}
+.btn-submit:hover{background:var(--green-dark);transform:translateY(-1px);box-shadow:0 4px 20px rgba(74,222,128,.3)}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed;transform:none}
 </style>
 </head>
 <body>
-
-<div class="topnav">
+<nav class="topnav">
   <a href="/" class="topnav-logo">Draft<span>Buddy</span></a>
-  <div class="nav-links">
-    <a href="/dashboard" class="btn-sm">â Dashboard</a>
-  </div>
-</div>
-
-<div class="page">
+  <a href="/dashboard" class="btn-sm btn-back">&larr; Dashboard</a>
+</nav>
+<div class="layout">
   <aside class="sidebar">
     <div class="sidebar-section">NFL</div>
-    <a href="/draft" class="nav-item active"> Setup Draft</a>
-    <a href="/rankings?sport=nfl" class="nav-item"> Rankings</a>
+    <a href="/draft" class="nav-item active">Setup Draft</a>
+    <a href="/rankings?sport=nfl" class="nav-item">Rankings</a>
     <div class="sidebar-section">Other Sports</div>
-    <a href="/baseball-draft" class="nav-item">â¾ Baseball</a>
-    <a href="/basketball-draft" class="nav-item"> Basketball</a>
-    <a href="/hockey-draft" class="nav-item"> Hockey</a>
-    <a href="/womens-draft" class="nav-item"> WNBA</a>
-    <a href="/bracket" class="nav-item"> March Madness</a>
+    <a href="/baseball-draft" class="nav-item">&#9918; Baseball</a>
+    <a href="/basketball-draft" class="nav-item">&#127936; Basketball</a>
+    <a href="/hockey-draft" class="nav-item">&#127944; Hockey</a>
+    <a href="/womens-draft" class="nav-item">WNBA</a>
+    <a href="/bracket" class="nav-item">&#127942; March Madness</a>
   </aside>
-
-  <div class="main">
-    <div class="form-wrap">
-      <div class="page-header">
-        <h1> NFL Draft Setup</h1>
-        <p>Configure your league settings to get personalized AI draft recommendations</p>
-      </div>
-
-      <div class="tip-box"> <strong>Tip:</strong> The more accurately you configure your league, the smarter the AI recommendations will be. Make sure your scoring format and roster settings match your league exactly.
-      </div>
-
-      <form id="draftForm">
-        <div class="section-card">
-          <h2> League Info</h2>
-          <div class="form-grid">
-            <div class="form-group full">
-              <label>League Name</label>
-              <input type="text" id="leagueName" placeholder="e.g. Monday Night Legends">
-            </div>
-            <div class="form-group">
-              <label>Number of Teams</label>
-              <select id="numTeams">
-                <option value="8">8 Teams</option>
-                <option value="10" selected>10 Teams</option>
-                <option value="12">12 Teams</option>
-                <option value="14">14 Teams</option>
-                <option value="16">16 Teams</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Draft Type</label>
-              <select id="draftType">
-                <option value="snake" selected>Snake Draft</option>
-                <option value="linear">Linear Draft</option>
-                <option value="auction">Auction Draft</option>
-              </select>
-            </div>
+  <main class="main">
+    <h1 class="page-title">&#127944; NFL Draft Setup</h1>
+    <p class="page-sub">Configure your league for personalized AI pick recommendations</p>
+    <div class="tip"><strong>Pro tip:</strong> Match your league settings exactly. PPR scoring + snake draft are the most common formats.</div>
+    <form id="draftForm">
+      <div class="card">
+        <div class="card-title">League Info</div>
+        <div class="field">
+          <label for="leagueName">League Name</label>
+          <input type="text" id="leagueName" placeholder="e.g. Monday Night Legends">
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="numTeams">Number of Teams</label>
+            <select id="numTeams">
+              <option value="4">4 Teams</option>
+              <option value="6">6 Teams</option>
+              <option value="8">8 Teams</option>
+              <option value="10" selected>10 Teams</option>
+              <option value="12">12 Teams</option>
+              <option value="14">14 Teams</option>
+              <option value="16">16 Teams</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="draftType">Draft Type</label>
+            <select id="draftType">
+              <option value="snake" selected>Snake Draft</option>
+              <option value="linear">Linear Draft</option>
+              <option value="auction">Auction Draft</option>
+            </select>
           </div>
         </div>
-
-        <div class="section-card">
-          <h2> Scoring Format</h2>
-          <div class="scoring-opts" id="scoringOpts">
-            <div class="scoring-opt selected" data-val="ppr" onclick="selectScoring('ppr',this)">
-              <div class="score-label">PPR</div>
-              <div class="score-desc">1 pt per reception</div>
-            </div>
-            <div class="scoring-opt" data-val="half" onclick="selectScoring('half',this)">
-              <div class="score-label">Half PPR</div>
-              <div class="score-desc">0.5 pt per rec</div>
-            </div>
-            <div class="scoring-opt" data-val="standard" onclick="selectScoring('standard',this)">
-              <div class="score-label">Standard</div>
-              <div class="score-desc">No reception pts</div>
-            </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Scoring Format</div>
+        <input type="hidden" id="scoring" value="ppr">
+        <div class="scoring-grid">
+          <div class="score-opt selected" onclick="selectScoring(this,'ppr')">
+            <div class="score-name">PPR</div>
+            <div class="score-desc">1 pt per reception</div>
           </div>
-          <input type="hidden" id="scoring" value="ppr">
+          <div class="score-opt" onclick="selectScoring(this,'half-ppr')">
+            <div class="score-name">Half PPR</div>
+            <div class="score-desc">0.5 pts per rec</div>
+          </div>
+          <div class="score-opt" onclick="selectScoring(this,'standard')">
+            <div class="score-name">Standard</div>
+            <div class="score-desc">No reception pts</div>
+          </div>
         </div>
-
-        <div class="section-card">
-          <h2> Your Draft Position</h2>
-          <p style="font-size:.82rem;color:var(--muted);margin-bottom:10px">Which pick are you in the first round?</p>
-          <div class="pick-selector" id="pickSelector"></div>
-          <input type="hidden" id="draftPosition" value="1">
-        </div>
-
-        <button type="submit" class="btn-submit" id="submitBtn"> Launch AI Draft Assistant â
-        </button>
-      </form>
-    </div>
-  </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Your Draft Position</div>
+        <input type="hidden" id="draftPosition" value="1">
+        <div class="pos-grid" id="posGrid"></div>
+      </div>
+      <button type="submit" class="btn-submit" id="submitBtn">&#9889; Start Draft &rarr;</button>
+    </form>
+  </main>
 </div>
-
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
-import { getAuth, setPersistence, browserLocalPersistence, setPersistence, browserLocalPersistence, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
-const FB = {apiKey:"AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88",authDomain:"draftbuddy-cf5c9.firebaseapp.com",projectId:"draftbuddy-cf5c9",storageBucket:"draftbuddy-cf5c9.appspot.com",messagingSenderId:"822764808554",appId:"1:861425863011:web:e6b8ee8525ba71f7de6b56"};
-const auth = getAuth(initializeApp(FB));
-    setPersistence(auth,browserLocalPersistence).catch(function(){});
-    setPersistence(auth,browserLocalPersistence).catch(function(){});
-onAuthStateChanged(auth, u => { if (!u) window.location.href = '/login'; });
-
-// Build pick selector
-const numTeamsEl = document.getElementById('numTeams');
-function buildPickSelector() {
-  const n = parseInt(numTeamsEl.value);
-  const sel = document.getElementById('pickSelector');
-  sel.style.gridTemplateColumns = 'repeat(' + Math.min(n, 8) + ', 1fr)';
-  sel.innerHTML = '';
-  for (let i = 1; i <= n; i++) {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'pick-btn' + (i === 1 ? ' selected' : '');
-    btn.textContent = i;
-    btn.onclick = () => {
-      document.querySelectorAll('.pick-btn').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-      document.getElementById('draftPosition').value = i;
-    };
-    sel.appendChild(btn);
+import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+const FB={apiKey:"AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88",authDomain:"draftbuddy-cf5c9.firebaseapp.com",projectId:"draftbuddy-cf5c9",storageBucket:"draftbuddy-cf5c9.appspot.com",messagingSenderId:"822764808554",appId:"1:861425863011:web:e6b8ee8525ba71f7de6b56"};
+const app=initializeApp(FB);const auth=getAuth(app);
+setPersistence(auth,browserLocalPersistence).catch(()=>{});
+onAuthStateChanged(auth,user=>{if(!user){window.location.href='/login?returnUrl=/draft';return;}});
+function buildPositions(n){
+  const grid=document.getElementById('posGrid');
+  const cur=parseInt(document.getElementById('draftPosition').value)||1;
+  grid.innerHTML='';
+  for(let i=1;i<=n;i++){
+    const btn=document.createElement('button');
+    btn.type='button';
+    btn.className='pos-btn'+(i===cur?' selected':'');
+    btn.textContent=i;
+    btn.onclick=()=>selectPos(btn,i);
+    grid.appendChild(btn);
   }
+  if(cur>n)document.getElementById('draftPosition').value=1;
 }
-numTeamsEl.addEventListener('change', buildPickSelector);
-buildPickSelector();
-
-window.selectScoring = function(val, el) {
-  document.querySelectorAll('.scoring-opt').forEach(o => o.classList.remove('selected'));
+window.selectPos=(el,val)=>{
+  document.querySelectorAll('.pos-btn').forEach(b=>b.classList.remove('selected'));
   el.classList.add('selected');
-  document.getElementById('scoring').value = val;
+  document.getElementById('draftPosition').value=val;
 };
-
-document.getElementById('draftForm').addEventListener('submit', (e) => {
+window.selectScoring=(el,val)=>{
+  document.querySelectorAll('.score-opt').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('scoring').value=val;
+};
+document.getElementById('numTeams').addEventListener('change',function(){buildPositions(parseInt(this.value));});
+buildPositions(10);
+document.getElementById('draftForm').addEventListener('submit',e=>{
   e.preventDefault();
-  const btn = document.getElementById('submitBtn');
-  btn.textContent = 'â³ Loading draft...';
-  btn.disabled = true;
-  const numTeams = document.getElementById('numTeams').value;
-  const draftType = document.getElementById('draftType').value;
-  const scoring = document.getElementById('scoring').value;
-  const pick = document.getElementById('draftPosition').value;
-  const league = encodeURIComponent(document.getElementById('leagueName').value || 'NFL League');
-  window.location.href = '/rankings?sport=nfl&teams=' + numTeams + '&type=' + draftType + '&scoring=' + scoring + '&pick=' + pick + '&league=' + league;
+  const btn=document.getElementById('submitBtn');
+  btn.textContent='Loading...';btn.disabled=true;
+  const numTeams=document.getElementById('numTeams').value;
+  const draftType=document.getElementById('draftType').value;
+  const scoring=document.getElementById('scoring').value;
+  const pick=document.getElementById('draftPosition').value;
+  const league=encodeURIComponent(document.getElementById('leagueName').value||'NFL League');
+  window.location.href='/rankings?sport=nfl&teams='+numTeams+'&type='+draftType+'&scoring='+scoring+'&pick='+pick+'&league='+league;
 });
 </script>
 </body>
