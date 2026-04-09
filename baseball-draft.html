@@ -51,28 +51,28 @@ input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(74,
 <body>
 <div class="topnav">
   <a href="/" class="topnav-logo">Draft<span>Buddy</span></a>
-  <div class="nav-links"><a href="/dashboard" class="btn-sm">Ã¢ÂÂ Dashboard</a></div>
+  <div class="nav-links"><a href="/dashboard" class="btn-sm">&larr; Dashboard</a></div>
 </div>
 <div class="page">
   <aside class="sidebar">
     <div class="sidebar-section">NFL</div>
-    <a href="/draft" class="nav-item">Ã°ÂÂÂ Football</a>
+    <a href="/draft" class="nav-item">ÃÂ°ÃÂÃÂÃÂ Football</a>
     <div class="sidebar-section">Other Sports</div>
-    <a href="/baseball-draft" class="nav-item active">Ã¢ÂÂ¾ Baseball</a>
-    <a href="/basketball-draft" class="nav-item">Ã°ÂÂÂ Basketball</a>
-    <a href="/hockey-draft" class="nav-item">Ã°ÂÂÂ Hockey</a>
-    <a href="/womens-draft" class="nav-item">Ã°ÂÂÂ WNBA</a>
-    <a href="/bracket" class="nav-item">Ã°ÂÂÂÃ¯Â¸Â March Madness</a>
+    <a href="/baseball-draft" class="nav-item active">ÃÂ¢ÃÂÃÂ¾ Baseball</a>
+    <a href="/basketball-draft" class="nav-item">ÃÂ°ÃÂÃÂÃÂ Basketball</a>
+    <a href="/hockey-draft" class="nav-item">ÃÂ°ÃÂÃÂÃÂ Hockey</a>
+    <a href="/womens-draft" class="nav-item">ÃÂ°ÃÂÃÂÃÂ WNBA</a>
+    <a href="/bracket" class="nav-item">ÃÂ°ÃÂÃÂÃÂÃÂ¯ÃÂ¸ÃÂ March Madness</a>
   </aside>
   <div class="main">
     <div class="form-wrap">
       <div class="page-header">
-        <h1>Ã¢ÂÂ¾ MLB Baseball Draft</h1>
+        <h1>ÃÂ¢ÃÂÃÂ¾ MLB Baseball Draft</h1>
         <p>Configure your league settings for AI draft recommendations</p>
       </div>
       <form id="draftForm">
         <div class="section-card">
-          <h2>Ã°ÂÂÂ League Info</h2>
+          <h2>ÃÂ°ÃÂÃÂÃÂ League Info</h2>
           <div class="form-grid">
             <div class="form-group full">
               <label>League Name</label>
@@ -81,7 +81,9 @@ input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(74,
             <div class="form-group">
               <label>Number of Teams</label>
               <select id="numTeams">
-                <option value="8">8 Teams</option>
+                <option value="4">4 Teams</option>
+              <option value="6">6 Teams</option>
+              <option value="8">8 Teams</option>
                 <option value="10" selected>10 Teams</option>
                 <option value="12">12 Teams</option>
                 <option value="14">14 Teams</option>
@@ -98,7 +100,7 @@ input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(74,
           </div>
         </div>
         <div class="section-card">
-          <h2>Ã°ÂÂÂ Scoring Format</h2>
+          <h2>ÃÂ°ÃÂÃÂÃÂ Scoring Format</h2>
           <div class="scoring-opts" id="scoringOpts">
             <div class="scoring-opt selected" data-val="standard"><div class="score-label">Standard</div><div class="score-desc">R/HR/RBI/SB/AVG</div></div>
             <div class="scoring-opt" data-val="roto"><div class="score-label">Rotisserie</div><div class="score-desc">Category rankings</div></div>
@@ -107,13 +109,13 @@ input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(74,
           <input type="hidden" id="scoring" value="standard">
         </div>
         <div class="section-card">
-          <h2>Ã°ÂÂÂ Your Draft Position</h2>
+          <h2>ÃÂ°ÃÂÃÂÃÂ Your Draft Position</h2>
           <p style="font-size:.82rem;color:var(--muted);margin-bottom:10px">Which pick are you in the first round?</p>
           <div class="pick-selector" id="pickSelector"></div>
           <input type="hidden" id="draftPosition" value="1">
         </div>
         
-        <button type="submit" class="btn-submit">Ã°ÂÂ¤Â Launch AI Draft Assistant Ã¢ÂÂ</button>
+        <button type="submit" class="btn-submit">ÃÂ°ÃÂÃÂ¤ÃÂ Launch AI Draft Assistant ÃÂ¢ÃÂÃÂ</button>
       </form>
     </div>
   </div>
