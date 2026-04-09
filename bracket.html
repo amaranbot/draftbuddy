@@ -26,14 +26,14 @@ input:focus,select:focus{outline:none;border-color:#4ade80}
 </head>
 <body>
 <div class="card">
-  <h1>Ã°ÂÂÂ March Madness</h1>
+  <h1>🏀 March Madness</h1>
   <p class="subtitle">AI-powered bracket assistant with team strength analysis, upset probabilities, and championship predictions across all 4 regions.</p>
   <ul class="feature-list">
-    <li><span class="icon">Ã°ÂÂ¤Â</span> AI championship & region predictions</li>
-    <li><span class="icon">Ã°ÂÂÂ</span> Team strength scores (0-100) for all 64 teams</li>
-    <li><span class="icon">Ã¢ÂÂ¡</span> Upset probability analysis per matchup</li>
-    <li><span class="icon">Ã°ÂÂÂ</span> Interactive bracket Ã¢ÂÂ click to select teams</li>
-    <li><span class="icon">Ã°ÂÂÂ</span> Win-loss records &amp; scoring stats</li>
+    <li><span class="icon">🤖</span> AI championship & region predictions</li>
+    <li><span class="icon">📊</span> Team strength scores (0-100) for all 64 teams</li>
+    <li><span class="icon">⚡</span> Upset probability analysis per matchup</li>
+    <li><span class="icon">🏆</span> Interactive bracket — click to select teams</li>
+    <li><span class="icon">📈</span> Win-loss records &amp; scoring stats</li>
   </ul>
   <form id="bracketForm">
     <label>Your Name / Bracket Name</label>
@@ -44,13 +44,13 @@ input:focus,select:focus{outline:none;border-color:#4ade80}
       <option value="upset" selected>Balanced (AI Recommended)</option>
       <option value="chaos">Chaos (Max Upsets)</option>
     </select>
-    <button type="submit" class="btn">Open AI Bracket Assistant Ã¢ÂÂ</button>
+    <button type="submit" class="btn">Open AI Bracket Assistant →</button>
   </form>
-  <a class="back-link" href="/dashboard">Ã¢ÂÂ Back to Dashboard</a>
+  <a class="back-link" href="/dashboard">← Back to Dashboard</a>
 </div>
 <script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
-import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 const firebaseConfig = {apiKey:"AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88",authDomain:"draftbuddy-cf5c9.firebaseapp.com",projectId:"draftbuddy-cf5c9",storageBucket:"draftbuddy-cf5c9.appspot.com",messagingSenderId:"822764808554",appId:"1:861425863011:web:e6b8ee8525ba71f7de6b56"};
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
