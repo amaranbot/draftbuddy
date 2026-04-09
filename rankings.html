@@ -93,11 +93,11 @@ tr.drafted-opp td{background:#1e1e2e;opacity:.5;text-decoration:line-through;col
 </div>
 
 <header>
-  <div class="logo">🏆 DraftBuddy <span id="leagueNameHeader" style="font-weight:400;font-size:1rem;color:#94a3b8"></span></div>
+  <div class="logo">ð DraftBuddy <span id="leagueNameHeader" style="font-weight:400;font-size:1rem;color:#94a3b8"></span></div>
   <div class="header-right">
     <span class="sport-badge" id="sportBadge">Loading...</span>
     <span class="data-source-badge" id="dataSourceBadge">Live Data</span>
-    <button class="btn-sm btn-back" onclick="window.location.href='/draft'">← New Draft</button>
+    <button class="btn-sm btn-back" onclick="window.location.href='/draft'">â New Draft</button>
     <button class="btn-sm btn-back" onclick="window.location.href='/dashboard'">Dashboard</button>
   </div>
 </header>
@@ -137,10 +137,10 @@ tr.drafted-opp td{background:#1e1e2e;opacity:.5;text-decoration:line-through;col
   <div class="right-panel">
     <div class="round-info" id="roundInfo">
       Round <span id="curRound">1</span> &bull; Pick <span id="curPick">1</span> &bull; 
-      <span id="turnStatus">—</span>
+      <span id="turnStatus">â</span>
     </div>
     <div class="ai-rec card" id="aiRecCard">
-      <h3>🤖 AI Recommendation</h3>
+      <h3>ð¤ AI Recommendation</h3>
       <div id="aiContent"><div style="color:#94a3b8">Start drafting to activate AI...</div></div>
     </div>
     <div class="card">
@@ -157,13 +157,13 @@ tr.drafted-opp td{background:#1e1e2e;opacity:.5;text-decoration:line-through;col
 <div id="mmArea" style="display:none;padding:16px">
   <div class="card" style="margin-bottom:12px">
     <div style="display:flex;justify-content:space-between;align-items:center">
-      <h3 style="margin-bottom:0">🏀 March Madness AI Bracket Assistant</h3>
+      <h3 style="margin-bottom:0">ð March Madness AI Bracket Assistant</h3>
       <span class="data-source-badge">2025 Tournament</span>
     </div>
     <p style="color:#94a3b8;font-size:.85rem;margin-top:8px">Click teams to advance them. AI recommends based on strength, seed, and upset probability.</p>
   </div>
   <div class="ai-rec card" id="mmAiRec" style="margin-bottom:12px">
-    <h3>🤖 AI Picks & Championship Prediction</h3>
+    <h3>ð¤ AI Picks & Championship Prediction</h3>
     <div id="mmAiContent"></div>
   </div>
   <div class="mm-bracket" id="mmBracket"></div>
@@ -182,8 +182,6 @@ onAuthStateChanged(auth, u => { if (!u) window.location.href = '/login'; });
 const P = new URLSearchParams(window.location.search);
 const _rawSport = (P.get('sport') || 'football').toLowerCase();
 const SPORT_MAP = {'nfl':'football','nba':'basketball','mlb':'baseball','nhl':'hockey','wnba':'wnba','march_madness':'marchmadness','mm':'marchmadness'};
-const _rawSport = (P.get('sport') || 'football').toLowerCase();
-const SPORT_MAP = {'nfl':'football','nba':'basketball','mlb':'baseball','nhl':'hockey','march_madness':'marchmadness','mm':'marchmadness'};
 const SPORT = SPORT_MAP[_rawSport] || _rawSport;
 const NUM_TEAMS = parseInt(P.get('teams') || '10');
 const DRAFT_TYPE = (P.get('type') || 'snake').toLowerCase();
@@ -207,7 +205,7 @@ const SPORT_CONFIG = {
   football: {
     sleeperSport: 'nfl',
     label: 'NFL Football',
-    emoji: '🏈',
+    emoji: 'ð',
     positions: ['QB','RB','WR','TE','K','DEF'],
     fantasyPositions: ['QB','RB','WR','TE','K','DEF'],
     roster: {
@@ -224,7 +222,7 @@ const SPORT_CONFIG = {
   basketball: {
     sleeperSport: 'nba',
     label: 'NBA Basketball',
-    emoji: '🏀',
+    emoji: 'ð',
     positions: ['PG','SG','SF','PF','C'],
     fantasyPositions: ['PG','SG','SF','PF','C'],
     roster: {
@@ -241,7 +239,7 @@ const SPORT_CONFIG = {
   baseball: {
     sleeperSport: null,
     label: 'MLB Baseball',
-    emoji: '⚾',
+    emoji: 'â¾',
     positions: ['SP','RP','C','1B','2B','3B','SS','OF','DH'],
     fantasyPositions: ['SP','RP','C','1B','2B','3B','SS','OF','DH'],
     roster: {
@@ -258,7 +256,7 @@ const SPORT_CONFIG = {
   hockey: {
     sleeperSport: null,
     label: 'NHL Hockey',
-    emoji: '🏒',
+    emoji: 'ð',
     positions: ['C','LW','RW','D','G'],
     fantasyPositions: ['C','LW','RW','D','G'],
     roster: {
@@ -278,7 +276,7 @@ const SPORT_CONFIG = {
 SPORT_CONFIG.wnba = {
   sleeperSport: null,
   label: 'WNBA',
-  emoji: '🏀',
+  emoji: 'ð',
   positions: ['PG','SG','SF','PF','C'],
   fantasyPositions: ['PG','SG','SF','PF','C'],
   roster: {
@@ -386,7 +384,7 @@ function transformSleeperNFL(raw) {
       name: p.full_name || (p.first_name + ' ' + p.last_name),
       team: p.team || 'FA',
       pos: mainPos,
-      age: p.age || '—',
+      age: p.age || 'â',
       status: p.injury_status || p.status || 'Active',
       rank: rank,
       adp: rank,
@@ -417,7 +415,7 @@ function transformSleeperNBA(raw) {
       name: p.full_name || (p.first_name + ' ' + p.last_name),
       team: p.team || 'FA',
       pos: mainPos,
-      age: p.age || '—',
+      age: p.age || 'â',
       status: p.injury_status || 'Active',
       rank: rank,
       adp: rank,
@@ -448,7 +446,7 @@ function transformMLB(raw) {
       name: p.fullName || 'Unknown',
       team: p.currentTeam ? p.currentTeam.abbreviation || p.currentTeam.name.substring(0,3).toUpperCase() : 'FA',
       pos: posCode,
-      age: p.birthDate ? (new Date().getFullYear() - parseInt(p.birthDate.substring(0,4))) : '—',
+      age: p.birthDate ? (new Date().getFullYear() - parseInt(p.birthDate.substring(0,4))) : 'â',
       status: 'Active',
       rank: idx + 1,
       adp: idx + 1,
@@ -470,7 +468,7 @@ function transformNHL(raw) {
       name: p.skaterFullName,
       team: p.teamAbbrevs ? p.teamAbbrevs.split(',')[0] : 'FA',
       pos: pos,
-      age: '—',
+      age: 'â',
       status: 'Active',
       rank: idx + 1,
       adp: idx + 1,
@@ -694,7 +692,7 @@ function updateNeedsGrid() {
     for (let i = 0; i < needed; i++) {
       const chip = document.createElement('div');
       chip.className = 'need-chip ' + (i < filled ? 'need-filled' : (pos === 'FLEX' || pos === 'UTIL' ? 'need-flex' : 'need-required'));
-      chip.textContent = pos + (i < filled ? ' ✓' : ' ?');
+      chip.textContent = pos + (i < filled ? ' â' : ' ?');
       grid.appendChild(chip);
     }
   });
@@ -713,7 +711,7 @@ function updateRoundInfo() {
   document.getElementById('curRound').textContent = round;
   document.getElementById('curPick').textContent = overallPick;
   const ts = document.getElementById('turnStatus');
-  ts.textContent = isMyTurn ? '✅ Your Pick!' : '⏳ Waiting...';
+  ts.textContent = isMyTurn ? 'â Your Pick!' : 'â³ Waiting...';
   ts.style.color = isMyTurn ? '#4ade80' : '#94a3b8';
 }
 
@@ -746,25 +744,25 @@ function updateAIRec() {
   const posFilled = (window._myRoster && window._myRoster[top.pos]) || 0;
   const needMore = posNeeded - posFilled > 0;
   const reasons = [
-    top.rank <= 5 ? '🔥 Elite tier — top-5 overall, never pass up.' : null,
-    needMore ? `📋 You need a ${top.pos} (${posFilled}/${posNeeded} filled).` : null,
-    !needMore && posNeeded > 0 ? `Your ${top.pos} slot is filled — depth pick.` : null,
-    top.status && top.status !== 'Active' ? `⚠️ Status: ${top.status} — check injury reports.` : null,
-    `📊 Ranked #${top.rank} overall · Proj ${top.proj} pts`,
+    top.rank <= 5 ? 'ð¥ Elite tier â top-5 overall, never pass up.' : null,
+    needMore ? `ð You need a ${top.pos} (${posFilled}/${posNeeded} filled).` : null,
+    !needMore && posNeeded > 0 ? `Your ${top.pos} slot is filled â depth pick.` : null,
+    top.status && top.status !== 'Active' ? `â ï¸ Status: ${top.status} â check injury reports.` : null,
+    `ð Ranked #${top.rank} overall Â· Proj ${top.proj} pts`,
     scored.length > 1 ? `Next: ${scored[1].player.name} (${scored[1].player.team}, ${scored[1].player.pos})` : null
   ].filter(Boolean);
 
   document.getElementById('aiContent').innerHTML = `
     <div class="ai-player-name">${top.name}</div>
     <div class="ai-player-meta">
-      ${top.team} · <span class="pos-badge pos-${top.pos}">${top.pos}</span> 
-      ${top.age && top.age !== '—' ? '· Age ' + top.age : ''}
+      ${top.team} Â· <span class="pos-badge pos-${top.pos}">${top.pos}</span> 
+      ${top.age && top.age !== 'â' ? 'Â· Age ' + top.age : ''}
       ${top.status && top.status !== 'Active' ? '<span class="status-badge status-' + top.status + '">' + top.status + '</span>' : ''}
     </div>
     <div class="ai-reason">${reasons.join('<br>')}</div>
     <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn-pick" onclick="pickPlayer('${top.id}','mine')">✅ Draft ${top.name.split(' ').pop()}</button>
-      <button class="btn-opp" onclick="pickPlayer('${top.id}','opp')">🚫 Opponent Took</button>
+      <button class="btn-pick" onclick="pickPlayer('${top.id}','mine')">â Draft ${top.name.split(' ').pop()}</button>
+      <button class="btn-opp" onclick="pickPlayer('${top.id}','opp')">ð« Opponent Took</button>
     </div>
   `;
 }
@@ -837,14 +835,14 @@ function renderPlayers() {
     const rowClass = status === 'mine' ? 'drafted-mine' : status === 'opp' ? 'drafted-opp' : '';
     const statusBadge = p.status && p.status !== 'Active' ? `<span class="status-badge status-${p.status}">${p.status}</span>` : '';
     const actionBtns = status ?
-      `<span style="color:${status==='mine'?'#4ade80':'#64748b'}">${status==='mine'?'✅ Yours':'🚫 Taken'}</span>` :
+      `<span style="color:${status==='mine'?'#4ade80':'#64748b'}">${status==='mine'?'â Yours':'ð« Taken'}</span>` :
       `<button class="btn-pick" onclick="pickPlayer('${p.id}','mine')">Mine</button> <button class="btn-opp" onclick="pickPlayer('${p.id}','opp')">Opp</button>`;
     return `<tr class="${rowClass}">
       <td>${p.rank}</td>
       <td><b>${p.name}</b>${statusBadge}</td>
       <td>${p.team || 'FA'}</td>
       <td><span class="pos-badge pos-${p.pos}">${p.pos}</span></td>
-      <td>${p.age || '—'}</td>
+      <td>${p.age || 'â'}</td>
       <td>${p.status || 'Active'}</td>
       <td>${p.adp || p.rank}</td>
       <td>${actionBtns}</td>
@@ -901,13 +899,13 @@ function renderBracket() {
       const td = document.createElement('div');
       td.className = 'mm-team' + (isSelected ? ' selected' : '');
       td.onclick = () => toggleMMTeam(regionName, t.name);
-      td.innerHTML = `<span class="mm-seed">#${t.seed}</span><span style="flex:1">${t.name}</span><span style="color:#64748b;font-size:.75rem">${t.wins}-${t.losses}</span>${isAI ? '<span style="color:#4ade80;font-size:.75rem;margin-left:4px">🤖</span>' : ''}`;
+      td.innerHTML = `<span class="mm-seed">#${t.seed}</span><span style="flex:1">${t.name}</span><span style="color:#64748b;font-size:.75rem">${t.wins}-${t.losses}</span>${isAI ? '<span style="color:#4ade80;font-size:.75rem;margin-left:4px">ð¤</span>' : ''}`;
       div.appendChild(td);
     });
     if (aiPick) {
       const ai = document.createElement('div');
       ai.className = 'mm-ai';
-      ai.textContent = '🤖 AI Pick: ' + aiPick.name + ' (Strength: ' + aiPick.str + '/100)';
+      ai.textContent = 'ð¤ AI Pick: ' + aiPick.name + ' (Strength: ' + aiPick.str + '/100)';
       div.appendChild(ai);
     }
     bracket.appendChild(div);
@@ -926,13 +924,13 @@ function updateMMRecs() {
 
   document.getElementById('mmAiContent').innerHTML = picks.map(p => `
     <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:#0f172a;border-radius:8px;margin-bottom:6px">
-      <div><b style="color:#fff">${p.team.name}</b> <span style="color:#94a3b8;font-size:.8rem">— ${p.region} · Seed #${p.team.seed} · ${p.team.wins}-${p.team.losses}</span></div>
+      <div><b style="color:#fff">${p.team.name}</b> <span style="color:#94a3b8;font-size:.8rem">â ${p.region} Â· Seed #${p.team.seed} Â· ${p.team.wins}-${p.team.losses}</span></div>
       <div style="text-align:right;font-size:.78rem"><div style="color:#4ade80">Str: ${p.team.str}/100</div><div style="color:#94a3b8">Upset: ${Math.round(p.team.upsetProb*100)}%</div></div>
     </div>
   `).join('') + (champion ? `
     <div style="margin-top:12px;background:#0f2d1f;border:1px solid #4ade80;padding:10px;border-radius:8px">
-      <div style="color:#4ade80;font-weight:700;margin-bottom:4px">🏆 AI Championship Prediction</div>
-      <div style="font-size:.85rem"><b>${champion.team.name}</b> vs <b>${runner ? runner.team.name : '?'}</b> → Winner: <b style="color:#4ade80">${champion.team.name}</b></div>
+      <div style="color:#4ade80;font-weight:700;margin-bottom:4px">ð AI Championship Prediction</div>
+      <div style="font-size:.85rem"><b>${champion.team.name}</b> vs <b>${runner ? runner.team.name : '?'}</b> â Winner: <b style="color:#4ade80">${champion.team.name}</b></div>
     </div>
   ` : '');
 }
@@ -943,8 +941,8 @@ async function init() {
 
   // Set header info
   const cfg = SPORT_CONFIG[SPORT] || SPORT_CONFIG.football;
-  document.getElementById('sportBadge').textContent = isMM ? '🏀 March Madness' : (cfg.emoji + ' ' + cfg.label);
-  if (LEAGUE_NAME) document.getElementById('leagueNameHeader').textContent = '— ' + LEAGUE_NAME;
+  document.getElementById('sportBadge').textContent = isMM ? 'ð March Madness' : (cfg.emoji + ' ' + cfg.label);
+  if (LEAGUE_NAME) document.getElementById('leagueNameHeader').textContent = 'â ' + LEAGUE_NAME;
 
   if (isMM) {
     document.getElementById('loadingOverlay').style.display = 'none';
@@ -970,8 +968,8 @@ async function init() {
       const raw = await fetchSleeperPlayers(SPORT);
       if (raw && Object.keys(raw).length > 100) {
         livePlayers = SPORT === 'football' ? transformSleeperNFL(raw) : transformSleeperNBA(raw);
-        dataSource = 'Live — Sleeper API';
-        document.getElementById('dataSourceBadge').textContent = '🟢 Live Data';
+        dataSource = 'Live â Sleeper API';
+        document.getElementById('dataSourceBadge').textContent = 'ð¢ Live Data';
         document.getElementById('lastUpdated').textContent = 'Updated: ' + new Date().toLocaleDateString();
       }
     } else if (SPORT === 'baseball') {
@@ -980,8 +978,8 @@ async function init() {
       const raw = await fetchMLBPlayers();
       if (raw && raw.length > 50) {
         livePlayers = transformMLB(raw);
-        dataSource = 'Live — MLB Stats API';
-        document.getElementById('dataSourceBadge').textContent = '🟢 Live Data';
+        dataSource = 'Live â MLB Stats API';
+        document.getElementById('dataSourceBadge').textContent = 'ð¢ Live Data';
         document.getElementById('lastUpdated').textContent = 'Updated: ' + new Date().toLocaleDateString();
       }
     } else if (SPORT === 'hockey') {
@@ -990,8 +988,8 @@ async function init() {
       const raw = await fetchNHLPlayers();
       if (raw && raw.length > 50) {
         livePlayers = transformNHL(raw);
-        dataSource = 'Live — NHL API';
-        document.getElementById('dataSourceBadge').textContent = '🟢 Live Data';
+        dataSource = 'Live â NHL API';
+        document.getElementById('dataSourceBadge').textContent = 'ð¢ Live Data';
         document.getElementById('lastUpdated').textContent = 'Updated: ' + new Date().toLocaleDateString();
       }
     }
@@ -1003,11 +1001,11 @@ async function init() {
   if (!livePlayers || livePlayers.length < 5) {
     const fb = FALLBACK[SPORT] || FALLBACK.football;
     livePlayers = fb;
-    document.getElementById('dataSourceBadge').textContent = '🟡 Fallback Data';
+    document.getElementById('dataSourceBadge').textContent = 'ð¡ Fallback Data';
     document.getElementById('dataSourceBadge').style.color = '#fbbf24';
     const errBanner = document.getElementById('errorBanner');
     errBanner.style.display = 'block';
-    errBanner.textContent = '⚠️ Could not load live data — showing cached rankings. Refresh to retry.';
+    errBanner.textContent = 'â ï¸ Could not load live data â showing cached rankings. Refresh to retry.';
     document.getElementById('lastUpdated').textContent = 'Static data (refresh to get live)';
   }
 
@@ -1033,7 +1031,7 @@ async function init() {
   ['Rank','Player','Team','Pos','Age','Status','ADP','Action'].forEach((h, i) => {
     const th = document.createElement('th');
     if (i < 7) {
-      th.textContent = h + ' ↕';
+      th.textContent = h + ' â';
       th.onclick = () => sortByCol(headerCols[i]);
     } else {
       th.textContent = h;
