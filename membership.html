@@ -8,7 +8,6 @@
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--green:#4ade80;--green-dark:#22c55e;--bg:#0f172a;--bg2:#1e293b;--bg3:#334155;--text:#f8fafc;--muted:#94a3b8}
 body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex}
-/* SIDEBAR */
 .sidebar{width:220px;min-width:220px;background:var(--bg2);border-right:1px solid var(--bg3);padding:24px 0;display:flex;flex-direction:column}
 .sidebar-logo{font-size:1.3rem;font-weight:800;padding:0 20px 24px;border-bottom:1px solid var(--bg3)}
 .sidebar-logo span{color:var(--green)}
@@ -16,12 +15,10 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 .sidebar-link{display:flex;align-items:center;gap:10px;padding:9px 20px;color:var(--muted);text-decoration:none;font-size:.9rem;transition:background .15s,color .15s;border-left:3px solid transparent}
 .sidebar-link:hover{background:rgba(74,222,128,.06);color:var(--text)}
 .sidebar-link.active{background:rgba(74,222,128,.1);color:var(--green);border-left-color:var(--green)}
-/* MAIN */
 .main{flex:1;padding:40px 5%;overflow-y:auto}
 .page-header{margin-bottom:36px}
 .page-header h1{font-size:2rem;font-weight:800;margin-bottom:8px}
 .page-header p{color:var(--muted);font-size:1rem}
-/* PLANS GRID */
 .plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;max-width:800px;margin-bottom:32px}
 .plan-card{background:var(--bg2);border:2px solid var(--bg3);border-radius:16px;padding:32px;position:relative;transition:border-color .2s}
 .plan-card:hover{border-color:var(--green)}
@@ -33,28 +30,25 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 .plan-desc{color:var(--muted);font-size:.88rem;margin-bottom:20px}
 .plan-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
 .plan-features li{display:flex;align-items:flex-start;gap:10px;font-size:.9rem}
-.plan-features li::before{content:'&#10003;';color:var(--green);font-weight:700;min-width:16px}
+.check{color:var(--green);font-weight:700;min-width:16px}
 .plan-btn{display:block;width:100%;padding:13px;border-radius:8px;font-size:.95rem;font-weight:700;text-align:center;text-decoration:none;cursor:pointer;border:none;transition:all .2s}
 .plan-btn.primary{background:var(--green);color:#000}
 .plan-btn.primary:hover{background:var(--green-dark)}
 .plan-btn.outline{background:transparent;color:var(--green);border:2px solid var(--green)}
 .plan-btn.outline:hover{background:var(--green);color:#000}
-/* SKIP SECTION */
 .skip-section{max-width:800px;text-align:center;padding:24px;background:var(--bg2);border:1px solid var(--bg3);border-radius:12px;margin-bottom:40px}
 .skip-section p{color:var(--muted);font-size:.9rem;margin-bottom:12px}
 .skip-btn{display:inline-flex;align-items:center;gap:6px;color:var(--green);text-decoration:none;font-size:.9rem;font-weight:600;padding:8px 16px;border-radius:6px;border:1px solid rgba(74,222,128,.3);transition:background .2s}
 .skip-btn:hover{background:rgba(74,222,128,.08)}
-/* FAQ */
 .faq{max-width:800px;margin-bottom:40px}
 .faq h2{font-size:1.3rem;font-weight:700;margin-bottom:16px}
 .faq-item{border-bottom:1px solid var(--bg3);overflow:hidden}
-.faq-q{padding:14px 0;font-size:.95rem;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;color:var(--text)}
+.faq-q{padding:14px 0;font-size:.95rem;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
 .faq-q:hover{color:var(--green)}
-.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;color:var(--muted);font-size:.9rem;line-height:1.6}
+.faq-q::after{content:"▾";font-size:1.1rem;transition:transform .3s}
 .faq-item.open .faq-a{max-height:200px;padding-bottom:14px}
 .faq-item.open .faq-q::after{transform:rotate(180deg)}
-.faq-q::after{content:'&#8964;';font-size:1.1rem;transition:transform .3s}
-/* TOPBAR */
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;color:var(--muted);font-size:.9rem;line-height:1.6}
 .topbar{display:none;background:var(--bg2);border-bottom:1px solid var(--bg3);padding:14px 20px;align-items:center;justify-content:space-between}
 .sign-out-btn{background:var(--green);color:#000;border:none;border-radius:6px;padding:7px 14px;font-weight:700;font-size:.85rem;cursor:pointer}
 .sign-out-btn:hover{background:var(--green-dark)}
@@ -65,18 +59,18 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 <nav class="sidebar">
   <div class="sidebar-logo"><span>Draft</span>Buddy</div>
   <div class="sidebar-section">Main</div>
-  <a href="/dashboard" class="sidebar-link">&#127968; Dashboard</a>
-  <a href="/settings" class="sidebar-link">&#9881;&#65039; Settings</a>
+  <a href="/dashboard" class="sidebar-link">&#x1F3E0; Dashboard</a>
+  <a href="/settings" class="sidebar-link">&#x2699;&#xFE0F; Settings</a>
   <div class="sidebar-section">Sports</div>
-  <a href="/draft?sport=nfl" class="sidebar-link">&#127944; NFL Draft</a>
-  <a href="/draft?sport=mlb" class="sidebar-link">&#9918; MLB Draft</a>
-  <a href="/draft?sport=nba" class="sidebar-link">&#127936; NBA Draft</a>
-  <a href="/draft?sport=nhl" class="sidebar-link">&#127944; NHL Draft</a>
-  <a href="/draft?sport=wnba" class="sidebar-link">&#127936; WNBA Draft</a>
-  <a href="/bracket" class="sidebar-link">&#127942; March Madness</a>
+  <a href="/draft?sport=nfl" class="sidebar-link">&#x1F3C8; NFL Draft</a>
+  <a href="/draft?sport=mlb" class="sidebar-link">&#x26BE; MLB Draft</a>
+  <a href="/draft?sport=nba" class="sidebar-link">&#x1F3C0; NBA Draft</a>
+  <a href="/draft?sport=nhl" class="sidebar-link">&#x1F3D2; NHL Draft</a>
+  <a href="/draft?sport=wnba" class="sidebar-link">&#x1F3C0; WNBA Draft</a>
+  <a href="/bracket" class="sidebar-link">&#x1F3C6; March Madness</a>
   <div class="sidebar-section">Account</div>
-  <a href="/draft-assistant" class="sidebar-link">&#129302; Draft Assistant</a>
-  <a href="/membership" class="sidebar-link active">&#9733; Membership</a>
+  <a href="/draft-assistant" class="sidebar-link">&#x1F916; Draft Assistant</a>
+  <a href="/membership" class="sidebar-link active">&#x2B50; Membership</a>
 </nav>
 <div class="topbar">
   <span style="font-size:1.1rem;font-weight:800"><span style="color:var(--green)">Draft</span>Buddy</span>
@@ -88,48 +82,44 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
     <p>Unlock the full power of DraftBuddy and dominate your leagues</p>
   </div>
   <div class="plans">
-    <!-- PRO -->
     <div class="plan-card">
       <div class="plan-name">Pro</div>
       <div class="plan-price">$9.99<span>/month</span></div>
       <div class="plan-desc">Everything you need to win your fantasy leagues</div>
       <ul class="plan-features">
-        <li>AI-powered trade analyzer</li>
-        <li>Waiver wire recommendations</li>
-        <li>Injury impact analysis</li>
-        <li>Multi-league support up to 5 leagues</li>
-        <li>Priority data refresh</li>
-        <li>Season-long coaching insights</li>
-        <li>Draft grade report</li>
-        <li>Draft Assistant sidekick overlay</li>
+        <li><span class="check">&#10003;</span> AI-powered trade analyzer</li>
+        <li><span class="check">&#10003;</span> Waiver wire recommendations</li>
+        <li><span class="check">&#10003;</span> Injury impact analysis</li>
+        <li><span class="check">&#10003;</span> Multi-league support up to 5 leagues</li>
+        <li><span class="check">&#10003;</span> Priority data refresh</li>
+        <li><span class="check">&#10003;</span> Season-long coaching insights</li>
+        <li><span class="check">&#10003;</span> Draft grade report</li>
+        <li><span class="check">&#10003;</span> Draft Assistant sidekick overlay</li>
       </ul>
       <a href="https://buy.stripe.com/test_28EaEX65Z3mb0NnOleIw01" target="_blank" class="plan-btn outline">Get Pro</a>
     </div>
-    <!-- CHAMPION -->
     <div class="plan-card featured">
       <div class="plan-badge">Most Popular</div>
       <div class="plan-name">Champion</div>
       <div class="plan-price">$24.99<span>/month</span></div>
       <div class="plan-desc">Maximum edge for serious fantasy players</div>
       <ul class="plan-features">
-        <li>Everything in Pro</li>
-        <li>DFS optimizer for DraftKings and FanDuel</li>
-        <li>Prop bet analysis</li>
-        <li>Playoff optimizer</li>
-        <li>Unlimited leagues</li>
-        <li>ESPN Yahoo and Sleeper integrations</li>
-        <li>Private Discord community</li>
-        <li>Monthly strategy session</li>
+        <li><span class="check">&#10003;</span> Everything in Pro</li>
+        <li><span class="check">&#10003;</span> DFS optimizer for DraftKings and FanDuel</li>
+        <li><span class="check">&#10003;</span> Prop bet analysis</li>
+        <li><span class="check">&#10003;</span> Playoff optimizer</li>
+        <li><span class="check">&#10003;</span> Unlimited leagues</li>
+        <li><span class="check">&#10003;</span> ESPN Yahoo and Sleeper integrations</li>
+        <li><span class="check">&#10003;</span> Private Discord community</li>
+        <li><span class="check">&#10003;</span> Monthly strategy session</li>
       </ul>
       <a href="https://buy.stripe.com/test_28EaEX65Z3mb0NnOleIw01" target="_blank" class="plan-btn primary">Get Champion</a>
     </div>
   </div>
-  <!-- SKIP / FREE OPTION -->
   <div class="skip-section">
     <p>Not ready to upgrade? You can start with the free plan and upgrade anytime.</p>
     <a href="/dashboard" class="skip-btn">Continue with Free Plan &#8594;</a>
   </div>
-  <!-- FAQ -->
   <div class="faq">
     <h2>Frequently Asked Questions</h2>
     <div class="faq-item">
