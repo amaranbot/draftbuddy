@@ -180,25 +180,22 @@
       const auth = getAuth(app);
       const googleProvider = new GoogleAuthProvider();
 
-      function getRedirectUrl() {
-        const params = new URLSearchParams(window.location.search);
-        const redirect = params.get('redirect');
-        if (redirect && redirect.startsWith('/') && !redirect.startsWith('//')) return redirect;
-        return '/dashboard';
+      // After sign-in always go to /membership first
+      // (membership page will redirect to /dashboard once plan is confirmed)
+      function getPostLoginUrl() {
+        return '/membership';
       }
 
-      // If already signed in, redirect to dashboard
+      // If already signed in, send straight to dashboard (they already went through membership)
       onAuthStateChanged(auth, (user) => {
         if (user) {
-          // Update localStorage with user info
           try {
-            const existing = localStorage.getItem('db_membership');
-            if (!existing) {
+            if (!localStorage.getItem('db_membership')) {
               localStorage.setItem('db_membership', 'free');
               localStorage.setItem('db_paid', 'false');
             }
           } catch(e) {}
-          window.location.href = getRedirectUrl();
+          window.location.href = '/dashboard';
         }
       });
 
@@ -291,9 +288,9 @@
         try {
           const persistence = remember ? browserLocalPersistence : browserSessionPersistence;
           await setPersistence(auth, persistence);
-          const cred = await signInWithEmailAndPassword(auth, email, password);
+          await signInWithEmailAndPassword(auth, email, password);
           saveMembershipLocally(localStorage.getItem('db_membership') || 'free');
-          window.location.href = getRedirectUrl();
+          window.location.href = getPostLoginUrl();
         } catch(err) {
           const msg = getFriendlyError(err.code);
           if (msg) showError(msg);
@@ -319,8 +316,8 @@
           await setPersistence(auth, browserLocalPersistence);
           await createUserWithEmailAndPassword(auth, email.trim(), password);
           saveMembershipLocally('free');
-          showSuccess('Account created! Taking you to your dashboard...');
-          setTimeout(() => { window.location.href = getRedirectUrl(); }, 1200);
+          showSuccess('Account created! Choosing your plan...');
+          setTimeout(() => { window.location.href = getPostLoginUrl(); }, 1000);
         } catch(err) {
           const msg = getFriendlyError(err.code);
           if (msg) showError(msg);
@@ -332,9 +329,9 @@
         clearMessages();
         try {
           await setPersistence(auth, browserLocalPersistence);
-          const cred = await signInWithPopup(auth, googleProvider);
+          await signInWithPopup(auth, googleProvider);
           saveMembershipLocally(localStorage.getItem('db_membership') || 'free');
-          window.location.href = getRedirectUrl();
+          window.location.href = getPostLoginUrl();
         } catch(err) {
           if (err.code && err.code !== 'auth/popup-closed-by-user') {
             showError(getFriendlyError(err.code));
