@@ -63,7 +63,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
     <a href="/baseball-draft" class="nav-item">&#9918; Baseball</a>
     <a href="/basketball-draft" class="nav-item">&#127936; Basketball</a>
     <a href="/hockey-draft" class="nav-item">&#127944; Hockey</a>
-    <a href="/womens-draft" class="nav-item">WNBA</a>
+    <a href="/womens-draft" class="nav-item">🏀 WNBA</a>
     <a href="/bracket" class="nav-item">&#127942; March Madness</a>
   </aside>
   <main class="main">
@@ -128,8 +128,8 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
   </main>
 </div>
 <script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
-import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 const FB={apiKey:"AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88",authDomain:"draftbuddy-cf5c9.firebaseapp.com",projectId:"draftbuddy-cf5c9",storageBucket:"draftbuddy-cf5c9.appspot.com",messagingSenderId:"822764808554",appId:"1:861425863011:web:e6b8ee8525ba71f7de6b56"};
 const app=initializeApp(FB);const auth=getAuth(app);
 setPersistence(auth,browserLocalPersistence).catch(()=>{});
