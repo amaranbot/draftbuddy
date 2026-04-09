@@ -88,7 +88,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
     </div>
 
     <div class="save-bar" id="saveBar" style="display:none">
-      <p>â ï¸ You have unsaved changes</p>
+      <p>✏️ You have unsaved changes</p>
       <button class="btn-primary" onclick="saveSettings()">Save Changes</button>
     </div>
 
@@ -236,14 +236,13 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
   </div>
 </div>
 
-<div class="toast" id="toast">â Settings saved!</div>
+<div class="toast" id="toast">✅ Settings saved!</div>
 
 <script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
-import { getAuth, setPersistence, browserLocalPersistence, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged, signOut, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 const FB = {apiKey:"AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88",authDomain:"draftbuddy-cf5c9.firebaseapp.com",projectId:"draftbuddy-cf5c9",storageBucket:"draftbuddy-cf5c9.appspot.com",messagingSenderId:"822764808554",appId:"1:861425863011:web:e6b8ee8525ba71f7de6b56"};
 const auth = getAuth(initializeApp(FB));
-    setPersistence(auth,browserLocalPersistence).catch(function(){});
     setPersistence(auth,browserLocalPersistence).catch(function(){});
 let currentUser = null;
 
