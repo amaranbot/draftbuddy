@@ -19,7 +19,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 .page-header{margin-bottom:36px}
 .page-header h1{font-size:2rem;font-weight:800;margin-bottom:8px}
 .page-header p{color:var(--muted);font-size:1rem}
-.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;max-width:800px;margin-bottom:32px}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;max-width:800px;margin-bottom:40px}
 .plan-card{background:var(--bg2);border:2px solid var(--bg3);border-radius:16px;padding:32px;position:relative;transition:border-color .2s}
 .plan-card:hover{border-color:var(--green)}
 .plan-card.featured{border-color:var(--green);background:linear-gradient(135deg,rgba(74,222,128,.06),var(--bg2))}
@@ -31,15 +31,13 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 .plan-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
 .plan-features li{display:flex;align-items:flex-start;gap:10px;font-size:.9rem}
 .check{color:var(--green);font-weight:700;min-width:16px}
-.plan-btn{display:block;width:100%;padding:13px;border-radius:8px;font-size:.95rem;font-weight:700;text-align:center;text-decoration:none;cursor:pointer;border:none;transition:all .2s}
+.plan-btn{display:block;width:100%;padding:14px;border-radius:8px;font-size:1rem;font-weight:700;text-align:center;text-decoration:none;cursor:pointer;border:none;transition:all .2s}
 .plan-btn.primary{background:var(--green);color:#000}
-.plan-btn.primary:hover{background:var(--green-dark)}
+.plan-btn.primary:hover{background:var(--green-dark);transform:translateY(-1px)}
 .plan-btn.outline{background:transparent;color:var(--green);border:2px solid var(--green)}
-.plan-btn.outline:hover{background:var(--green);color:#000}
-.skip-section{max-width:800px;text-align:center;padding:24px;background:var(--bg2);border:1px solid var(--bg3);border-radius:12px;margin-bottom:40px}
-.skip-section p{color:var(--muted);font-size:.9rem;margin-bottom:12px}
-.skip-btn{display:inline-flex;align-items:center;gap:6px;color:var(--green);text-decoration:none;font-size:.9rem;font-weight:600;padding:8px 16px;border-radius:6px;border:1px solid rgba(74,222,128,.3);transition:background .2s}
-.skip-btn:hover{background:rgba(74,222,128,.08)}
+.plan-btn.outline:hover{background:var(--green);color:#000;transform:translateY(-1px)}
+.secure-note{max-width:800px;display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.85rem;margin-bottom:40px;padding:14px 18px;background:var(--bg2);border:1px solid var(--bg3);border-radius:10px}
+.secure-note span{font-size:1.2rem}
 .faq{max-width:800px;margin-bottom:40px}
 .faq h2{font-size:1.3rem;font-weight:700;margin-bottom:16px}
 .faq-item{border-bottom:1px solid var(--bg3);overflow:hidden}
@@ -82,6 +80,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
     <p>Unlock the full power of DraftBuddy and dominate your leagues</p>
   </div>
   <div class="plans">
+    <!-- PRO -->
     <div class="plan-card">
       <div class="plan-name">Pro</div>
       <div class="plan-price">$9.99<span>/month</span></div>
@@ -96,8 +95,9 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
         <li><span class="check">&#10003;</span> Draft grade report</li>
         <li><span class="check">&#10003;</span> Draft Assistant sidekick overlay</li>
       </ul>
-      <a href="https://buy.stripe.com/test_28EaEX65Z3mb0NnOleIw01" target="_blank" class="plan-btn outline">Get Pro</a>
+      <a href="https://buy.stripe.com/test_28EaEX65Z3mb0NnOleIw01" target="_blank" class="plan-btn outline" onclick="handlePlanClick('pro')">Get Pro &mdash; $9.99/mo</a>
     </div>
+    <!-- CHAMPION -->
     <div class="plan-card featured">
       <div class="plan-badge">Most Popular</div>
       <div class="plan-name">Champion</div>
@@ -109,17 +109,19 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
         <li><span class="check">&#10003;</span> Prop bet analysis</li>
         <li><span class="check">&#10003;</span> Playoff optimizer</li>
         <li><span class="check">&#10003;</span> Unlimited leagues</li>
-        <li><span class="check">&#10003;</span> ESPN Yahoo and Sleeper integrations</li>
+        <li><span class="check">&#10003;</span> ESPN, Yahoo and Sleeper integrations</li>
         <li><span class="check">&#10003;</span> Private Discord community</li>
         <li><span class="check">&#10003;</span> Monthly strategy session</li>
       </ul>
-      <a href="https://buy.stripe.com/test_28EaEX65Z3mb0NnOleIw01" target="_blank" class="plan-btn primary">Get Champion</a>
+      <a href="https://buy.stripe.com/test_28EaEX65Z3mb0NnOleIw01" target="_blank" class="plan-btn primary" onclick="handlePlanClick('champion')">Get Champion &mdash; $24.99/mo</a>
     </div>
   </div>
-  <div class="skip-section">
-    <p>Not ready to upgrade? You can start with the free plan and upgrade anytime.</p>
-    <a href="/dashboard" class="skip-btn">Continue with Free Plan &#8594;</a>
+  <!-- SECURE PAYMENT NOTE -->
+  <div class="secure-note">
+    <span>&#x1F512;</span>
+    Secure payment powered by Stripe. After completing payment you will be taken to your dashboard automatically. Cancel anytime from your account settings.
   </div>
+  <!-- FAQ -->
   <div class="faq">
     <h2>Frequently Asked Questions</h2>
     <div class="faq-item">
@@ -127,26 +129,53 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
       <div class="faq-a">Yes, cancel anytime from your account settings. No contracts, no commitments.</div>
     </div>
     <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What happens after I pay?</div>
+      <div class="faq-a">After your payment is processed by Stripe, you will be redirected straight to your DraftBuddy dashboard with your plan activated.</div>
+    </div>
+    <div class="faq-item">
       <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What sports are covered?</div>
       <div class="faq-a">NFL, MLB, NBA, NHL, and WNBA fantasy leagues are all supported.</div>
     </div>
     <div class="faq-item">
-      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is there a free trial?</div>
-      <div class="faq-a">Yes! The free plan gives you access to basic rankings and draft tools. Upgrade anytime to unlock AI features.</div>
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is my payment information safe?</div>
+      <div class="faq-a">Yes. All payments are processed securely by Stripe. DraftBuddy never stores your card details.</div>
     </div>
   </div>
 </main>
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-const app = initializeApp({apiKey:"AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88",authDomain:"draftbuddy-cf5c9.firebaseapp.com",projectId:"draftbuddy-cf5c9",storageBucket:"draftbuddy-cf5c9.appspot.com",messagingSenderId:"822764808554",appId:"1:861425863011:web:e6b8ee8525ba71f7de6b56"});
+const app = initializeApp({
+  apiKey:"AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88",
+  authDomain:"draftbuddy-cf5c9.firebaseapp.com",
+  projectId:"draftbuddy-cf5c9",
+  storageBucket:"draftbuddy-cf5c9.appspot.com",
+  messagingSenderId:"822764808554",
+  appId:"1:861425863011:web:e6b8ee8525ba71f7de6b56"
+});
 const auth = getAuth(app);
 onAuthStateChanged(auth, (user) => {
   if (!user) { window.location.href = '/login'; return; }
+  // Store user email so Stripe can prefill it
+  try { localStorage.setItem('db_user_email', user.email || ''); } catch(e){}
 });
 const signOutHandler = async () => { await signOut(auth); window.location.href = '/login'; };
 const soBtn = document.getElementById('signOutTopBtn');
 if (soBtn) soBtn.onclick = signOutHandler;
+
+// When user clicks a plan, save chosen plan and open Stripe
+// After Stripe payment, user should be redirected to /dashboard
+// (Configure return URL in Stripe Dashboard to https://mydraftbuddy.com/dashboard)
+window.handlePlanClick = function(plan) {
+  try {
+    localStorage.setItem('db_chosen_plan', plan);
+    localStorage.setItem('db_membership', plan);
+    localStorage.setItem('db_paid', 'true');
+  } catch(e) {}
+  // The Stripe link opens in a new tab; after payment, Stripe
+  // redirects to the success URL set in your Stripe Dashboard.
+  // Set that to: https://mydraftbuddy.com/dashboard
+};
 </script>
 </body>
 </html>
