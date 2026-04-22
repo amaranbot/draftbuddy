@@ -9,7 +9,7 @@
 :root{--green:#00e676;--green2:#00c853;--green3:#69f0ae;--bg:#060b14;--bg2:#0d1626;--bg3:#162035;--bg4:#1e2d45;--text:#f0f4ff;--muted:#7b93b8;--card:#111d2e;--border:rgba(0,230,118,.12)}
 body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
 .topnav{background:rgba(13,22,38,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.topnav-logo{font-size:1.25rem;font-weight:900;color:var(--text);text-decoration:none;letter-spacing:-.02em}
+.topnav-logo{display:flex;align-items:center;font-size:1.25rem;font-weight:900;color:var(--text);text-decoration:none;letter-spacing:-.02em}
 .topnav-logo span{color:var(--green)}
 .topnav-right{display:flex;align-items:center;gap:12px}
 .user-pill{display:flex;align-items:center;gap:8px;background:rgba(0,230,118,.07);border:1px solid rgba(0,230,118,.2);padding:7px 16px;border-radius:50px;font-size:.85rem;cursor:pointer;transition:all .2s}
@@ -58,7 +58,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 </head>
 <body>
 <div class="topnav">
-  <a href="/" class="topnav-logo">Draft<span>Buddy</span></a>
+  <a href="/" class="topnav-logo"><img src="/logo.png" alt="DraftBuddy" style="height:40px;width:auto;margin-right:8px">Draft<span>Buddy</span></a>
   <div class="topnav-right">
     <div class="user-pill">
       <div class="user-avatar" id="userInitials">?</div>
