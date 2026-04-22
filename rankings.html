@@ -180,7 +180,7 @@ onAuthStateChanged(auth, u => { if (!u) window.location.href = '/login'; });
 const P = new URLSearchParams(window.location.search);
 const _rawSport = (P.get('sport') || 'football').toLowerCase();
 const SPORT_MAP = {'nfl':'football','nba':'basketball','mlb':'baseball','nhl':'hockey','wnba':'wnba','march_madness':'marchmadness','mm':'marchmadness'};
-const _rawSport = (P.get('sport') || 'football').toLowerCase();
+_rawSport = (P.get('sport') || 'football').toLowerCase();
 const SPORT_MAP = {'nfl':'football','nba':'basketball','mlb':'baseball','nhl':'hockey','march_madness':'marchmadness','mm':'marchmadness'};
 const SPORT = SPORT_MAP[_rawSport] || _rawSport;
 const NUM_TEAMS = parseInt(P.get('teams') || '10');
