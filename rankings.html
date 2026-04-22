@@ -965,60 +965,13 @@ async function init() {
   const loadingText = document.getElementById('loadingText');
   const loadingSubtext = document.getElementById('loadingSubtext');
 
-  // Try live data
-  let livePlayers = null;
   let dataSource = 'Offline (Fallback)';
 
-  try {
-    if (SPORT === 'football' || SPORT === 'basketball') {
-      loadingText.textContent = 'Fetching live ' + cfg.label + ' rosters...';
-      loadingSubtext.textContent = 'Source: Sleeper API (api.sleeper.app)';
-      const sportKey = SPORT === 'football' ? 'nfl' : 'nba';
-      const raw = await fetchSleeperPlayers(SPORT);
-      if (raw && Object.keys(raw).length > 100) {
-        livePlayers = SPORT === 'football' ? transformSleeperNFL(raw) : transformSleeperNBA(raw);
-        dataSource = 'Live â Sleeper API';
-        document.getElementById('dataSourceBadge').textContent = 'ð¢ Live Data';
-        document.getElementById('lastUpdated').textContent = 'Updated: ' + new Date().toLocaleDateString();
-      }
-    } else if (SPORT === 'baseball') {
-      loadingText.textContent = 'Fetching live MLB rosters...';
-      loadingSubtext.textContent = 'Source: MLB Stats API (statsapi.mlb.com)';
-      const raw = await fetchMLBPlayers();
-      if (raw && raw.length > 50) {
-        livePlayers = transformMLB(raw);
-        dataSource = 'Live â MLB Stats API';
-        document.getElementById('dataSourceBadge').textContent = 'ð¢ Live Data';
-        document.getElementById('lastUpdated').textContent = 'Updated: ' + new Date().toLocaleDateString();
-      }
-    } else if (SPORT === 'hockey') {
-      loadingText.textContent = 'Fetching live NHL rosters...';
-      loadingSubtext.textContent = 'Source: NHL API (api.nhle.com)';
-      const raw = await fetchNHLPlayers();
-      if (raw && raw.length > 50) {
-        livePlayers = transformNHL(raw);
-        dataSource = 'Live â NHL API';
-        document.getElementById('dataSourceBadge').textContent = 'ð¢ Live Data';
-        document.getElementById('lastUpdated').textContent = 'Updated: ' + new Date().toLocaleDateString();
-      }
-    }
-  } catch(e) {
-    console.error('Live data fetch error:', e);
-  }
+  // === INSTANT LOAD: Use fallback data immediately, fetch live in background ===
+  const fb = FALLBACK[SPORT] || FALLBACK.football;
+  allPlayers = fb || [];
+  dataSource = '⚡ Loading live data...';
 
-  // Use fallback if live data failed
-  if (!livePlayers || livePlayers.length < 5) {
-    const fb = FALLBACK[SPORT] || FALLBACK.football;
-    livePlayers = fb;
-    document.getElementById('dataSourceBadge').textContent = 'ð¡ Fallback Data';
-    document.getElementById('dataSourceBadge').style.color = '#fbbf24';
-    const errBanner = document.getElementById('errorBanner');
-    errBanner.style.display = 'block';
-    errBanner.textContent = 'â ï¸ Could not load live data â showing cached rankings. Refresh to retry.';
-    document.getElementById('lastUpdated').textContent = 'Static data (refresh to get live)';
-  }
-
-  allPlayers = livePlayers;
 
   // Init roster tracking
   const config = getRosterConfig();
@@ -1057,6 +1010,38 @@ async function init() {
   updateRoundInfo();
   renderPlayers();
   updateAIRec();
+}
+
+// Background live data refresh (runs after page is already shown)
+async function fetchLiveInBackground() {
+  if (SPORT === 'marchmadness' || SPORT === 'mm' || SPORT === 'march_madness') return;
+  const cfg = SPORT_CONFIG[SPORT] || SPORT_CONFIG.football;
+  try {
+    let livePlayers = null;
+    if (SPORT === 'football' || SPORT === 'basketball') {
+      const raw = await fetchSleeperPlayers(SPORT);
+      if (raw && Object.keys(raw).length > 100) {
+        livePlayers = SPORT === 'football' ? transformSleeperNFL(raw) : transformSleeperNBA(raw);
+      }
+    } else if (SPORT === 'baseball') {
+      const raw = await fetchMLBPlayers();
+      if (raw && raw.length > 50) livePlayers = transformMLB(raw);
+    } else if (SPORT === 'hockey') {
+      const raw = await fetchNHLPlayers();
+      if (raw && raw.length > 50) livePlayers = transformNHL(raw);
+    }
+    if (livePlayers && livePlayers.length > 5) {
+      allPlayers = livePlayers;
+      document.getElementById('dataSourceBadge').textContent = '✅ Live Data';
+      document.getElementById('dataSourceBadge').style.color = '#4ade80';
+      document.getElementById('lastUpdated').textContent = 'Updated: ' + new Date().toLocaleTimeString();
+      renderPlayers();
+      updateAIRec();
+  fetchLiveInBackground(); // non-blocking background update
+    }
+  } catch(e) {
+    console.warn('Background live fetch failed:', e);
+  }
 }
 
 init();
