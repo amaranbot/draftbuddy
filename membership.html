@@ -44,7 +44,7 @@ body{min-height:100vh;overflow:auto}
 .faq-item{border-bottom:1px solid var(--bg3);overflow:hidden}
 .faq-q{padding:14px 0;font-size:.95rem;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
 .faq-q:hover{color:var(--green)}
-.faq-q::after{content:"▾";font-size:1.1rem;transition:transform .3s}
+.faq-q::after{content:"";font-size:1.1rem;transition:transform .3s}
 .faq-item.open .faq-a{max-height:200px;padding-bottom:14px}
 .faq-item.open .faq-q::after{transform:rotate(180deg)}
 .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;color:var(--muted);font-size:.9rem;line-height:1.6}
@@ -54,7 +54,7 @@ body{min-height:100vh;overflow:auto}
 @media(max-width:768px){body{flex-direction:column;height:auto;overflow:auto}.main{height:auto;overflow:visible;padding:24px 5%}.topbar{display:flex}}
 </style>
 </head>
-<body><nav class="topnav"><a href="/dashboard" class="topnav-logo"><img src="/logo.png" alt="DraftBuddy" class="nav-logo"><span>Draft</span>Buddy</a><div class="topnav-right"><a href="/dashboard" class="btn-back">&#x2190; Dashboard</a></div></nav>
+<body><nav class="topnav"><a href="/dashboard" class="topnav-logo"><span>Draft</span>Buddy</a><div class="topnav-right"><a href="/dashboard" class="btn-back">&#x2190; Dashboard</a></div></nav>
 
 <div class="topbar">
   <span style="font-size:1.1rem;font-weight:800"><span style="color:var(--green)">Draft</span>Buddy</span>
