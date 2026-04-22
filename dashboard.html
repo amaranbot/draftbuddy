@@ -58,44 +58,44 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 </head>
 <body>
 <div class="topnav">
-  <a href="/" class="topnav-logo"><img src="/logo.png" alt="DraftBuddy" style="height:40px;width:auto;margin-right:8px">Draft<span>Buddy</span></a>
+  <a href="/" class="topnav-logo">Draft<span>Buddy</span></a>
   <div class="topnav-right">
     <div class="user-pill">
       <div class="user-avatar" id="userInitials">?</div>
       <span id="userEmail" style="color:var(--text);font-size:.85rem">Loading...</span>
     </div>
-    <a href="/settings" class="btn-sm btn-outline">⚙️ Settings</a>
+    <a href="/settings" class="btn-sm btn-outline"> Settings</a>
     <button class="btn-sm btn-danger" id="signOutBtn">Sign Out</button>
   </div>
 </div>
 <div class="page">
   <aside class="sidebar">
     <div class="sidebar-section">Main</div>
-    <a href="/dashboard" class="nav-item active">🏠 Dashboard</a>
-    <a href="/settings" class="nav-item">⚙️ Settings</a>
+    <a href="/dashboard" class="nav-item active">< Dashboard</a>
+    <a href="/settings" class="nav-item"> Settings</a>
     <div class="sidebar-section">NFL</div>
-    <a href="/draft" class="nav-item">🏈 Setup Draft</a>
-    <a href="/rankings?sport=nfl" class="nav-item">📊 Rankings</a>
+    <a href="/draft" class="nav-item">< Setup Draft</a>
+    <a href="/rankings?sport=nfl" class="nav-item">= Rankings</a>
     <div class="sidebar-section">MLB</div>
-    <a href="/baseball-draft" class="nav-item">⚾ Setup Draft</a>
-    <a href="/rankings?sport=baseball" class="nav-item">📊 Rankings</a>
+    <a href="/baseball-draft" class="nav-item"> Setup Draft</a>
+    <a href="/rankings?sport=baseball" class="nav-item">= Rankings</a>
     <div class="sidebar-section">NBA</div>
-    <a href="/basketball-draft" class="nav-item">🏀 Setup Draft</a>
-    <a href="/rankings?sport=basketball" class="nav-item">📊 Rankings</a>
+    <a href="/basketball-draft" class="nav-item">< Setup Draft</a>
+    <a href="/rankings?sport=basketball" class="nav-item">= Rankings</a>
     <div class="sidebar-section">NHL</div>
-    <a href="/hockey-draft" class="nav-item">🏒 Setup Draft</a>
-    <a href="/rankings?sport=hockey" class="nav-item">📊 Rankings</a>
+    <a href="/hockey-draft" class="nav-item">< Setup Draft</a>
+    <a href="/rankings?sport=hockey" class="nav-item">= Rankings</a>
     <div class="sidebar-section">Other</div>
-    <a href="/womens-draft" class="nav-item">🏀 WNBA Draft</a>
-    <a href="/bracket" class="nav-item">🏆 March Madness</a>
+    <a href="/womens-draft" class="nav-item">< WNBA Draft</a>
+    <a href="/bracket" class="nav-item">< March Madness</a>
   </aside>
   <main class="main">
     <div class="welcome-bar">
       <div class="welcome-text">
-        <h1>Welcome back<span id="welcomeName"></span> 👋</h1>
+        <h1>Welcome back<span id="welcomeName"></span> =K</h1>
         <p>Choose a sport to start your AI-powered draft session</p>
       </div>
-      <a href="/draft" class="btn-primary">🏈 Quick Draft (NFL)</a>
+      <a href="/draft" class="btn-primary">< Quick Draft (NFL)</a>
     </div>
     <div class="quick-stats">
       <div class="stat-card"><div class="stat-value">6</div><div class="stat-label">Sports Available</div></div>
@@ -107,63 +107,63 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
     <div class="sport-grid">
       <div class="sport-card">
         <div class="card-header">
-          <div class="card-emoji">🏈</div>
+          <div class="card-emoji"><</div>
           <div>
             <div class="card-title">NFL Football</div>
             <div class="card-subtitle">PPR &middot; Standard &middot; Half-PPR</div>
-            <span class="card-badge">🟢 Live Rosters</span>
+            <span class="card-badge">= Live Rosters</span>
           </div>
         </div>
         <div class="card-actions">
-          <a href="/draft" class="btn-card btn-card-primary">🚀 Setup Draft</a>
-          <a href="/rankings?sport=nfl" class="btn-card btn-card-secondary">📊 Rankings</a>
+          <a href="/draft" class="btn-card btn-card-primary">= Setup Draft</a>
+          <a href="/rankings?sport=nfl" class="btn-card btn-card-secondary">= Rankings</a>
         </div>
       </div>
       <div class="sport-card">
         <div class="card-header">
-          <div class="card-emoji">⚾</div>
+          <div class="card-emoji"></div>
           <div>
             <div class="card-title">MLB Baseball</div>
             <div class="card-subtitle">Roto &middot; H2H &middot; Points League</div>
-            <span class="card-badge">🟢 Live Rosters</span>
+            <span class="card-badge">= Live Rosters</span>
           </div>
         </div>
         <div class="card-actions">
-          <a href="/baseball-draft" class="btn-card btn-card-primary">🚀 Setup Draft</a>
-          <a href="/rankings?sport=baseball" class="btn-card btn-card-secondary">📊 Rankings</a>
+          <a href="/baseball-draft" class="btn-card btn-card-primary">= Setup Draft</a>
+          <a href="/rankings?sport=baseball" class="btn-card btn-card-secondary">= Rankings</a>
         </div>
       </div>
       <div class="sport-card">
         <div class="card-header">
-          <div class="card-emoji">🏀</div>
+          <div class="card-emoji"><</div>
           <div>
             <div class="card-title">NBA Basketball</div>
             <div class="card-subtitle">Categories &middot; Points League</div>
-            <span class="card-badge">🟢 Live Rosters</span>
+            <span class="card-badge">= Live Rosters</span>
           </div>
         </div>
         <div class="card-actions">
-          <a href="/basketball-draft" class="btn-card btn-card-primary">🚀 Setup Draft</a>
-          <a href="/rankings?sport=basketball" class="btn-card btn-card-secondary">📊 Rankings</a>
+          <a href="/basketball-draft" class="btn-card btn-card-primary">= Setup Draft</a>
+          <a href="/rankings?sport=basketball" class="btn-card btn-card-secondary">= Rankings</a>
         </div>
       </div>
       <div class="sport-card">
         <div class="card-header">
-          <div class="card-emoji">🏒</div>
+          <div class="card-emoji"><</div>
           <div>
             <div class="card-title">NHL Hockey</div>
             <div class="card-subtitle">Standard &middot; Points League</div>
-            <span class="card-badge">🟢 Live Rosters</span>
+            <span class="card-badge">= Live Rosters</span>
           </div>
         </div>
         <div class="card-actions">
-          <a href="/hockey-draft" class="btn-card btn-card-primary">🚀 Setup Draft</a>
-          <a href="/rankings?sport=hockey" class="btn-card btn-card-secondary">📊 Rankings</a>
+          <a href="/hockey-draft" class="btn-card btn-card-primary">= Setup Draft</a>
+          <a href="/rankings?sport=hockey" class="btn-card btn-card-secondary">= Rankings</a>
         </div>
       </div>
       <div class="sport-card">
         <div class="card-header">
-          <div class="card-emoji">🏀</div>
+          <div class="card-emoji"><</div>
           <div>
             <div class="card-title">WNBA</div>
             <div class="card-subtitle">Women's Basketball</div>
@@ -171,13 +171,13 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
           </div>
         </div>
         <div class="card-actions">
-          <a href="/womens-draft" class="btn-card btn-card-primary">🚀 Setup Draft</a>
-          <a href="/rankings?sport=wnba" class="btn-card btn-card-secondary">📊 Rankings</a>
+          <a href="/womens-draft" class="btn-card btn-card-primary">= Setup Draft</a>
+          <a href="/rankings?sport=wnba" class="btn-card btn-card-secondary">= Rankings</a>
         </div>
       </div>
       <div class="sport-card">
         <div class="card-header">
-          <div class="card-emoji">🏆</div>
+          <div class="card-emoji"><</div>
           <div>
             <div class="card-title">March Madness</div>
             <div class="card-subtitle">AI Bracket Predictions &mdash; 2025</div>
@@ -185,8 +185,8 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
           </div>
         </div>
         <div class="card-actions">
-          <a href="/bracket" class="btn-card btn-card-primary">🤖 AI Bracket</a>
-          <a href="/rankings?sport=marchmadness" class="btn-card btn-card-secondary">📊 View Picks</a>
+          <a href="/bracket" class="btn-card btn-card-primary">> AI Bracket</a>
+          <a href="/rankings?sport=marchmadness" class="btn-card btn-card-secondary">= View Picks</a>
         </div>
       </div>
     </div>
