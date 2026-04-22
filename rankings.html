@@ -1054,3 +1054,1059 @@ init();
 </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Draft Assistant - DraftBuddy</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0f172a;color:#e2e8f0;font-family:'Segoe UI',sans-serif;min-height:100vh}
+header{background:#1e293b;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #4ade80}
+.logo{font-size:1.4rem;font-weight:700;color:#4ade80}
+.sport-badge{background:#4ade80;color:#0f172a;padding:4px 12px;border-radius:20px;font-weight:700;font-size:.85rem}
+.header-right{display:flex;gap:12px;align-items:center}
+.btn-sm{padding:6px 14px;border-radius:8px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-back{background:#334155;color:#cbd5e1}
+.btn-back:hover{background:#475569}
+.main{display:grid;grid-template-columns:1fr 360px;gap:16px;padding:16px;height:calc(100vh - 64px)}
+.left-panel{display:flex;flex-direction:column;gap:12px;overflow:hidden}
+.right-panel{display:flex;flex-direction:column;gap:12px;overflow-y:auto}
+.card{background:#1e293b;border-radius:12px;padding:16px;border:1px solid #334155}
+.card h3{color:#4ade80;font-size:.95rem;margin-bottom:12px;text-transform:uppercase;letter-spacing:.05em}
+.search-row{display:flex;gap:8px;flex-wrap:wrap}
+.search-input{flex:1;min-width:160px;background:#0f172a;border:1px solid #334155;color:#e2e8f0;padding:8px 12px;border-radius:8px;font-size:.9rem}
+.filter-select{background:#0f172a;border:1px solid #334155;color:#e2e8f0;padding:8px 10px;border-radius:8px;font-size:.85rem}
+.player-table-wrap{flex:1;overflow-y:auto;border-radius:8px}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th{background:#0f172a;color:#94a3b8;padding:8px 10px;text-align:left;position:sticky;top:0;z-index:1;cursor:pointer;user-select:none}
+th:hover{color:#e2e8f0}
+td{padding:8px 10px;border-bottom:1px solid #1e293b}
+tr:hover td{background:#334155}
+tr.drafted-mine td{background:#14532d;opacity:.8}
+tr.drafted-opp td{background:#1e1e2e;opacity:.5;text-decoration:line-through;color:#64748b}
+.pos-badge{padding:2px 7px;border-radius:5px;font-size:.75rem;font-weight:700;display:inline-block}
+.pos-QB,.pos-PG,.pos-C,.pos-SP{background:#7c3aed;color:#fff}
+.pos-RB,.pos-SG,.pos-2B,.pos-LW{background:#0369a1;color:#fff}
+.pos-WR,.pos-SF,.pos-3B,.pos-RW{background:#0891b2;color:#fff}
+.pos-TE,.pos-PF,.pos-1B,.pos-D{background:#b45309;color:#fff}
+.pos-K,.pos-C2,.pos-SS,.pos-G{background:#4b5563;color:#fff}
+.pos-DST,.pos-OF,.pos-DH,.pos-RP{background:#1e3a5f;color:#fff}
+.pos-FLEX,.pos-UTIL{background:#475569;color:#fff}
+.status-badge{font-size:.7rem;padding:1px 5px;border-radius:4px;margin-left:4px}
+.status-IR{background:#7f1d1d;color:#fca5a5}
+.status-Q{background:#78350f;color:#fcd34d}
+.status-O{background:#7f1d1d;color:#fca5a5}
+.status-D{background:#1e3a5f;color:#93c5fd}
+.btn-pick{background:#4ade80;color:#0f172a;border:none;padding:4px 10px;border-radius:6px;cursor:pointer;font-weight:700;font-size:.8rem}
+.btn-pick:hover{background:#22c55e}
+.btn-opp{background:#334155;color:#94a3b8;border:none;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:.8rem}
+.btn-opp:hover{background:#475569}
+.ai-rec{background:linear-gradient(135deg,#0f2d1f,#1a3a2a);border:1px solid #4ade80;border-radius:12px;padding:16px}
+.ai-rec h3{color:#4ade80;margin-bottom:10px;font-size:1rem}
+.ai-player-name{font-size:1.2rem;font-weight:700;color:#fff;margin-bottom:4px}
+.ai-player-meta{color:#94a3b8;font-size:.85rem;margin-bottom:10px}
+.ai-reason{background:#0f172a;padding:10px;border-radius:8px;font-size:.85rem;color:#cbd5e1;line-height:1.5}
+.needs-grid{display:flex;flex-wrap:wrap;gap:6px}
+.need-chip{padding:4px 10px;border-radius:20px;font-size:.8rem;font-weight:600}
+.need-required{background:#dc2626;color:#fff}
+.need-flex{background:#d97706;color:#fff}
+.need-filled{background:#166534;color:#4ade80}
+.round-info{background:#1e293b;border:1px solid #334155;padding:10px;border-radius:8px;font-size:.85rem;color:#94a3b8}
+.round-info span{color:#4ade80;font-weight:700}
+.my-picks{max-height:200px;overflow-y:auto}
+.pick-item{display:flex;justify-content:space-between;padding:6px 8px;background:#0f172a;border-radius:6px;margin-bottom:4px;font-size:.82rem}
+.loading-overlay{position:fixed;inset:0;background:#0f172a;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1000}
+.loading-spinner{width:48px;height:48px;border:4px solid #334155;border-top-color:#4ade80;border-radius:50%;animation:spin .8s linear infinite;margin-bottom:16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{color:#94a3b8;font-size:.95rem}
+.loading-subtext{color:#4ade80;font-size:.8rem;margin-top:6px}
+.error-banner{background:#7f1d1d;color:#fca5a5;padding:12px;border-radius:8px;margin-bottom:12px;font-size:.85rem}
+.data-source-badge{font-size:.7rem;color:#4ade80;background:#0f2d1f;padding:2px 8px;border-radius:10px;border:1px solid #166534}
+.mm-bracket{display:flex;gap:16px;overflow-x:auto;padding-bottom:12px}
+.mm-region{background:#1e293b;border-radius:10px;padding:12px;min-width:220px}
+.mm-region h4{color:#4ade80;font-size:.85rem;margin-bottom:10px;text-transform:uppercase}
+.mm-team{display:flex;justify-content:space-between;align-items:center;padding:6px 8px;border-radius:6px;margin-bottom:4px;cursor:pointer;font-size:.82rem;border:1px solid transparent}
+.mm-team:hover{border-color:#4ade80}
+.mm-team.selected{background:#14532d;border-color:#4ade80}
+.mm-seed{color:#4ade80;font-weight:700;min-width:24px}
+.mm-ai{background:#0f2d1f;border:1px solid #4ade80;padding:6px 10px;border-radius:6px;font-size:.8rem;color:#4ade80;margin-top:4px}
+.adp-bar-wrap{width:60px;height:6px;background:#1e293b;border-radius:3px;display:inline-block;vertical-align:middle;margin-left:4px}
+.adp-bar{height:6px;background:#4ade80;border-radius:3px}
+</style>
+</head>
+<body>
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-spinner"></div>
+  <div class="loading-text" id="loadingText">Loading live player data...</div>
+  <div class="loading-subtext" id="loadingSubtext">Fetching current rosters...</div>
+</div>
+  <div class="loading-text" id="loadingText">Loading live player data...</div>
+  <div class="loading-subtext" id="loadingSubtext">Fetching current rosters from Sleeper API</div>
+</div>
+
+<header>
+  <div class="logo">🏆 DraftBuddy <span id="leagueNameHeader" style="font-weight:400;font-size:1rem;color:#94a3b8"></span></div>
+  <div class="header-right">
+    <span class="sport-badge" id="sportBadge">Loading...</span>
+    <span class="data-source-badge" id="dataSourceBadge">Live Data</span>
+    <button class="btn-sm btn-back" onclick="window.location.href='/draft'">← New Draft</button>
+    <button class="btn-sm btn-back" onclick="window.location.href='/dashboard'">Dashboard</button>
+  </div>
+</header>
+
+<div class="main" id="mainArea" style="display:none">
+  <div class="left-panel">
+    <div class="card">
+      <div class="search-row">
+        <input class="search-input" id="searchInput" placeholder="Search players, teams..." oninput="filterPlayers()">
+        <select class="filter-select" id="posFilter" onchange="filterPlayers()">
+          <option value="">All Positions</option>
+        </select>
+        <select class="filter-select" id="statusFilter" onchange="filterPlayers()">
+          <option value="active">Active Only</option>
+          <option value="all">Show All</option>
+        </select>
+        <select class="filter-select" id="availFilter" onchange="filterPlayers()">
+          <option value="available">Available</option>
+          <option value="all">Show Drafted</option>
+        </select>
+      </div>
+    </div>
+    <div class="card" style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h3 style="margin-bottom:0">Player Rankings <span id="playerCount" style="color:#94a3b8;font-weight:400"></span></h3>
+        <span id="lastUpdated" style="font-size:.75rem;color:#64748b"></span>
+      </div>
+      <div id="errorBanner" class="error-banner" style="display:none"></div>
+      <div class="player-table-wrap" id="playerTableWrap">
+        <table id="playerTable">
+          <thead id="tableHead"></thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="right-panel">
+    <div class="round-info" id="roundInfo">
+      Round <span id="curRound">1</span> &bull; Pick <span id="curPick">1</span> &bull; 
+      <span id="turnStatus">—</span>
+    </div>
+    <div class="ai-rec card" id="aiRecCard">
+      <h3>🤖 AI Recommendation</h3>
+      <div id="aiContent"><div style="color:#94a3b8">Start drafting to activate AI...</div></div>
+    </div>
+    <div class="card">
+      <h3>Positional Needs</h3>
+      <div class="needs-grid" id="needsGrid"></div>
+    </div>
+    <div class="card">
+      <h3>My Picks (<span id="myPickCount">0</span>)</h3>
+      <div class="my-picks" id="myPicksList"></div>
+    </div>
+  </div>
+</div>
+
+<div id="mmArea" style="display:none;padding:16px">
+  <div class="card" style="margin-bottom:12px">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h3 style="margin-bottom:0">🏀 March Madness AI Bracket Assistant</h3>
+      <span class="data-source-badge">2025 Tournament</span>
+    </div>
+    <p style="color:#94a3b8;font-size:.85rem;margin-top:8px">Click teams to advance them. AI recommends based on strength, seed, and upset probability.</p>
+  </div>
+  <div class="ai-rec card" id="mmAiRec" style="margin-bottom:12px">
+    <h3>🤖 AI Picks & Championship Prediction</h3>
+    <div id="mmAiContent"></div>
+  </div>
+  <div class="mm-bracket" id="mmBracket"></div>
+</div>
+
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+const FB = {apiKey:"AIzaSyBJq24N56L-6YeRj5we6VoA-diqWJnHd88",authDomain:"draftbuddy-cf5c9.firebaseapp.com",projectId:"draftbuddy-cf5c9",storageBucket:"draftbuddy-cf5c9.appspot.com",messagingSenderId:"822764808554",appId:"1:861425863011:web:e6b8ee8525ba71f7de6b56"};
+const auth = getAuth(initializeApp(FB));
+    setPersistence(auth,browserLocalPersistence).catch(function(){});
+onAuthStateChanged(auth, u => { if (!u) window.location.href = '/login'; });
+
+// ===== URL PARAMS =====
+const P = new URLSearchParams(window.location.search);
+const _rawSport = (P.get('sport') || 'football').toLowerCase();
+const SPORT_MAP = {'nfl':'football','nba':'basketball','mlb':'baseball','nhl':'hockey','wnba':'wnba','march_madness':'marchmadness','mm':'marchmadness'};
+_rawSport = (P.get('sport') || 'football').toLowerCase();
+SPORT_MAP = {'nfl':'football','nba':'basketball','mlb':'baseball','nhl':'hockey','march_madness':'marchmadness','mm':'marchmadness'};
+const SPORT = SPORT_MAP[_rawSport] || _rawSport;
+const NUM_TEAMS = parseInt(P.get('teams') || '10');
+const DRAFT_TYPE = (P.get('type') || 'snake').toLowerCase();
+const SCORING = (P.get('scoring') || 'ppr').toLowerCase();
+const MY_PICK = parseInt(P.get('pick') || '1');
+const LEAGUE_NAME = P.get('league') || '';
+
+// ===== STATE =====
+let overallPick = 1;
+let draftedPlayers = {};
+let myPicks = [];
+let allPlayers = [];
+let sortCol = 'rank';
+let sortDir = 1;
+
+// ===== SLEEPER SPORT MAP =====
+// Sleeper API: api.sleeper.app/v1/players/{sport}
+// Supported: nfl, nba, lcs (no MLB/NHL on Sleeper)
+// For MLB we use MLB Stats API, for NHL we use NHL API
+const SPORT_CONFIG = {
+  football: {
+    sleeperSport: 'nfl',
+    label: 'NFL Football',
+    emoji: '🏈',
+    positions: ['QB','RB','WR','TE','K','DEF'],
+    fantasyPositions: ['QB','RB','WR','TE','K','DEF'],
+    roster: {
+      ppr: {QB:1,RB:2,WR:3,TE:1,FLEX:1,K:1,DEF:1},
+      standard: {QB:1,RB:2,WR:2,TE:1,FLEX:1,K:1,DEF:1},
+      half: {QB:1,RB:2,WR:2,TE:1,FLEX:1,K:1,DEF:1}
+    },
+    headers: ['Rank','Player','Team','Pos','Age','Status','ADP','Action'],
+    adpField: 'search_rank',
+    nameFields: ['full_name','first_name','last_name'],
+    teamField: 'team',
+    posField: 'fantasy_positions'
+  },
+  basketball: {
+    sleeperSport: 'nba',
+    label: 'NBA Basketball',
+    emoji: '🏀',
+    positions: ['PG','SG','SF','PF','C'],
+    fantasyPositions: ['PG','SG','SF','PF','C'],
+    roster: {
+      standard: {PG:1,SG:1,SF:1,PF:1,C:1,G:1,F:1,UTIL:1},
+      categories: {PG:1,SG:1,SF:1,PF:1,C:1,G:1,F:1,UTIL:1},
+      points: {PG:1,SG:1,SF:1,PF:1,C:1,G:1,F:1,UTIL:1}
+    },
+    headers: ['Rank','Player','Team','Pos','Age','Status','ADP','Action'],
+    adpField: 'search_rank',
+    nameFields: ['full_name','first_name','last_name'],
+    teamField: 'team',
+    posField: 'fantasy_positions'
+  },
+  baseball: {
+    sleeperSport: null,
+    label: 'MLB Baseball',
+    emoji: '⚾',
+    positions: ['SP','RP','C','1B','2B','3B','SS','OF','DH'],
+    fantasyPositions: ['SP','RP','C','1B','2B','3B','SS','OF','DH'],
+    roster: {
+      standard: {SP:2,RP:2,C:1,'1B':1,'2B':1,'3B':1,SS:1,OF:3,DH:1},
+      roto: {SP:2,RP:2,C:1,'1B':1,'2B':1,'3B':1,SS:1,OF:3,DH:1},
+      points: {SP:2,RP:2,C:1,'1B':1,'2B':1,'3B':1,SS:1,OF:3,DH:1}
+    },
+    headers: ['Rank','Player','Team','Pos','Age','Status','ADP','Action'],
+    adpField: 'search_rank',
+    nameFields: ['full_name','first_name','last_name'],
+    teamField: 'team',
+    posField: 'fantasy_positions'
+  },
+  hockey: {
+    sleeperSport: null,
+    label: 'NHL Hockey',
+    emoji: '🏒',
+    positions: ['C','LW','RW','D','G'],
+    fantasyPositions: ['C','LW','RW','D','G'],
+    roster: {
+      standard: {C:2,LW:2,RW:2,D:2,G:2,UTIL:1},
+      categories: {C:2,LW:2,RW:2,D:2,G:2,UTIL:1},
+      points: {C:2,LW:2,RW:2,D:2,G:2,UTIL:1}
+    },
+    headers: ['Rank','Player','Team','Pos','Age','Status','ADP','Action'],
+    adpField: 'search_rank',
+    nameFields: ['full_name','first_name','last_name'],
+    teamField: 'team',
+    posField: 'fantasy_positions'
+  }
+};
+
+
+SPORT_CONFIG.wnba = {
+  sleeperSport: null,
+  label: 'WNBA',
+  emoji: '🏀',
+  positions: ['PG','SG','SF','PF','C'],
+  fantasyPositions: ['PG','SG','SF','PF','C'],
+  roster: {
+    standard: {PG:1,SG:1,SF:1,PF:1,C:1,G:1,F:1,UTIL:1},
+    categories: {PG:1,SG:1,SF:1,PF:1,C:1,G:1,F:1,UTIL:1},
+    points: {PG:1,SG:1,SF:1,PF:1,C:1,G:1,F:1,UTIL:1}
+  },
+  headers: ['Rank','Player','Team','Pos','Age','Status','ADP','Action'],
+  adpField: 'search_rank',
+  nameFields: ['full_name'],
+  teamField: 'team',
+  posField: 'fantasy_positions'
+};
+
+// ===== FETCH LIVE DATA =====
+async function fetchSleeperPlayers(sport) {
+  const sportKey = sport === 'football' ? 'nfl' : sport === 'basketball' ? 'nba' : null;
+  if (!sportKey) return null;
+  const cacheKey = 'db_sleeper_' + sportKey;
+  const cacheTTL = 60 * 60 * 1000; // 1 hour
+  try {
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) {
+      const { ts, data } = JSON.parse(cached);
+      if (Date.now() - ts < cacheTTL) return data;
+    }
+  } catch(e) {}
+  try {
+    const url = `https://api.sleeper.app/v1/players/${sportKey}`;
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    try { localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data })); } catch(e) {}
+    return data;
+  } catch(e) {
+    console.error('Sleeper fetch failed:', e);
+    return null;
+  }
+}
+
+// Fetch MLB players from MLB Stats API (free, public, CORS enabled)
+async function fetchMLBPlayers() {
+  const cacheKey = 'db_mlb_players';
+  const cacheTTL = 60 * 60 * 1000; // 1 hour
+  try {
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) {
+      const { ts, data } = JSON.parse(cached);
+      if (Date.now() - ts < cacheTTL) return data;
+    }
+  } catch(e) {}
+  try {
+    const url = 'https://statsapi.mlb.com/api/v1/sports/1/players?season=2025&gameType=R&fields=people,id,fullName,firstName,lastName,primaryPosition,currentTeam,active,nameSlug';
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    const result = data.people || [];
+    try { localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data: result })); } catch(e) {}
+    return result;
+  } catch(e) {
+    console.error('MLB fetch failed:', e);
+    return [];
+  }
+}
+
+// Fetch NHL players from NHL Stats API (free, public, CORS enabled)
+async function fetchNHLPlayers() {
+  const cacheKey = 'db_nhl_players';
+  const cacheTTL = 60 * 60 * 1000; // 1 hour
+  try {
+    const cached = localStorage.getItem(cacheKey);
+    if (cached) {
+      const { ts, data } = JSON.parse(cached);
+      if (Date.now() - ts < cacheTTL) return data;
+    }
+  } catch(e) {}
+  try {
+    const url = 'https://api.nhle.com/stats/rest/en/skater/summary?limit=200&start=0&sort=points&cayenneExp=seasonId=20242025%20and%20gameTypeId=2';
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    const result = data.data || [];
+    try { localStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), data: result })); } catch(e) {}
+    return result;
+  } catch(e) {
+    console.error('NHL fetch failed:', e);
+    return [];
+  }
+}
+
+// ===== TRANSFORM SLEEPER DATA =====
+function transformSleeperNFL(raw) {
+  const players = [];
+  const validPos = ['QB','RB','WR','TE','K','DEF'];
+  Object.entries(raw).forEach(([id, p]) => {
+    if (!p.active && p.status !== 'Active') return;
+    const positions = p.fantasy_positions || [];
+    const mainPos = positions[0] || p.position;
+    if (!mainPos || !validPos.includes(mainPos)) return;
+    if (!p.team && mainPos !== 'DEF') return;
+    const rank = p.search_rank || p.fantasy_data_id || 9999;
+    if (rank > 500 && mainPos !== 'DEF') return; // filter low-ranked
+    players.push({
+      id: id,
+      name: p.full_name || (p.first_name + ' ' + p.last_name),
+      team: p.team || 'FA',
+      pos: mainPos,
+      age: p.age || '—',
+      status: p.injury_status || p.status || 'Active',
+      rank: rank,
+      adp: rank,
+      proj: Math.max(1, Math.round(500 - rank * 1.2 + (mainPos === 'QB' ? 100 : mainPos === 'RB' ? 20 : mainPos === 'WR' ? 15 : mainPos === 'TE' ? 10 : 0))),
+      yearsExp: p.years_exp || 0,
+      college: p.college || '',
+      active: p.status !== 'Inactive' && p.status !== 'Retired'
+    });
+  });
+  // Sort by rank
+  players.sort((a, b) => a.rank - b.rank);
+  return players;
+}
+
+function transformSleeperNBA(raw) {
+  const players = [];
+  const validPos = ['PG','SG','SF','PF','C'];
+  Object.entries(raw).forEach(([id, p]) => {
+    if (!p.active) return;
+    const positions = p.fantasy_positions || [];
+    const mainPos = positions[0] || p.position;
+    if (!mainPos || !validPos.includes(mainPos)) return;
+    if (!p.team) return;
+    const rank = p.search_rank || 9999;
+    if (rank > 400) return;
+    players.push({
+      id: id,
+      name: p.full_name || (p.first_name + ' ' + p.last_name),
+      team: p.team || 'FA',
+      pos: mainPos,
+      age: p.age || '—',
+      status: p.injury_status || 'Active',
+      rank: rank,
+      adp: rank,
+      proj: Math.max(1, Math.round(400 - rank)),
+      active: true
+    });
+  });
+  players.sort((a, b) => a.rank - b.rank);
+  return players;
+}
+
+function transformMLB(raw) {
+  const posMap = {
+    'Pitcher': 'SP', 'Starting Pitcher': 'SP', 'Relief Pitcher': 'RP',
+    'Catcher': 'C', 'First Base': '1B', 'Second Base': '2B',
+    'Third Base': '3B', 'Shortstop': 'SS', 'Left Field': 'OF',
+    'Center Field': 'OF', 'Right Field': 'OF', 'Outfield': 'OF',
+    'Designated Hitter': 'DH'
+  };
+  const players = [];
+  raw.forEach((p, idx) => {
+    if (!p.active) return;
+    const posCode = p.primaryPosition ? (posMap[p.primaryPosition.name] || p.primaryPosition.abbreviation) : '?';
+    const validPos = ['SP','RP','C','1B','2B','3B','SS','OF','DH'];
+    if (!validPos.includes(posCode)) return;
+    players.push({
+      id: 'mlb_' + (p.id || idx),
+      name: p.fullName || 'Unknown',
+      team: p.currentTeam ? p.currentTeam.abbreviation || p.currentTeam.name.substring(0,3).toUpperCase() : 'FA',
+      pos: posCode,
+      age: p.birthDate ? (new Date().getFullYear() - parseInt(p.birthDate.substring(0,4))) : '—',
+      status: 'Active',
+      rank: idx + 1,
+      adp: idx + 1,
+      proj: Math.max(1, 300 - idx),
+      active: true
+    });
+  });
+  return players;
+}
+
+function transformNHL(raw) {
+  const players = [];
+  raw.forEach((p, idx) => {
+    if (!p.skaterFullName) return;
+    const posMap = {'C':'C','L':'LW','R':'RW','D':'D'};
+    const pos = posMap[p.positionCode] || p.positionCode || 'C';
+    players.push({
+      id: 'nhl_' + p.playerId,
+      name: p.skaterFullName,
+      team: p.teamAbbrevs ? p.teamAbbrevs.split(',')[0] : 'FA',
+      pos: pos,
+      age: '—',
+      status: 'Active',
+      rank: idx + 1,
+      adp: idx + 1,
+      proj: Math.max(1, 250 - idx),
+      active: true
+    });
+  });
+  return players;
+}
+
+// ===== FALLBACK DATA (shown if APIs are unavailable) =====
+const FALLBACK = {
+  football: [
+    {id:'f1',name:'Christian McCaffrey',team:'SF',pos:'RB',age:27,status:'Active',rank:1,adp:1,proj:320,active:true},
+    {id:'f2',name:'CeeDee Lamb',team:'DAL',pos:'WR',age:24,status:'Active',rank:2,adp:2,proj:295,active:true},
+    {id:'f3',name:'Tyreek Hill',team:'MIA',pos:'WR',age:30,status:'Active',rank:3,adp:3,proj:285,active:true},
+    {id:'f4',name:'Ja'Marr Chase',team:'CIN',pos:'WR',age:24,status:'Active',rank:4,adp:4,proj:280,active:true},
+    {id:'f5',name:'Justin Jefferson',team:'MIN',pos:'WR',age:24,status:'Active',rank:5,adp:5,proj:275,active:true},
+    {id:'f6',name:'Breece Hall',team:'NYJ',pos:'RB',age:23,status:'Active',rank:6,adp:6,proj:265,active:true},
+    {id:'f7',name:'Amon-Ra St. Brown',team:'DET',pos:'WR',age:24,status:'Active',rank:7,adp:7,proj:260,active:true},
+    {id:'f8',name:'Garrett Wilson',team:'NYJ',pos:'WR',age:23,status:'Active',rank:8,adp:8,proj:245,active:true},
+    {id:'f9',name:'Sam LaPorta',team:'DET',pos:'TE',age:23,status:'Active',rank:9,adp:9,proj:200,active:true},
+    {id:'f10',name:'Josh Allen',team:'BUF',pos:'QB',age:27,status:'Active',rank:10,adp:10,proj:420,active:true},
+    {id:'f11',name:'Davante Adams',team:'LV',pos:'WR',age:31,status:'Active',rank:11,adp:11,proj:235,active:true},
+    {id:'f12',name:'Lamar Jackson',team:'BAL',pos:'QB',age:27,status:'Active',rank:12,adp:12,proj:415,active:true},
+    {id:'f13',name:'Travis Kelce',team:'KC',pos:'TE',age:34,status:'Active',rank:13,adp:13,proj:195,active:true},
+    {id:'f14',name:'Tony Pollard',team:'TEN',pos:'RB',age:26,status:'Active',rank:14,adp:14,proj:230,active:true},
+    {id:'f15',name:'Drake London',team:'ATL',pos:'WR',age:23,status:'Active',rank:15,adp:15,proj:230,active:true},
+    {id:'f16',name:'Patrick Mahomes',team:'KC',pos:'QB',age:29,status:'Active',rank:16,adp:16,proj:400,active:true},
+    {id:'f17',name:'Jonathan Taylor',team:'IND',pos:'RB',age:25,status:'Active',rank:17,adp:17,proj:225,active:true},
+    {id:'f18',name:'Stefon Diggs',team:'BUF',pos:'WR',age:30,status:'Active',rank:18,adp:18,proj:220,active:true},
+    {id:'f19',name:'Mark Andrews',team:'BAL',pos:'TE',age:28,status:'Active',rank:19,adp:19,proj:190,active:true},
+    {id:'f20',name:'Josh Jacobs',team:'GB',pos:'RB',age:26,status:'Active',rank:20,adp:20,proj:210,active:true},
+    {id:'f21',name:'Bijan Robinson',team:'ATL',pos:'RB',age:22,status:'Active',rank:21,adp:21,proj:205,active:true},
+    {id:'f22',name:'Jalen Hurts',team:'PHI',pos:'QB',age:25,status:'Active',rank:22,adp:22,proj:395,active:true},
+    {id:'f23',name:'Dak Prescott',team:'DAL',pos:'QB',age:31,status:'Active',rank:23,adp:23,proj:380,active:true},
+    {id:'f24',name:'Jahmyr Gibbs',team:'DET',pos:'RB',age:22,status:'Active',rank:24,adp:24,proj:200,active:true},
+    {id:'f25',name:'Tee Higgins',team:'CIN',pos:'WR',age:24,status:'Active',rank:25,adp:25,proj:225,active:true},
+    {id:'f26',name:'Harrison Butker',team:'KC',pos:'K',age:28,status:'Active',rank:50,adp:50,proj:160,active:true},
+    {id:'f27',name:'Justin Tucker',team:'BAL',pos:'K',age:34,status:'Active',rank:51,adp:51,proj:155,active:true},
+    {id:'f28',name:'SF 49ers DST',team:'SF',pos:'DEF',age:0,status:'Active',rank:55,adp:55,proj:140,active:true},
+    {id:'f29',name:'KC Chiefs DST',team:'KC',pos:'DEF',age:0,status:'Active',rank:56,adp:56,proj:135,active:true},
+    {id:'f30',name:'DAL Cowboys DST',team:'DAL',pos:'DEF',age:0,status:'Active',rank:57,adp:57,proj:130,active:true}
+  ],
+  basketball: [
+    {id:'b1',name:'Nikola Jokic',team:'DEN',pos:'C',age:29,status:'Active',rank:1,adp:1,proj:580,active:true},
+    {id:'b2',name:'Luka Doncic',team:'DAL',pos:'PG',age:25,status:'Active',rank:2,adp:2,proj:570,active:true},
+    {id:'b3',name:'Giannis Antetokounmpo',team:'MIL',pos:'PF',age:29,status:'Active',rank:3,adp:3,proj:555,active:true},
+    {id:'b4',name:'Shai Gilgeous-Alexander',team:'OKC',pos:'PG',age:25,status:'Active',rank:4,adp:4,proj:545,active:true},
+    {id:'b5',name:'Joel Embiid',team:'PHI',pos:'C',age:30,status:'Active',rank:5,adp:5,proj:530,active:true},
+    {id:'b6',name:'Anthony Davis',team:'LAL',pos:'PF',age:31,status:'Active',rank:6,adp:6,proj:520,active:true},
+    {id:'b7',name:'Jayson Tatum',team:'BOS',pos:'SF',age:26,status:'Active',rank:7,adp:7,proj:510,active:true},
+    {id:'b8',name:'Devin Booker',team:'PHX',pos:'SG',age:27,status:'Active',rank:8,adp:8,proj:500,active:true},
+    {id:'b9',name:'Tyrese Haliburton',team:'IND',pos:'PG',age:24,status:'Active',rank:9,adp:9,proj:490,active:true},
+    {id:'b10',name:'Anthony Edwards',team:'MIN',pos:'SG',age:22,status:'Active',rank:10,adp:10,proj:460,active:true},
+    {id:'b11',name:'Damian Lillard',team:'MIL',pos:'PG',age:33,status:'Active',rank:11,adp:11,proj:470,active:true},
+    {id:'b12',name:'Donovan Mitchell',team:'CLE',pos:'SG',age:27,status:'Active',rank:12,adp:12,proj:480,active:true},
+    {id:'b13',name:'Kevin Durant',team:'PHX',pos:'SF',age:35,status:'Active',rank:13,adp:13,proj:465,active:true},
+    {id:'b14',name:'Ja Morant',team:'MEM',pos:'PG',age:24,status:'Active',rank:14,adp:14,proj:450,active:true},
+    {id:'b15',name:'LeBron James',team:'LAL',pos:'SF',age:39,status:'Active',rank:15,adp:15,proj:435,active:true},
+    {id:'b16',name:'Bam Adebayo',team:'MIA',pos:'C',age:26,status:'Active',rank:16,adp:16,proj:445,active:true},
+    {id:'b17',name:'Domantas Sabonis',team:'SAC',pos:'PF',age:27,status:'Active',rank:17,adp:17,proj:440,active:true},
+    {id:'b18',name:'Trae Young',team:'ATL',pos:'PG',age:25,status:'Active',rank:18,adp:18,proj:430,active:true},
+    {id:'b19',name:'Karl-Anthony Towns',team:'NYK',pos:'C',age:28,status:'Active',rank:19,adp:19,proj:420,active:true},
+    {id:'b20',name:'Paolo Banchero',team:'ORL',pos:'PF',age:21,status:'Active',rank:20,adp:20,proj:385,active:true}
+  ],
+  baseball: [
+    {id:'bb1',name:'Shohei Ohtani',team:'LAD',pos:'DH',age:29,status:'Active',rank:1,adp:1,proj:520,active:true},
+    {id:'bb2',name:'Ronald Acuna Jr',team:'ATL',pos:'OF',age:26,status:'Active',rank:2,adp:2,proj:500,active:true},
+    {id:'bb3',name:'Mookie Betts',team:'LAD',pos:'OF',age:31,status:'Active',rank:3,adp:3,proj:460,active:true},
+    {id:'bb4',name:'Spencer Strider',team:'ATL',pos:'SP',age:25,status:'Active',rank:4,adp:4,proj:440,active:true},
+    {id:'bb5',name:'Freddie Freeman',team:'LAD',pos:'1B',age:34,status:'Active',rank:5,adp:5,proj:420,active:true},
+    {id:'bb6',name:'Gerrit Cole',team:'NYY',pos:'SP',age:33,status:'Active',rank:6,adp:6,proj:430,active:true},
+    {id:'bb7',name:'Trea Turner',team:'PHI',pos:'SS',age:30,status:'Active',rank:7,adp:7,proj:410,active:true},
+    {id:'bb8',name:'Bobby Witt Jr',team:'KC',pos:'SS',age:24,status:'Active',rank:8,adp:8,proj:395,active:true},
+    {id:'bb9',name:'Jose Ramirez',team:'CLE',pos:'3B',age:31,status:'Active',rank:9,adp:9,proj:400,active:true},
+    {id:'bb10',name:'Juan Soto',team:'NYY',pos:'OF',age:25,status:'Active',rank:10,adp:10,proj:380,active:true},
+    {id:'bb11',name:'Adley Rutschman',team:'BAL',pos:'C',age:26,status:'Active',rank:11,adp:11,proj:370,active:true},
+    {id:'bb12',name:'Mason Miller',team:'OAK',pos:'RP',age:25,status:'Active',rank:12,adp:12,proj:280,active:true},
+    {id:'bb13',name:'Yordan Alvarez',team:'HOU',pos:'DH',age:27,status:'Active',rank:13,adp:13,proj:370,active:true},
+    {id:'bb14',name:'Corbin Carroll',team:'ARI',pos:'OF',age:23,status:'Active',rank:14,adp:14,proj:355,active:true},
+    {id:'bb15',name:'Gunnar Henderson',team:'BAL',pos:'SS',age:22,status:'Active',rank:15,adp:15,proj:350,active:true},
+    {id:'bb16',name:'Austin Riley',team:'ATL',pos:'3B',age:26,status:'Active',rank:16,adp:16,proj:360,active:true},
+    {id:'bb17',name:'Zack Wheeler',team:'PHI',pos:'SP',age:34,status:'Active',rank:17,adp:17,proj:405,active:true},
+    {id:'bb18',name:'Francisco Lindor',team:'NYM',pos:'SS',age:30,status:'Active',rank:18,adp:18,proj:385,active:true},
+    {id:'bb19',name:'Vladimir Guerrero Jr',team:'TOR',pos:'1B',age:25,status:'Active',rank:19,adp:19,proj:370,active:true},
+    {id:'bb20',name:'Fernando Tatis Jr',team:'SD',pos:'OF',age:25,status:'Active',rank:20,adp:20,proj:400,active:true}
+  ],
+  hockey: [
+    {id:'h1',name:'Connor McDavid',team:'EDM',pos:'C',age:27,status:'Active',rank:1,adp:1,proj:600,active:true},
+    {id:'h2',name:'Leon Draisaitl',team:'EDM',pos:'C',age:28,status:'Active',rank:2,adp:2,proj:570,active:true},
+    {id:'h3',name:'Nathan MacKinnon',team:'COL',pos:'C',age:28,status:'Active',rank:3,adp:3,proj:560,active:true},
+    {id:'h4',name:'David Pastrnak',team:'BOS',pos:'RW',age:27,status:'Active',rank:4,adp:4,proj:540,active:true},
+    {id:'h5',name:'Auston Matthews',team:'TOR',pos:'C',age:26,status:'Active',rank:5,adp:5,proj:530,active:true},
+    {id:'h6',name:'Nikita Kucherov',team:'TB',pos:'RW',age:31,status:'Active',rank:6,adp:6,proj:500,active:true},
+    {id:'h7',name:'Mikko Rantanen',team:'COL',pos:'RW',age:27,status:'Active',rank:7,adp:7,proj:510,active:true},
+    {id:'h8',name:'Cale Makar',team:'COL',pos:'D',age:25,status:'Active',rank:8,adp:8,proj:480,active:true},
+    {id:'h9',name:'Jason Robertson',team:'DAL',pos:'LW',age:24,status:'Active',rank:9,adp:9,proj:470,active:true},
+    {id:'h10',name:'Matthew Tkachuk',team:'FLA',pos:'LW',age:26,status:'Active',rank:10,adp:10,proj:460,active:true},
+    {id:'h11',name:'Igor Shesterkin',team:'NYR',pos:'G',age:28,status:'Active',rank:11,adp:11,proj:380,active:true},
+    {id:'h12',name:'Andrei Vasilevskiy',team:'TB',pos:'G',age:29,status:'Active',rank:12,adp:12,proj:375,active:true},
+    {id:'h13',name:'Aleksander Barkov',team:'FLA',pos:'C',age:29,status:'Active',rank:13,adp:13,proj:355,active:true},
+    {id:'h14',name:'Quinn Hughes',team:'VAN',pos:'D',age:24,status:'Active',rank:14,adp:14,proj:440,active:true},
+    {id:'h15',name:'Jack Hughes',team:'NJ',pos:'C',age:22,status:'Active',rank:15,adp:15,proj:435,active:true},
+    {id:'h16',name:'Alex Ovechkin',team:'WSH',pos:'LW',age:39,status:'Active',rank:16,adp:16,proj:390,active:true},
+    {id:'h17',name:'Artemi Panarin',team:'NYR',pos:'LW',age:33,status:'Active',rank:17,adp:17,proj:395,active:true},
+    {id:'h18',name:'Roman Josi',team:'NSH',pos:'D',age:33,status:'Active',rank:18,adp:18,proj:345,active:true},
+    {id:'h19',name:'Victor Hedman',team:'TB',pos:'D',age:33,status:'Active',rank:19,adp:19,proj:350,active:true},
+    {id:'h20',name:'Brady Tkachuk',team:'OTT',pos:'LW',age:24,status:'Active',rank:20,adp:20,proj:345,active:true}
+  ]
+
+  wnba: [
+    {id:'w1',name:'A'ja Wilson',team:'LV',pos:'PF',age:27,status:'Active',rank:1,adp:1,proj:520,active:true},
+    {id:'w2',name:'Breanna Stewart',team:'NYL',pos:'SF',age:29,status:'Active',rank:2,adp:2,proj:500,active:true},
+    {id:'w3',name:'Sabrina Ionescu',team:'NYL',pos:'PG',age:26,status:'Active',rank:3,adp:3,proj:480,active:true},
+    {id:'w4',name:'Caitlin Clark',team:'IND',pos:'PG',age:22,status:'Active',rank:4,adp:4,proj:470,active:true},
+    {id:'w5',name:'Kelsey Plum',team:'LV',pos:'PG',age:29,status:'Active',rank:5,adp:5,proj:450,active:true},
+    {id:'w6',name:'Alyssa Thomas',team:'CT',pos:'PF',age:32,status:'Active',rank:6,adp:6,proj:440,active:true},
+    {id:'w7',name:'Napheesa Collier',team:'MIN',pos:'PF',age:27,status:'Active',rank:7,adp:7,proj:430,active:true},
+    {id:'w8',name:'Jonquel Jones',team:'NYL',pos:'C',age:29,status:'Active',rank:8,adp:8,proj:420,active:true},
+    {id:'w9',name:'DeWanna Bonner',team:'CT',pos:'SF',age:36,status:'Active',rank:9,adp:9,proj:400,active:true},
+    {id:'w10',name:'Angel Reese',team:'CHI',pos:'PF',age:22,status:'Active',rank:10,adp:10,proj:390,active:true},
+    {id:'w11',name:'Brittney Griner',team:'PHX',pos:'C',age:33,status:'Active',rank:11,adp:11,proj:380,active:true},
+    {id:'w12',name:'Rhyne Howard',team:'ATL',pos:'SG',age:24,status:'Active',rank:12,adp:12,proj:370,active:true},
+    {id:'w13',name:'Ezi Magbegor',team:'SEA',pos:'C',age:25,status:'Active',rank:13,adp:13,proj:360,active:true},
+    {id:'w14',name:'Marina Mabrey',team:'CT',pos:'SG',age:27,status:'Active',rank:14,adp:14,proj:350,active:true},
+    {id:'w15',name:'Kayla McBride',team:'MIN',pos:'SG',age:32,status:'Active',rank:15,adp:15,proj:340,active:true}
+  ],
+};
+
+// ===== MARCH MADNESS 2025 DATA =====
+const MM_REGIONS = {
+  East: [
+    {seed:1,name:'Duke',wins:35,losses:3,pts:81.2,str:96,upsetProb:0.02},
+    {seed:2,name:'Alabama',wins:32,losses:5,pts:83.5,str:91,upsetProb:0.05},
+    {seed:3,name:'Wisconsin',wins:30,losses:6,pts:74.2,str:87,upsetProb:0.08},
+    {seed:4,name:'Arizona',wins:28,losses:8,pts:79.3,str:83,upsetProb:0.12},
+    {seed:5,name:'Oregon',wins:26,losses:9,pts:71.8,str:79,upsetProb:0.17},
+    {seed:6,name:'BYU',wins:25,losses:10,pts:69.5,str:74,upsetProb:0.22},
+    {seed:7,name:'Saint Mary's',wins:24,losses:10,pts:72.1,str:70,upsetProb:0.26},
+    {seed:8,name:'Mississippi State',wins:22,losses:12,pts:68.9,str:66,upsetProb:0.30},
+    {seed:9,name:'Baylor',wins:22,losses:11,pts:72.4,str:64,upsetProb:0.35},
+    {seed:10,name:'Vanderbilt',wins:21,losses:12,pts:70.4,str:58,upsetProb:0.39},
+    {seed:11,name:'VCU',wins:26,losses:8,pts:69.8,str:54,upsetProb:0.35},
+    {seed:12,name:'Liberty',wins:30,losses:5,pts:74.2,str:50,upsetProb:0.35},
+    {seed:13,name:'Akron',wins:26,losses:7,pts:73.8,str:46,upsetProb:0.12},
+    {seed:14,name:'Vermont',wins:27,losses:6,pts:71.9,str:42,upsetProb:0.08},
+    {seed:15,name:'Lipscomb',wins:25,losses:9,pts:69.2,str:38,upsetProb:0.05},
+    {seed:16,name:'American',wins:18,losses:15,pts:65.4,str:34,upsetProb:0.02}
+  ],
+  West: [
+    {seed:1,name:'Auburn',wins:34,losses:3,pts:82.1,str:96,upsetProb:0.02},
+    {seed:2,name:'Michigan State',wins:32,losses:5,pts:75.3,str:90,upsetProb:0.05},
+    {seed:3,name:'Iowa State',wins:30,losses:5,pts:77.5,str:86,upsetProb:0.08},
+    {seed:4,name:'Texas Tech',wins:27,losses:7,pts:68.2,str:82,upsetProb:0.12},
+    {seed:5,name:'Memphis',wins:28,losses:7,pts:72.4,str:77,upsetProb:0.18},
+    {seed:6,name:'Missouri',wins:25,losses:9,pts:70.8,str:72,upsetProb:0.23},
+    {seed:7,name:'Marquette',wins:24,losses:10,pts:76.5,str:68,upsetProb:0.27},
+    {seed:8,name:'Louisville',wins:22,losses:12,pts:70.1,str:63,upsetProb:0.32},
+    {seed:9,name:'Creighton',wins:21,losses:12,pts:74.5,str:61,upsetProb:0.36},
+    {seed:10,name:'New Mexico',wins:26,losses:7,pts:75.2,str:57,upsetProb:0.30},
+    {seed:11,name:'Drake',wins:28,losses:5,pts:75.8,str:53,upsetProb:0.35},
+    {seed:12,name:'UC San Diego',wins:27,losses:7,pts:76.4,str:50,upsetProb:0.33},
+    {seed:13,name:'Grand Canyon',wins:26,losses:7,pts:74.1,str:45,upsetProb:0.11},
+    {seed:14,name:'Bryant',wins:25,losses:8,pts:72.3,str:41,upsetProb:0.08},
+    {seed:15,name:'SIU Edwardsville',wins:24,losses:9,pts:70.5,str:37,upsetProb:0.05},
+    {seed:16,name:'Alabama State',wins:18,losses:15,pts:66.1,str:33,upsetProb:0.02}
+  ],
+  South: [
+    {seed:1,name:'Houston',wins:35,losses:3,pts:71.5,str:97,upsetProb:0.02},
+    {seed:2,name:'Tennessee',wins:31,losses:6,pts:76.8,str:91,upsetProb:0.05},
+    {seed:3,name:'Kentucky',wins:30,losses:6,pts:77.2,str:87,upsetProb:0.08},
+    {seed:4,name:'Purdue',wins:27,losses:8,pts:72.1,str:82,upsetProb:0.13},
+    {seed:5,name:'Clemson',wins:26,losses:9,pts:71.8,str:78,upsetProb:0.19},
+    {seed:6,name:'Illinois',wins:25,losses:10,pts:74.5,str:73,upsetProb:0.22},
+    {seed:7,name:'UCLA',wins:24,losses:11,pts:72.8,str:69,upsetProb:0.27},
+    {seed:8,name:'Gonzaga',wins:26,losses:9,pts:80.2,str:65,upsetProb:0.31},
+    {seed:9,name:'Georgia',wins:21,losses:13,pts:72.4,str:61,upsetProb:0.34},
+    {seed:10,name:'Nebraska',wins:22,losses:12,pts:71.8,str:56,upsetProb:0.40},
+    {seed:11,name:'Indiana',wins:20,losses:13,pts:69.9,str:52,upsetProb:0.44},
+    {seed:12,name:'McNeese',wins:31,losses:3,pts:79.5,str:49,upsetProb:0.30},
+    {seed:13,name:'High Point',wins:27,losses:6,pts:73.5,str:45,upsetProb:0.11},
+    {seed:14,name:'Troy',wins:25,losses:8,pts:71.8,str:41,upsetProb:0.08},
+    {seed:15,name:'Wofford',wins:26,losses:7,pts:70.4,str:37,upsetProb:0.05},
+    {seed:16,name:'Coppin State',wins:18,losses:15,pts:64.8,str:33,upsetProb:0.02}
+  ],
+  Midwest: [
+    {seed:1,name:'Florida',wins:34,losses:3,pts:81.5,str:97,upsetProb:0.02},
+    {seed:2,name:'St. John's',wins:31,losses:6,pts:75.4,str:91,upsetProb:0.05},
+    {seed:3,name:'Texas A&M',wins:29,losses:7,pts:74.2,str:86,upsetProb:0.09},
+    {seed:4,name:'Maryland',wins:27,losses:9,pts:73.5,str:82,upsetProb:0.13},
+    {seed:5,name:'Mississippi',wins:26,losses:9,pts:71.8,str:77,upsetProb:0.19},
+    {seed:6,name:'Dayton',wins:28,losses:5,pts:74.1,str:72,upsetProb:0.23},
+    {seed:7,name:'Kansas',wins:24,losses:10,pts:75.5,str:68,upsetProb:0.28},
+    {seed:8,name:'Connecticut',wins:22,losses:12,pts:78.2,str:66,upsetProb:0.32},
+    {seed:9,name:'Oklahoma',wins:21,losses:13,pts:72.4,str:60,upsetProb:0.36},
+    {seed:10,name:'Arkansas',wins:22,losses:12,pts:71.8,str:55,upsetProb:0.40},
+    {seed:11,name:'Xavier',wins:21,losses:13,pts:69.9,str:51,upsetProb:0.44},
+    {seed:12,name:'Colorado State',wins:29,losses:5,pts:75.8,str:49,upsetProb:0.30},
+    {seed:13,name:'Yale',wins:26,losses:7,pts:73.5,str:45,upsetProb:0.10},
+    {seed:14,name:'Lipscomb',wins:26,losses:7,pts:72.4,str:41,upsetProb:0.08},
+    {seed:15,name:'Robert Morris',wins:24,losses:10,pts:69.8,str:37,upsetProb:0.05},
+    {seed:16,name:'Norfolk State',wins:21,losses:12,pts:67.2,str:33,upsetProb:0.02}
+  ]
+};
+let mmSelections = {};
+
+// ===== ROSTER NEEDS =====
+function getRosterConfig() {
+  const cfg = SPORT_CONFIG[SPORT] || SPORT_CONFIG.football;
+  const rKey = SCORING && cfg.roster[SCORING] ? SCORING : Object.keys(cfg.roster)[0];
+  return cfg.roster[rKey];
+}
+function updateNeedsGrid() {
+  const grid = document.getElementById('needsGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  const config = getRosterConfig();
+  Object.entries(config).forEach(([pos, needed]) => {
+    const filled = window._myRoster[pos] || 0;
+    for (let i = 0; i < needed; i++) {
+      const chip = document.createElement('div');
+      chip.className = 'need-chip ' + (i < filled ? 'need-filled' : (pos === 'FLEX' || pos === 'UTIL' ? 'need-flex' : 'need-required'));
+      chip.textContent = pos + (i < filled ? ' ✓' : ' ?');
+      grid.appendChild(chip);
+    }
+  });
+}
+
+// ===== SNAKE DRAFT MATH =====
+function getPickInfo() {
+  const round = Math.ceil(overallPick / NUM_TEAMS);
+  const posInRound = ((overallPick - 1) % NUM_TEAMS) + 1;
+  const snakePick = round % 2 === 1 ? MY_PICK : (NUM_TEAMS + 1 - MY_PICK);
+  const isMyTurn = DRAFT_TYPE === 'snake' ? posInRound === snakePick : posInRound === MY_PICK;
+  return { round, posInRound, isMyTurn };
+}
+function updateRoundInfo() {
+  const { round, posInRound, isMyTurn } = getPickInfo();
+  document.getElementById('curRound').textContent = round;
+  document.getElementById('curPick').textContent = overallPick;
+  const ts = document.getElementById('turnStatus');
+  ts.textContent = isMyTurn ? '✅ Your Pick!' : '⏳ Waiting...';
+  ts.style.color = isMyTurn ? '#4ade80' : '#94a3b8';
+}
+
+// ===== AI SCORING =====
+function calcAIScore(player) {
+  const config = getRosterConfig();
+  const posNeeded = config[player.pos] || 0;
+  const posFilled = (window._myRoster && window._myRoster[player.pos]) || 0;
+  const need = Math.max(0, posNeeded - posFilled);
+  const lateOnly = ['K','DEF','G'];
+  const latePenalty = lateOnly.includes(player.pos) ? 15 : 0;
+  const totalP = allPlayers.length || 80;
+  const rankScore = (totalP + 1 - Math.min(player.rank, totalP)) * 1.0;
+  const needBonus = need > 0 ? 35 + (need * 8) : 0;
+  const injuryPenalty = (player.status === 'IR' || player.status === 'O') ? 20 : (player.status === 'Q' ? 5 : 0);
+  return rankScore + needBonus - latePenalty - injuryPenalty;
+}
+
+function updateAIRec() {
+  const available = allPlayers.filter(p => !draftedPlayers[p.id]);
+  if (available.length === 0) {
+    document.getElementById('aiContent').innerHTML = '<div style="color:#94a3b8">All players drafted!</div>';
+    return;
+  }
+  const scored = available.map(p => ({ player: p, score: calcAIScore(p) }));
+  scored.sort((a, b) => b.score - a.score);
+  const top = scored[0].player;
+  const config = getRosterConfig();
+  const posNeeded = config[top.pos] || 0;
+  const posFilled = (window._myRoster && window._myRoster[top.pos]) || 0;
+  const needMore = posNeeded - posFilled > 0;
+  const reasons = [
+    top.rank <= 5 ? '🔥 Elite tier — top-5 overall, never pass up.' : null,
+    needMore ? `📋 You need a ${top.pos} (${posFilled}/${posNeeded} filled).` : null,
+    !needMore && posNeeded > 0 ? `Your ${top.pos} slot is filled — depth pick.` : null,
+    top.status && top.status !== 'Active' ? `⚠️ Status: ${top.status} — check injury reports.` : null,
+    `📊 Ranked #${top.rank} overall · Proj ${top.proj} pts`,
+    scored.length > 1 ? `Next: ${scored[1].player.name} (${scored[1].player.team}, ${scored[1].player.pos})` : null
+  ].filter(Boolean);
+
+  document.getElementById('aiContent').innerHTML = `
+    <div class="ai-player-name">${top.name}</div>
+    <div class="ai-player-meta">
+      ${top.team} · <span class="pos-badge pos-${top.pos}">${top.pos}</span> 
+      ${top.age && top.age !== '—' ? '· Age ' + top.age : ''}
+      ${top.status && top.status !== 'Active' ? '<span class="status-badge status-' + top.status + '">' + top.status + '</span>' : ''}
+    </div>
+    <div class="ai-reason">${reasons.join('<br>')}</div>
+    <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn-pick" onclick="pickPlayer('${top.id}','mine')">✅ Draft ${top.name.split(' ').pop()}</button>
+      <button class="btn-opp" onclick="pickPlayer('${top.id}','opp')">🚫 Opponent Took</button>
+    </div>
+  `;
+}
+
+function pickPlayer(id, type) {
+  const player = allPlayers.find(p => p.id == id);
+  if (!player || draftedPlayers[id]) return;
+  draftedPlayers[id] = type;
+  overallPick++;
+  if (type === 'mine') {
+    const config = getRosterConfig();
+    if (window._myRoster[player.pos] !== undefined && window._myRoster[player.pos] < config[player.pos]) {
+      window._myRoster[player.pos]++;
+    } else {
+      const flexKey = config.FLEX !== undefined ? 'FLEX' : config.UTIL !== undefined ? 'UTIL' : null;
+      if (flexKey && window._myRoster[flexKey] < config[flexKey]) window._myRoster[flexKey]++;
+    }
+    const round = Math.ceil((overallPick - 1) / NUM_TEAMS);
+    myPicks.push({ player, round });
+    updateMyPicksList();
+    document.getElementById('myPickCount').textContent = myPicks.length;
+  }
+  updateNeedsGrid();
+  updateRoundInfo();
+  renderPlayers();
+  updateAIRec();
+}
+
+function updateMyPicksList() {
+  const list = document.getElementById('myPicksList');
+  list.innerHTML = myPicks.map(p => `
+    <div class="pick-item">
+      <span style="color:#4ade80;font-weight:700;min-width:32px">R${p.round}</span>
+      <span style="flex:1">${p.player.name}</span>
+      <span><span class="pos-badge pos-${p.player.pos}">${p.player.pos}</span></span>
+    </div>
+  `).join('');
+}
+
+// ===== RENDER TABLE =====
+function renderPlayers() {
+  const cfg = SPORT_CONFIG[SPORT] || SPORT_CONFIG.football;
+  const search = (document.getElementById('searchInput').value || '').toLowerCase();
+  const posFilter = document.getElementById('posFilter').value;
+  const statusFilter = document.getElementById('statusFilter').value;
+  const availFilter = document.getElementById('availFilter').value;
+
+  let players = allPlayers.filter(p => {
+    const matchSearch = !search || p.name.toLowerCase().includes(search) || (p.team && p.team.toLowerCase().includes(search)) || p.pos.toLowerCase().includes(search);
+    const matchPos = !posFilter || p.pos === posFilter;
+    const matchStatus = statusFilter === 'all' || p.active !== false;
+    const matchAvail = availFilter === 'all' || !draftedPlayers[p.id];
+    return matchSearch && matchPos && matchStatus && matchAvail;
+  });
+
+  // Sort
+  players = [...players].sort((a, b) => {
+    let av = a[sortCol] ?? a.rank;
+    let bv = b[sortCol] ?? b.rank;
+    if (typeof av === 'string') av = av.toLowerCase();
+    if (typeof bv === 'string') bv = bv.toLowerCase();
+    return sortDir * (av < bv ? -1 : av > bv ? 1 : 0);
+  });
+
+  document.getElementById('playerCount').textContent = '(' + players.length + ' players)';
+
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = players.map(p => {
+    const status = draftedPlayers[p.id];
+    const rowClass = status === 'mine' ? 'drafted-mine' : status === 'opp' ? 'drafted-opp' : '';
+    const statusBadge = p.status && p.status !== 'Active' ? `<span class="status-badge status-${p.status}">${p.status}</span>` : '';
+    const actionBtns = status ?
+      `<span style="color:${status==='mine'?'#4ade80':'#64748b'}">${status==='mine'?'✅ Yours':'🚫 Taken'}</span>` :
+      `<button class="btn-pick" onclick="pickPlayer('${p.id}','mine')">Mine</button> <button class="btn-opp" onclick="pickPlayer('${p.id}','opp')">Opp</button>`;
+    return `<tr class="${rowClass}">
+      <td>${p.rank}</td>
+      <td><b>${p.name}</b>${statusBadge}</td>
+      <td>${p.team || 'FA'}</td>
+      <td><span class="pos-badge pos-${p.pos}">${p.pos}</span></td>
+      <td>${p.age || '—'}</td>
+      <td>${p.status || 'Active'}</td>
+      <td>${p.adp || p.rank}</td>
+      <td>${actionBtns}</td>
+    </tr>`;
+  }).join('');
+}
+
+function filterPlayers() { renderPlayers(); }
+
+function sortByCol(col) {
+  if (sortCol === col) { sortDir *= -1; } else { sortCol = col; sortDir = 1; }
+  renderPlayers();
+}
+
+// ===== MARCH MADNESS =====
+function initMarchMadness() {
+  document.getElementById('mainArea').style.display = 'none';
+  document.getElementById('mmArea').style.display = 'block';
+  Object.keys(MM_REGIONS).forEach(r => { mmSelections[r] = []; });
+  renderBracket();
+  updateMMRecs();
+}
+
+function getMMPick(region) {
+  const teams = MM_REGIONS[region];
+  if (!teams) return null;
+  const scored = teams.map(t => ({
+    team: t,
+    score: t.str * 0.6 + (1 - t.upsetProb) * 30 + (t.wins / (t.wins + t.losses)) * 10
+  })).sort((a, b) => b.score - a.score);
+  return scored[0].team;
+}
+
+function toggleMMTeam(region, name) {
+  if (!mmSelections[region]) mmSelections[region] = [];
+  const idx = mmSelections[region].indexOf(name);
+  if (idx > -1) mmSelections[region].splice(idx, 1);
+  else mmSelections[region].push(name);
+  renderBracket();
+  updateMMRecs();
+}
+
+function renderBracket() {
+  const bracket = document.getElementById('mmBracket');
+  bracket.innerHTML = '';
+  Object.entries(MM_REGIONS).forEach(([regionName, teams]) => {
+    const div = document.createElement('div');
+    div.className = 'mm-region';
+    div.innerHTML = '<h4>' + regionName + ' Region</h4>';
+    const aiPick = getMMPick(regionName);
+    teams.forEach(t => {
+      const isSelected = (mmSelections[regionName] || []).includes(t.name);
+      const isAI = aiPick && aiPick.name === t.name;
+      const td = document.createElement('div');
+      td.className = 'mm-team' + (isSelected ? ' selected' : '');
+      td.onclick = () => toggleMMTeam(regionName, t.name);
+      td.innerHTML = `<span class="mm-seed">#${t.seed}</span><span style="flex:1">${t.name}</span><span style="color:#64748b;font-size:.75rem">${t.wins}-${t.losses}</span>${isAI ? '<span style="color:#4ade80;font-size:.75rem;margin-left:4px">🤖</span>' : ''}`;
+      div.appendChild(td);
+    });
+    if (aiPick) {
+      const ai = document.createElement('div');
+      ai.className = 'mm-ai';
+      ai.textContent = '🤖 AI Pick: ' + aiPick.name + ' (Strength: ' + aiPick.str + '/100)';
+      div.appendChild(ai);
+    }
+    bracket.appendChild(div);
+  });
+}
+
+function updateMMRecs() {
+  const picks = Object.entries(MM_REGIONS).map(([region]) => {
+    const p = getMMPick(region);
+    return p ? { region, team: p } : null;
+  }).filter(Boolean);
+
+  picks.sort((a, b) => b.team.str - a.team.str);
+  const champion = picks[0];
+  const runner = picks[1];
+
+  document.getElementById('mmAiContent').innerHTML = picks.map(p => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:#0f172a;border-radius:8px;margin-bottom:6px">
+      <div><b style="color:#fff">${p.team.name}</b> <span style="color:#94a3b8;font-size:.8rem">— ${p.region} · Seed #${p.team.seed} · ${p.team.wins}-${p.team.losses}</span></div>
+      <div style="text-align:right;font-size:.78rem"><div style="color:#4ade80">Str: ${p.team.str}/100</div><div style="color:#94a3b8">Upset: ${Math.round(p.team.upsetProb*100)}%</div></div>
+    </div>
+  `).join('') + (champion ? `
+    <div style="margin-top:12px;background:#0f2d1f;border:1px solid #4ade80;padding:10px;border-radius:8px">
+      <div style="color:#4ade80;font-weight:700;margin-bottom:4px">🏆 AI Championship Prediction</div>
+      <div style="font-size:.85rem"><b>${champion.team.name}</b> vs <b>${runner ? runner.team.name : '?'}</b> → Winner: <b style="color:#4ade80">${champion.team.name}</b></div>
+    </div>
+  ` : '');
+}
+
+// ===== MAIN INIT =====
+async function init() {
+  const isMM = SPORT === 'marchmadness' || SPORT === 'mm' || SPORT === 'march_madness';
+
+  // Set header info
+  const cfg = SPORT_CONFIG[SPORT] || SPORT_CONFIG.football;
+  document.getElementById('sportBadge').textContent = isMM ? '🏀 March Madness' : (cfg.emoji + ' ' + cfg.label);
+  if (LEAGUE_NAME) document.getElementById('leagueNameHeader').textContent = '— ' + LEAGUE_NAME;
+
+  if (isMM) {
+    document.getElementById('loadingOverlay').style.display = 'none';
+    document.getElementById('mainArea').style.display = 'none';
+    document.getElementById('mmArea').style.display = 'block';
+    initMarchMadness();
+    return;
+  }
+
+  // Show loading
+  const loadingText = document.getElementById('loadingText');
+  const loadingSubtext = document.getElementById('loadingSubtext');
+
+  // Try live data
+  let livePlayers = null;
+  let dataSource = 'Offline (Fallback)';
+
+  try {
+    if (SPORT === 'football' || SPORT === 'basketball') {
+      loadingText.textContent = 'Fetching live ' + cfg.label + ' rosters...';
+      loadingSubtext.textContent = 'Source: Sleeper API (api.sleeper.app)';
+      const sportKey = SPORT === 'football' ? 'nfl' : 'nba';
+      const raw = await fetchSleeperPlayers(SPORT);
+      if (raw && Object.keys(raw).length > 100) {
+        livePlayers = SPORT === 'football' ? transformSleeperNFL(raw) : transformSleeperNBA(raw);
+        dataSource = 'Live — Sleeper API';
+        document.getElementById('dataSourceBadge').textContent = '🟢 Live Data';
+        document.getElementById('lastUpdated').textContent = 'Updated: ' + new Date().toLocaleDateString();
+      }
+    } else if (SPORT === 'baseball') {
+      loadingText.textContent = 'Fetching live MLB rosters...';
+      loadingSubtext.textContent = 'Source: MLB Stats API (statsapi.mlb.com)';
+      const raw = await fetchMLBPlayers();
+      if (raw && raw.length > 50) {
+        livePlayers = transformMLB(raw);
+        dataSource = 'Live — MLB Stats API';
+        document.getElementById('dataSourceBadge').textContent = '🟢 Live Data';
+        document.getElementById('lastUpdated').textContent = 'Updated: ' + new Date().toLocaleDateString();
+      }
+    } else if (SPORT === 'hockey') {
+      loadingText.textContent = 'Fetching live NHL rosters...';
+      loadingSubtext.textContent = 'Source: NHL API (api.nhle.com)';
+      const raw = await fetchNHLPlayers();
+      if (raw && raw.length > 50) {
+        livePlayers = transformNHL(raw);
+        dataSource = 'Live — NHL API';
+        document.getElementById('dataSourceBadge').textContent = '🟢 Live Data';
+        document.getElementById('lastUpdated').textContent = 'Updated: ' + new Date().toLocaleDateString();
+      }
+    }
+  } catch(e) {
+    console.error('Live data fetch error:', e);
+  }
+
+  // Use fallback if live data failed
+  if (!livePlayers || livePlayers.length < 5) {
+    const fb = FALLBACK[SPORT] || FALLBACK.football;
+    livePlayers = fb;
+    document.getElementById('dataSourceBadge').textContent = '🟡 Fallback Data';
+    document.getElementById('dataSourceBadge').style.color = '#fbbf24';
+    const errBanner = document.getElementById('errorBanner');
+    errBanner.style.display = 'block';
+    errBanner.textContent = '⚠️ Could not load live data — showing cached rankings. Refresh to retry.';
+    document.getElementById('lastUpdated').textContent = 'Static data (refresh to get live)';
+  }
+
+  allPlayers = livePlayers;
+
+  // Init roster tracking
+  const config = getRosterConfig();
+  window._myRoster = {};
+  Object.keys(config).forEach(pos => { window._myRoster[pos] = 0; });
+
+  // Build position filter
+  const pf = document.getElementById('posFilter');
+  cfg.positions.forEach(pos => {
+    const opt = document.createElement('option');
+    opt.value = pos; opt.textContent = pos;
+    pf.appendChild(opt);
+  });
+
+  // Build sortable table headers
+  const thead = document.getElementById('tableHead');
+  const headerRow = document.createElement('tr');
+  const headerCols = ['rank','name','team','pos','age','status','adp'];
+  ['Rank','Player','Team','Pos','Age','Status','ADP','Action'].forEach((h, i) => {
+    const th = document.createElement('th');
+    if (i < 7) {
+      th.textContent = h + ' ↕';
+      th.onclick = () => sortByCol(headerCols[i]);
+    } else {
+      th.textContent = h;
+    }
+    headerRow.appendChild(th);
+  });
+  thead.appendChild(headerRow);
+
+  // Hide loading, show content
+  document.getElementById('loadingOverlay').style.display = 'none';
+  document.getElementById('mainArea').style.display = 'grid';
+
+  updateNeedsGrid();
+  updateRoundInfo();
+  renderPlayers();
+  updateAIRec();
+}
+
+init();
+</script>
+</body>
+</html>
