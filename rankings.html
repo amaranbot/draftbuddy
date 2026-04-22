@@ -8,7 +8,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#0f172a;color:#e2e8f0;font-family:'Segoe UI',sans-serif;min-height:100vh}
 header{background:#1e293b;padding:14px 20px;display:lex;align-items:center;justify-content:space-between;border-bottom:2px solid #4ade80}
-.logo{font-size:1.4rem;font-weight:700;color:#4ade80}
+.logo{display:flex;align-items:center;font-size:1.1rem;font-weight:700;color:#4ade80}
 .sport-badge{background:#4ade80;color:#0f172a;paddin:4px 12px;border-radius:20px;font-weight:700;font-size:.85rem}
 .header-right{display:flex;gap:12px;align-items:center}
 .btn-sm{padding:6px 14px;border-radius:8px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
@@ -86,14 +86,13 @@ tr.drafted-opp td{background:#1e1e2e;opacity:.5;text-decoration:line-through;col
   <div class="loading-text" id="loadingText">Loading live player data...</div>
   <div class="loading-subtext" id="loadingSubtext">Fetching current rosters...</div>
 </div>
-<div class="loading-overlay" id="loadingOverlay">
-  <div class="loading-spinner"></div>
+
   <div class="loading-text" id="loadingText">Loading live player data...</div>
   <div class="loading-subtext" id="loadingSubtext">Fetching current rosters from Sleeper API</div>
 </div>
 
 <header>
-  <div class="logo">ð DraftBuddy <span id="leagueNameHeader" style="font-weight:400;font-size:1rem;color:#94a3b8"></span></div>
+  <div class="logo"><img src="/logo.png" alt="DraftBuddy" style="height:36px;width:auto;vertical-align:middle;margin-right:8px"> DraftBuddy <span id="leagueNameHeader" style="font-weight:400;font-size:1rem;color:#94a3b8"></span></div>
   <div class="header-right">
     <span class="sport-badge" id="sportBadge">Loading...</span>
     <span class="data-source-badge" id="dataSourceBadge">Live Data</span>
