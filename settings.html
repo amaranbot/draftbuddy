@@ -122,6 +122,13 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
       </div>
     </div>
 
+    <!-- Membership -->
+    <div class="settings-section">
+      <div class="settings-section-header"><h2>Membership</h2></div>
+      <div class="setting-row"><div class="setting-info"><div class="setting-label">Current Plan</div><div class="setting-desc" id="currentPlanDesc">Loading...</div></div><div class="setting-control"><a href="/membership" class="btn-primary" id="membershipBtn" style="text-decoration:none;padding:8px 16px;border-radius:8px;font-size:.85rem;font-weight:600;display:inline-block">View Plans</a></div></div>
+      <div class="setting-row" id="proFeaturesRow" style="display:none"><div class="setting-info"><div class="setting-label">Pro Features Active</div><div class="setting-desc">Unlimited AI picks, draft grade report, trade analyzer, and waiver wire enabled on all pages.</div></div><div class="setting-control"><span style="color:#4ade80;font-weight:700">Active</span></div></div>
+      <div class="setting-row" id="champFeaturesRow" style="display:none"><div class="setting-info"><div class="setting-label">Champion Features Active</div><div class="setting-desc">DFS optimizer, unlimited leagues, ESPN/Yahoo/Sleeper integrations, and all Pro features enabled.</div></div><div class="setting-control"><span style="color:#fbbf24;font-weight:700">Active</span></div></div>
+    </div>
     <!-- Draft Defaults -->
     <div class="settings-section">
       <div class="settings-section-header"><h2>Draft Defaults</h2></div>
@@ -261,6 +268,7 @@ document.getElementById('signOutBtn').addEventListener('click', async () => {
   window.location.href = '/';
 });
 
+(function(){const p=(localStorage.getItem('db_membership')||'free').toLowerCase();const desc=document.getElementById('currentPlanDesc');const btn=document.getElementById('membershipBtn');const proRow=document.getElementById('proFeaturesRow');const champRow=document.getElementById('champFeaturesRow');if(p==='champion'){if(desc)desc.innerHTML='<strong style="color:#fbbf24">Champion Plan</strong> - $9.99/month';if(btn){btn.textContent='Manage Plan';btn.style.background='rgba(251,191,36,.15)';btn.style.color='#fbbf24';btn.style.border='1px solid rgba(251,191,36,.3)';}if(proRow)proRow.style.display='flex';if(champRow)champRow.style.display='flex';}else if(p==='pro'){if(desc)desc.innerHTML='<strong style="color:#4ade80">Pro Plan</strong> - $4.99/month';if(btn){btn.textContent='Manage Plan';btn.style.background='rgba(74,222,128,.1)';btn.style.color='#4ade80';btn.style.border='1px solid rgba(74,222,128,.25)';}if(proRow)proRow.style.display='flex';}else{if(desc)desc.innerHTML='<strong>Free Plan</strong> - 3 AI picks per draft session';if(btn){btn.textContent='Upgrade Now';btn.style.background='#4ade80';btn.style.color='#0f172a';}}})();
 // Load saved settings
 const saved = JSON.parse(localStorage.getItem('draftbuddy_settings') || '{}');
 if (saved.defaultScoring) document.getElementById('defaultScoring').value = saved.defaultScoring;

@@ -97,6 +97,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
       </div>
       <a href="/draft" class="btn-primary">< Quick Draft (NFL)</a>
     </div>
+    <div id="upgradeBanner" style="display:none;background:linear-gradient(135deg,rgba(0,230,118,.08),rgba(0,200,83,.04));border:1px solid rgba(0,230,118,.2);border-radius:16px;padding:16px 24px;margin-bottom:28px;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap"><div><div style="font-weight:700;font-size:1rem;color:#00e676;margin-bottom:4px">Unlock the full AI experience</div><div style="font-size:.85rem;color:#7b93b8">Free: 3 AI picks per draft &nbsp;|&nbsp; <strong style="color:#e2e8f0">Pro $4.99/mo</strong>: Unlimited AI picks &amp; trade analyzer &nbsp;|&nbsp; <strong style="color:#fbbf24">Champion $9.99/mo</strong>: DFS optimizer &amp; all integrations</div></div><a href="/membership" style="background:#00e676;color:#060b14;font-weight:700;padding:10px 22px;border-radius:10px;text-decoration:none;white-space:nowrap;font-size:.9rem;flex-shrink:0">View Plans &#8594;</a></div>
     <div class="quick-stats">
       <div class="stat-card"><div class="stat-value">6</div><div class="stat-label">Sports Available</div></div>
       <div class="stat-card"><div class="stat-value">Live</div><div class="stat-label">Player Data</div></div>
@@ -206,6 +207,13 @@ onAuthStateChanged(auth,user=>{
   document.getElementById('userEmail').textContent=user.displayName||user.email;
   const firstName=(user.displayName||'').split(' ')[0];
   if(firstName)document.getElementById('welcomeName').textContent=', '+firstName;
+  if(user)try{localStorage.setItem('db_user_email',user.email||'');}catch(e){}
+  const plan=(localStorage.getItem('db_membership')||'free').toLowerCase();
+  const planEl=document.getElementById('planStat');
+  const planCard=document.getElementById('planStatCard');
+  if(plan==='champion'){if(planEl){planEl.textContent='Champion';planEl.style.color='#fbbf24';}if(planCard)planCard.style.borderColor='rgba(251,191,36,.3)';}
+  else if(plan==='pro'){if(planEl){planEl.textContent='Pro';planEl.style.color='#00e676';}if(planCard)planCard.style.borderColor='rgba(0,230,118,.3)';}
+  else{if(planEl){planEl.textContent='Free';planEl.style.color='#7b93b8';}const b=document.getElementById('upgradeBanner');if(b)b.style.display='flex';}
 });
 document.getElementById('signOutBtn').addEventListener('click',async()=>{
   await signOut(auth);
