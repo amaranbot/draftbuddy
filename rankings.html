@@ -91,11 +91,11 @@ tr.drafted-opp td{background:#1e1e2e;opacity:.5;text-decoration:line-through;col
 </div>
 
 <header>
-  <div class="logo">🏆 DraftBuddy <span id="leagueNameHeader" style="font-weight:400;font-size:1rem;color:#94a3b8"></span></div>
+  <div class="logo">ð DraftBuddy <span id="leagueNameHeader" style="font-weight:400;font-size:1rem;color:#94a3b8"></span></div>
   <div class="header-right">
     <span class="sport-badge" id="sportBadge">Loading...</span>
     <span class="data-source-badge" id="dataSourceBadge">Live Data</span>
-    <button class="btn-sm btn-back" onclick="window.location.href='/draft'">← New Draft</button>
+    <button class="btn-sm btn-back" onclick="window.location.href='/draft'">â New Draft</button>
     <button class="btn-sm btn-back" onclick="window.location.href='/dashboard'">Dashboard</button>
   </div>
 </header>
@@ -135,10 +135,10 @@ tr.drafted-opp td{background:#1e1e2e;opacity:.5;text-decoration:line-through;col
   <div class="right-panel">
     <div class="round-info" id="roundInfo">
       Round <span id="curRound">1</span> &bull; Pick <span id="curPick">1</span> &bull; 
-      <span id="turnStatus">—</span>
+      <span id="turnStatus">â</span>
     </div>
     <div class="ai-rec card" id="aiRecCard">
-      <h3>🤖 AI Recommendation</h3>
+      <h3>ð¤ AI Recommendation</h3>
       <div id="aiContent"><div style="color:#94a3b8">Start drafting to activate AI...</div></div>
     </div>
     <div class="card">
@@ -155,13 +155,13 @@ tr.drafted-opp td{background:#1e1e2e;opacity:.5;text-decoration:line-through;col
 <div id="mmArea" style="display:none;padding:16px">
   <div class="card" style="margin-bottom:12px">
     <div style="display:flex;justify-content:space-between;align-items:center">
-      <h3 style="margin-bottom:0">🏀 March Madness AI Bracket Assistant</h3>
+      <h3 style="margin-bottom:0">ð March Madness AI Bracket Assistant</h3>
       <span class="data-source-badge">2025 Tournament</span>
     </div>
     <p style="color:#94a3b8;font-size:.85rem;margin-top:8px">Click teams to advance them. AI recommends based on strength, seed, and upset probability.</p>
   </div>
   <div class="ai-rec card" id="mmAiRec" style="margin-bottom:12px">
-    <h3>🤖 AI Picks & Championship Prediction</h3>
+    <h3>ð¤ AI Picks & Championship Prediction</h3>
     <div id="mmAiContent"></div>
   </div>
   <div class="mm-bracket" id="mmBracket"></div>
@@ -180,8 +180,6 @@ onAuthStateChanged(auth, u => { if (!u) window.location.href = '/login'; });
 const P = new URLSearchParams(window.location.search);
 const _rawSport = (P.get('sport') || 'football').toLowerCase();
 const SPORT_MAP = {'nfl':'football','nba':'basketball','mlb':'baseball','nhl':'hockey','wnba':'wnba','march_madness':'marchmadness','mm':'marchmadness'};
-_rawSport = (P.get('sport') || 'football').toLowerCase();
-SPORT_MAP = {'nfl':'football','nba':'basketball','mlb':'baseball','nhl':'hockey','march_madness':'marchmadness','mm':'marchmadness'};
 const SPORT = SPORT_MAP[_rawSport] || _rawSport;
 const NUM_TEAMS = parseInt(P.get('teams') || '10');
 const DRAFT_TYPE = (P.get('type') || 'snake').toLowerCase();
@@ -205,7 +203,7 @@ const SPORT_CONFIG = {
   football: {
     sleeperSport: 'nfl',
     label: 'NFL Football',
-    emoji: '🏈',
+    emoji: 'ð',
     positions: ['QB','RB','WR','TE','K','DEF'],
     fantasyPositions: ['QB','RB','WR','TE','K','DEF'],
     roster: {
@@ -222,7 +220,7 @@ const SPORT_CONFIG = {
   basketball: {
     sleeperSport: 'nba',
     label: 'NBA Basketball',
-    emoji: '🏀',
+    emoji: 'ð',
     positions: ['PG','SG','SF','PF','C'],
     fantasyPositions: ['PG','SG','SF','PF','C'],
     roster: {
@@ -239,7 +237,7 @@ const SPORT_CONFIG = {
   baseball: {
     sleeperSport: null,
     label: 'MLB Baseball',
-    emoji: '⚾',
+    emoji: 'â¾',
     positions: ['SP','RP','C','1B','2B','3B','SS','OF','DH'],
     fantasyPositions: ['SP','RP','C','1B','2B','3B','SS','OF','DH'],
     roster: {
@@ -256,7 +254,7 @@ const SPORT_CONFIG = {
   hockey: {
     sleeperSport: null,
     label: 'NHL Hockey',
-    emoji: '🏒',
+    emoji: 'ð',
     positions: ['C','LW','RW','D','G'],
     fantasyPositions: ['C','LW','RW','D','G'],
     roster: {
@@ -276,7 +274,7 @@ const SPORT_CONFIG = {
 SPORT_CONFIG.wnba = {
   sleeperSport: null,
   label: 'WNBA',
-  emoji: '🏀',
+  emoji: 'ð',
   positions: ['PG','SG','SF','PF','C'],
   fantasyPositions: ['PG','SG','SF','PF','C'],
   roster: {
@@ -384,7 +382,7 @@ function transformSleeperNFL(raw) {
       name: p.full_name || (p.first_name + ' ' + p.last_name),
       team: p.team || 'FA',
       pos: mainPos,
-      age: p.age || '—',
+      age: p.age || 'â',
       status: p.injury_status || p.status || 'Active',
       rank: rank,
       adp: rank,
@@ -415,7 +413,7 @@ function transformSleeperNBA(raw) {
       name: p.full_name || (p.first_name + ' ' + p.last_name),
       team: p.team || 'FA',
       pos: mainPos,
-      age: p.age || '—',
+      age: p.age || 'â',
       status: p.injury_status || 'Active',
       rank: rank,
       adp: rank,
@@ -446,7 +444,7 @@ function transformMLB(raw) {
       name: p.fullName || 'Unknown',
       team: p.currentTeam ? p.currentTeam.abbreviation || p.currentTeam.name.substring(0,3).toUpperCase() : 'FA',
       pos: posCode,
-      age: p.birthDate ? (new Date().getFullYear() - parseInt(p.birthDate.substring(0,4))) : '—',
+      age: p.birthDate ? (new Date().getFullYear() - parseInt(p.birthDate.substring(0,4))) : 'â',
       status: 'Active',
       rank: idx + 1,
       adp: idx + 1,
@@ -468,7 +466,7 @@ function transformNHL(raw) {
       name: p.skaterFullName,
       team: p.teamAbbrevs ? p.teamAbbrevs.split(',')[0] : 'FA',
       pos: pos,
-      age: '—',
+      age: 'â',
       status: 'Active',
       rank: idx + 1,
       adp: idx + 1,
@@ -485,7 +483,7 @@ const FALLBACK = {
     {id:'f1',name:'Christian McCaffrey',team:'SF',pos:'RB',age:27,status:'Active',rank:1,adp:1,proj:320,active:true},
     {id:'f2',name:'CeeDee Lamb',team:'DAL',pos:'WR',age:24,status:'Active',rank:2,adp:2,proj:295,active:true},
     {id:'f3',name:'Tyreek Hill',team:'MIA',pos:'WR',age:30,status:'Active',rank:3,adp:3,proj:285,active:true},
-    {id:'f4',name:'Ja'Marr Chase',team:'CIN',pos:'WR',age:24,status:'Active',rank:4,adp:4,proj:280,active:true},
+    {id:'f4',name:"Ja'Marr Chase",team:'CIN',pos:'WR',age:24,status:'Active',rank:4,adp:4,proj:280,active:true},
     {id:'f5',name:'Justin Jefferson',team:'MIN',pos:'WR',age:24,status:'Active',rank:5,adp:5,proj:275,active:true},
     {id:'f6',name:'Breece Hall',team:'NYJ',pos:'RB',age:23,status:'Active',rank:6,adp:6,proj:265,active:true},
     {id:'f7',name:'Amon-Ra St. Brown',team:'DET',pos:'WR',age:24,status:'Active',rank:7,adp:7,proj:260,active:true},
@@ -526,7 +524,7 @@ const FALLBACK = {
     {id:'b10',name:'Anthony Edwards',team:'MIN',pos:'SG',age:22,status:'Active',rank:10,adp:10,proj:460,active:true},
     {id:'b11',name:'Damian Lillard',team:'MIL',pos:'PG',age:33,status:'Active',rank:11,adp:11,proj:470,active:true},
     {id:'b12',name:'Donovan Mitchell',team:'CLE',pos:'SG',age:27,status:'Active',rank:12,adp:12,proj:480,active:true},
-    {id:'b13',name:'Kevin Durant',team:'PHX',pos:'SF',age:35,status:'Active',rank:13,adp:13,proj:465,active:true},
+    {id:'b13',name:'Kevin Durant',team:'PHX',pos:'SF',age:35,status:'Acive',rank:13,adp:13,proj:465,active:true},
     {id:'b14',name:'Ja Morant',team:'MEM',pos:'PG',age:24,status:'Active',rank:14,adp:14,proj:450,active:true},
     {id:'b15',name:'LeBron James',team:'LAL',pos:'SF',age:39,status:'Active',rank:15,adp:15,proj:435,active:true},
     {id:'b16',name:'Bam Adebayo',team:'MIA',pos:'C',age:26,status:'Active',rank:16,adp:16,proj:445,active:true},
@@ -578,10 +576,10 @@ const FALLBACK = {
     {id:'h18',name:'Roman Josi',team:'NSH',pos:'D',age:33,status:'Active',rank:18,adp:18,proj:345,active:true},
     {id:'h19',name:'Victor Hedman',team:'TB',pos:'D',age:33,status:'Active',rank:19,adp:19,proj:350,active:true},
     {id:'h20',name:'Brady Tkachuk',team:'OTT',pos:'LW',age:24,status:'Active',rank:20,adp:20,proj:345,active:true}
-  ]
+  ],
 
   wnba: [
-    {id:'w1',name:'A'ja Wilson',team:'LV',pos:'PF',age:27,status:'Active',rank:1,adp:1,proj:520,active:true},
+    {id:'w1',name:"A'ja Wilson",team:'LV',pos:'PF',age:27,status:'Active',rank:1,adp:1,proj:520,active:true},
     {id:'w2',name:'Breanna Stewart',team:'NYL',pos:'SF',age:29,status:'Active',rank:2,adp:2,proj:500,active:true},
     {id:'w3',name:'Sabrina Ionescu',team:'NYL',pos:'PG',age:26,status:'Active',rank:3,adp:3,proj:480,active:true},
     {id:'w4',name:'Caitlin Clark',team:'IND',pos:'PG',age:22,status:'Active',rank:4,adp:4,proj:470,active:true},
@@ -608,7 +606,7 @@ const MM_REGIONS = {
     {seed:4,name:'Arizona',wins:28,losses:8,pts:79.3,str:83,upsetProb:0.12},
     {seed:5,name:'Oregon',wins:26,losses:9,pts:71.8,str:79,upsetProb:0.17},
     {seed:6,name:'BYU',wins:25,losses:10,pts:69.5,str:74,upsetProb:0.22},
-    {seed:7,name:'Saint Mary's',wins:24,losses:10,pts:72.1,str:70,upsetProb:0.26},
+    {seed:7,name:"Saint Mary's",wins:24,losses:10,pts:72.1,str:70,upsetProb:0.26},
     {seed:8,name:'Mississippi State',wins:22,losses:12,pts:68.9,str:66,upsetProb:0.30},
     {seed:9,name:'Baylor',wins:22,losses:11,pts:72.4,str:64,upsetProb:0.35},
     {seed:10,name:'Vanderbilt',wins:21,losses:12,pts:70.4,str:58,upsetProb:0.39},
@@ -657,7 +655,7 @@ const MM_REGIONS = {
   ],
   Midwest: [
     {seed:1,name:'Florida',wins:34,losses:3,pts:81.5,str:97,upsetProb:0.02},
-    {seed:2,name:'St. John's',wins:31,losses:6,pts:75.4,str:91,upsetProb:0.05},
+    {seed:2,name:"St. John's",wins:31,losses:6,pts:75.4,str:91,upsetProb:0.05},
     {seed:3,name:'Texas A&M',wins:29,losses:7,pts:74.2,str:86,upsetProb:0.09},
     {seed:4,name:'Maryland',wins:27,losses:9,pts:73.5,str:82,upsetProb:0.13},
     {seed:5,name:'Mississippi',wins:26,losses:9,pts:71.8,str:77,upsetProb:0.19},
@@ -692,7 +690,7 @@ function updateNeedsGrid() {
     for (let i = 0; i < needed; i++) {
       const chip = document.createElement('div');
       chip.className = 'need-chip ' + (i < filled ? 'need-filled' : (pos === 'FLEX' || pos === 'UTIL' ? 'need-flex' : 'need-required'));
-      chip.textContent = pos + (i < filled ? ' ✓' : ' ?');
+      chip.textContent = pos + (i < filled ? ' â' : ' ?');
       grid.appendChild(chip);
     }
   });
@@ -711,7 +709,7 @@ function updateRoundInfo() {
   document.getElementById('curRound').textContent = round;
   document.getElementById('curPick').textContent = overallPick;
   const ts = document.getElementById('turnStatus');
-  ts.textContent = isMyTurn ? '✅ Your Pick!' : '⏳ Waiting...';
+  ts.textContent = isMyTurn ? 'â Your Pick!' : 'â³ Waiting...';
   ts.style.color = isMyTurn ? '#4ade80' : '#94a3b8';
 }
 
@@ -744,25 +742,25 @@ function updateAIRec() {
   const posFilled = (window._myRoster && window._myRoster[top.pos]) || 0;
   const needMore = posNeeded - posFilled > 0;
   const reasons = [
-    top.rank <= 5 ? '🔥 Elite tier — top-5 overall, never pass up.' : null,
-    needMore ? `📋 You need a ${top.pos} (${posFilled}/${posNeeded} filled).` : null,
-    !needMore && posNeeded > 0 ? `Your ${top.pos} slot is filled — depth pick.` : null,
-    top.status && top.status !== 'Active' ? `⚠️ Status: ${top.status} — check injury reports.` : null,
-    `📊 Ranked #${top.rank} overall · Proj ${top.proj} pts`,
+    top.rank <= 5 ? 'ð¥ Elite tier â top-5 overall, never pass up.' : null,
+    needMore ? `ð You need a ${top.pos} (${posFilled}/${posNeeded} filled).` : null,
+    !needMore && posNeeded > 0 ? `Your ${top.pos} slot is filled â depth pick.` : null,
+    top.status && top.status !== 'Active' ? `â ï¸ Status: ${top.status} â check injury reports.` : null,
+    `ð Ranked #${top.rank} overall Â· Proj ${top.proj} pts`,
     scored.length > 1 ? `Next: ${scored[1].player.name} (${scored[1].player.team}, ${scored[1].player.pos})` : null
   ].filter(Boolean);
 
   document.getElementById('aiContent').innerHTML = `
     <div class="ai-player-name">${top.name}</div>
     <div class="ai-player-meta">
-      ${top.team} · <span class="pos-badge pos-${top.pos}">${top.pos}</span> 
-      ${top.age && top.age !== '—' ? '· Age ' + top.age : ''}
+      ${top.team} Â· <span class="pos-badge pos-${top.pos}">${top.pos}</span> 
+      ${top.age && top.age !== 'â' ? 'Â· Age ' + top.age : ''}
       ${top.status && top.status !== 'Active' ? '<span class="status-badge status-' + top.status + '">' + top.status + '</span>' : ''}
     </div>
     <div class="ai-reason">${reasons.join('<br>')}</div>
     <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn-pick" onclick="pickPlayer('${top.id}','mine')">✅ Draft ${top.name.split(' ').pop()}</button>
-      <button class="btn-opp" onclick="pickPlayer('${top.id}','opp')">🚫 Opponent Took</button>
+      <button class="btn-pick" onclick="pickPlayer('${top.id}','mine')">â Draft ${top.name.split(' ').pop()}</button>
+      <button class="btn-opp" onclick="pickPlayer('${top.id}','opp')">ð« Opponent Took</button>
     </div>
   `;
 }
@@ -797,4 +795,260 @@ function updateMyPicksList() {
     <div class="pick-item">
       <span style="color:#4ade80;font-weight:700;min-width:32px">R${p.round}</span>
       <span style="flex:1">${p.player.name}</span>
-      <span><span cla
+      <span><span class="pos-badge pos-${p.player.pos}">${p.player.pos}</span></span>
+    </div>
+  `).join('');
+}
+
+// ===== RENDER TABLE =====
+function renderPlayers() {
+  const cfg = SPORT_CONFIG[SPORT] || SPORT_CONFIG.football;
+  const search = (document.getElementById('searchInput').value || '').toLowerCase();
+  const posFilter = document.getElementById('posFilter').value;
+  const statusFilter = document.getElementById('statusFilter').value;
+  const availFilter = document.getElementById('availFilter').value;
+
+  let players = allPlayers.filter(p => {
+    const matchSearch = !search || p.name.toLowerCase().includes(search) || (p.team && p.team.toLowerCase().includes(search)) || p.pos.toLowerCase().includes(search);
+    const matchPos = !posFilter || p.pos === posFilter;
+    const matchStatus = statusFilter === 'all' || p.active !== false;
+    const matchAvail = availFilter === 'all' || !draftedPlayers[p.id];
+    return matchSearch && matchPos && matchStatus && matchAvail;
+  });
+
+  // Sort
+  players = [...players].sort((a, b) => {
+    let av = a[sortCol] ?? a.rank;
+    let bv = b[sortCol] ?? b.rank;
+    if (typeof av === 'string') av = av.toLowerCase();
+    if (typeof bv === 'string') bv = bv.toLowerCase();
+    return sortDir * (av < bv ? -1 : av > bv ? 1 : 0);
+  });
+
+  document.getElementById('playerCount').textContent = '(' + players.length + ' players)';
+
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = players.map(p => {
+    const status = draftedPlayers[p.id];
+    const rowClass = status === 'mine' ? 'drafted-mine' : status === 'opp' ? 'drafted-opp' : '';
+    const statusBadge = p.status && p.status !== 'Active' ? `<span class="status-badge status-${p.status}">${p.status}</span>` : '';
+    const actionBtns = status ?
+      `<span style="color:${status==='mine'?'#4ade80':'#64748b'}">${status==='mine'?'â Yours':'ð« Taken'}</span>` :
+      `<button class="btn-pick" onclick="pickPlayer('${p.id}','mine')">Mine</button> <button class="btn-opp" onclick="pickPlayer('${p.id}','opp')">Opp</button>`;
+    return `<tr class="${rowClass}">
+      <td>${p.rank}</td>
+      <td><b>${p.name}</b>${statusBadge}</td>
+      <td>${p.team || 'FA'}</td>
+      <td><span class="pos-badge pos-${p.pos}">${p.pos}</span></td>
+      <td>${p.age || 'â'}</td>
+      <td>${p.status || 'Active'}</td>
+      <td>${p.adp || p.rank}</td>
+      <td>${actionBtns}</td>
+    </tr>`;
+  }).join('');
+}
+
+function filterPlayers() { renderPlayers(); }
+
+function sortByCol(col) {
+  if (sortCol === col) { sortDir *= -1; } else { sortCol = col; sortDir = 1; }
+  renderPlayers();
+}
+
+// ===== MARCH MADNESS =====
+function initMarchMadness() {
+  document.getElementById('mainArea').style.display = 'none';
+  document.getElementById('mmArea').style.display = 'block';
+  Object.keys(MM_REGIONS).forEach(r => { mmSelections[r] = []; });
+  renderBracket();
+  updateMMRecs();
+}
+
+function getMMPick(region) {
+  const teams = MM_REGIONS[region];
+  if (!teams) return null;
+  const scored = teams.map(t => ({
+    team: t,
+    score: t.str * 0.6 + (1 - t.upsetProb) * 30 + (t.wins / (t.wins + t.losses)) * 10
+  })).sort((a, b) => b.score - a.score);
+  return scored[0].team;
+}
+
+function toggleMMTeam(region, name) {
+  if (!mmSelections[region]) mmSelections[region] = [];
+  const idx = mmSelections[region].indexOf(name);
+  if (idx > -1) mmSelections[region].splice(idx, 1);
+  else mmSelections[region].push(name);
+  renderBracket();
+  updateMMRecs();
+}
+
+function renderBracket() {
+  const bracket = document.getElementById('mmBracket');
+  bracket.innerHTML = '';
+  Object.entries(MM_REGIONS).forEach(([regionName, teams]) => {
+    const div = document.createElement('div');
+    div.className = 'mm-region';
+    div.innerHTML = '<h4>' + regionName + ' Region</h4>';
+    const aiPick = getMMPick(regionName);
+    teams.forEach(t => {
+      const isSelected = (mmSelections[regionName] || []).includes(t.name);
+      const isAI = aiPick && aiPick.name === t.name;
+      const td = document.createElement('div');
+      td.className = 'mm-team' + (isSelected ? ' selected' : '');
+      td.onclick = () => toggleMMTeam(regionName, t.name);
+      td.innerHTML = `<span class="mm-seed">#${t.seed}</span><span style="flex:1">${t.name}</span><span style="color:#64748b;font-size:.75rem">${t.wins}-${t.losses}</span>${isAI ? '<span style="color:#4ade80;font-size:.75rem;margin-left:4px">ð¤</span>' : ''}`;
+      div.appendChild(td);
+    });
+    if (aiPick) {
+      const ai = document.createElement('div');
+      ai.className = 'mm-ai';
+      ai.textContent = 'ð¤ AI Pick: ' + aiPick.name + ' (Strength: ' + aiPick.str + '/100)';
+      div.appendChild(ai);
+    }
+    bracket.appendChild(div);
+  });
+}
+
+function updateMMRecs() {
+  const picks = Object.entries(MM_REGIONS).map(([region]) => {
+    const p = getMMPick(region);
+    return p ? { region, team: p } : null;
+  }).filter(Boolean);
+
+  picks.sort((a, b) => b.team.str - a.team.str);
+  const champion = picks[0];
+  const runner = picks[1];
+
+  document.getElementById('mmAiContent').innerHTML = picks.map(p => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:#0f172a;border-radius:8px;margin-bottom:6px">
+      <div><b style="color:#fff">${p.team.name}</b> <span style="color:#94a3b8;font-size:.8rem">â ${p.region} Â· Seed #${p.team.seed} Â· ${p.team.wins}-${p.team.losses}</span></div>
+      <div style="text-align:right;font-size:.78rem"><div style="color:#4ade80">Str: ${p.team.str}/100</div><div style="color:#94a3b8">Upset: ${Math.round(p.team.upsetProb*100)}%</div></div>
+    </div>
+  `).join('') + (champion ? `
+    <div style="margin-top:12px;background:#0f2d1f;border:1px solid #4ade80;padding:10px;border-radius:8px">
+      <div style="color:#4ade80;font-weight:700;margin-bottom:4px">ð AI Championship Prediction</div>
+      <div style="font-size:.85rem"><b>${champion.team.name}</b> vs <b>${runner ? runner.team.name : '?'}</b> â Winner: <b style="color:#4ade80">${champion.team.name}</b></div>
+    </div>
+  ` : '');
+}
+
+// ===== MAIN INIT =====
+async function init() {
+  const isMM = SPORT === 'marchmadness' || SPORT === 'mm' || SPORT === 'march_madness';
+
+  // Set header info
+  const cfg = SPORT_CONFIG[SPORT] || SPORT_CONFIG.football;
+  document.getElementById('sportBadge').textContent = isMM ? 'ð March Madness' : (cfg.emoji + ' ' + cfg.label);
+  if (LEAGUE_NAME) document.getElementById('leagueNameHeader').textContent = 'â ' + LEAGUE_NAME;
+
+  if (isMM) {
+    document.getElementById('loadingOverlay').style.display = 'none';
+    document.getElementById('mainArea').style.display = 'none';
+    document.getElementById('mmArea').style.display = 'block';
+    initMarchMadness();
+    return;
+  }
+
+  // Show loading
+  const loadingText = document.getElementById('loadingText');
+  const loadingSubtext = document.getElementById('loadingSubtext');
+
+  // Try live data
+  let livePlayers = null;
+  let dataSource = 'Offline (Fallback)';
+
+  try {
+    if (SPORT === 'football' || SPORT === 'basketball') {
+      loadingText.textContent = 'Fetching live ' + cfg.label + ' rosters...';
+      loadingSubtext.textContent = 'Source: Sleeper API (api.sleeper.app)';
+      const sportKey = SPORT === 'football' ? 'nfl' : 'nba';
+      const raw = await fetchSleeperPlayers(SPORT);
+      if (raw && Object.keys(raw).length > 100) {
+        livePlayers = SPORT === 'football' ? transformSleeperNFL(raw) : transformSleeperNBA(raw);
+        dataSource = 'Live â Sleeper API';
+        document.getElementById('dataSourceBadge').textContent = 'ð¢ Live Data';
+        document.getElementById('lastUpdated').textContent = 'Updated: ' + new Date().toLocaleDateString();
+      }
+    } else if (SPORT === 'baseball') {
+      loadingText.textContent = 'Fetching live MLB rosters...';
+      loadingSubtext.textContent = 'Source: MLB Stats API (statsapi.mlb.com)';
+      const raw = await fetchMLBPlayers();
+      if (raw && raw.length > 50) {
+        livePlayers = transformMLB(raw);
+        dataSource = 'Live â MLB Stats API';
+        document.getElementById('dataSourceBadge').textContent = 'ð¢ Live Data';
+        document.getElementById('lastUpdated').textContent = 'Updated: ' + new Date().toLocaleDateString();
+      }
+    } else if (SPORT === 'hockey') {
+      loadingText.textContent = 'Fetching live NHL rosters...';
+      loadingSubtext.textContent = 'Source: NHL API (api.nhle.com)';
+      const raw = await fetchNHLPlayers();
+      if (raw && raw.length > 50) {
+        livePlayers = transformNHL(raw);
+        dataSource = 'Live â NHL API';
+        document.getElementById('dataSourceBadge').textContent = 'ð¢ Live Data';
+        document.getElementById('lastUpdated').textContent = 'Updated: ' + new Date().toLocaleDateString();
+      }
+    }
+  } catch(e) {
+    console.error('Live data fetch error:', e);
+  }
+
+  // Use fallback if live data failed
+  if (!livePlayers || livePlayers.length < 5) {
+    const fb = FALLBACK[SPORT] || FALLBACK.football;
+    livePlayers = fb;
+    document.getElementById('dataSourceBadge').textContent = 'ð¡ Fallback Data';
+    document.getElementById('dataSourceBadge').style.color = '#fbbf24';
+    const errBanner = document.getElementById('errorBanner');
+    errBanner.style.display = 'block';
+    errBanner.textContent = 'â ï¸ Could not load live data â showing cached rankings. Refresh to retry.';
+    document.getElementById('lastUpdated').textContent = 'Static data (refresh to get live)';
+  }
+
+  allPlayers = livePlayers;
+
+  // Init roster tracking
+  const config = getRosterConfig();
+  window._myRoster = {};
+  Object.keys(config).forEach(pos => { window._myRoster[pos] = 0; });
+
+  // Build position filter
+  const pf = document.getElementById('posFilter');
+  cfg.positions.forEach(pos => {
+    const opt = document.createElement('option');
+    opt.value = pos; opt.textContent = pos;
+    pf.appendChild(opt);
+  });
+
+  // Build sortable table headers
+  const thead = document.getElementById('tableHead');
+  const headerRow = document.createElement('tr');
+  const headerCols = ['rank','name','team','pos','age','status','adp'];
+  ['Rank','Player','Team','Pos','Age','Status','ADP','Action'].forEach((h, i) => {
+    const th = document.createElement('th');
+    if (i < 7) {
+      th.textContent = h + ' â';
+      th.onclick = () => sortByCol(headerCols[i]);
+    } else {
+      th.textContent = h;
+    }
+    headerRow.appendChild(th);
+  });
+  thead.appendChild(headerRow);
+
+  // Hide loading, show content
+  document.getElementById('loadingOverlay').style.display = 'none';
+  document.getElementById('mainArea').style.display = 'grid';
+
+  updateNeedsGrid();
+  updateRoundInfo();
+  renderPlayers();
+  updateAIRec();
+}
+
+init();
+</script>
+</body>
+</html>
