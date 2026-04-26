@@ -20,7 +20,7 @@ body{min-height:100vh;overflow:auto}
 .page-header{margin-bottom:36px}
 .page-header h1{font-size:2rem;font-weight:800;margin-bottom:8px}
 .page-header p{color:var(--muted);font-size:1rem}
-.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;max-width:800px;margin-bottom:40px}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;max-width:1200px;margin-bottom:40px}
 .plan-card{background:var(--bg2);border:2px solid var(--bg3);border-radius:16px;padding:32px;position:relative;transition:border-color .2s}
 .plan-card:hover{border-color:var(--green)}
 .plan-card.featured{border-color:var(--green);background:linear-gradient(135deg,rgba(74,222,128,.06),var(--bg2))}
@@ -67,6 +67,17 @@ body{min-height:100vh;overflow:auto}
   </div>
   <div class="plans">
     <div class="plan-card">
+      <div class="plan-name">Free</div>
+      <div class="plan-price">$0<span>/month</span></div>
+      <div class="plan-desc">Try DraftBuddy with limited access</div>
+      <ul class="plan-features">
+        <li><span class="check">&#10003;</span> AI-powered trade analyzer</li>
+        <li><span class="check">&#10003;</span> Waiver wire recommendations</li>
+        <li><span class="check">&#10003;</span> 3 uses total</li>
+      </ul>
+      <a class="plan-btn outline" onclick="handlePlanClick('free')">Get Started &mdash; Free</a>
+    </div>
+    <div class="plan-card">
       <div class="plan-name">Pro</div>
       <div class="plan-price">$4.99<span>/month</span></div>
       <div class="plan-desc">Everything you need to win your fantasy leagues</div>
@@ -79,6 +90,7 @@ body{min-height:100vh;overflow:auto}
         <li><span class="check">&#10003;</span> Season-long coaching insights</li>
         <li><span class="check">&#10003;</span> Draft grade report</li>
         <li><span class="check">&#10003;</span> Draft Assistant sidekick overlay</li>
+        <li><span class="check">&#10003;</span> 10 uses per month</li>
       </ul>
       <a href="https://buy.stripe.com/test_28EaEX65Z3mb0NnOleIw01" target="_blank" class="plan-btn outline" onclick="handlePlanClick('pro')">Get Pro &mdash; $4.99/mo</a>
     </div>
@@ -96,6 +108,7 @@ body{min-height:100vh;overflow:auto}
         <li><span class="check">&#10003;</span> ESPN, Yahoo and Sleeper integrations</li>
         <li><span class="check">&#10003;</span> Private Discord community</li>
         <li><span class="check">&#10003;</span> Monthly strategy session</li>
+        <li><span class="check">&#10003;</span> Infinite uses</li>
       </ul>
       <a href="https://buy.stripe.com/test_28EaEX65Z3mb0NnOleIw01" target="_blank" class="plan-btn primary" onclick="handlePlanClick('champion')">Get Champion &mdash; $9.99/mo</a>
     </div>
@@ -148,7 +161,17 @@ window.handlePlanClick = function(plan) {
   try {
     localStorage.setItem('db_chosen_plan', plan);
     localStorage.setItem('db_membership', plan);
-    localStorage.setItem('db_paid', 'true');
+    if (plan === 'free') {
+      localStorage.setItem('db_paid', 'false');
+      localStorage.setItem('db_uses_limit', '3');
+      window.location.href = '/dashboard';
+    } else if (plan === 'pro') {
+      localStorage.setItem('db_paid', 'true');
+      localStorage.setItem('db_uses_limit', '10');
+    } else if (plan === 'champion') {
+      localStorage.setItem('db_paid', 'true');
+      localStorage.setItem('db_uses_limit', 'unlimited');
+    }
   } catch(e) {}
 };
 </script>
