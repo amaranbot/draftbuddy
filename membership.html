@@ -92,7 +92,7 @@ body{min-height:100vh;overflow:auto}
         <li><span class="check">&#10003;</span> Draft Assistant sidekick overlay</li>
         <li><span class="check">&#10003;</span> 10 uses per month</li>
       </ul>
-      <a href="https://buy.stripe.com/test_28EaEX65Z3mb0NnOleIw01" target="_blank" class="plan-btn outline" onclick="handlePlanClick('pro')">Get Pro &mdash; $4.99/mo</a>
+      <a href="https://buy.stripe.com/test_28EaEX65Z3mb0NnOleIw01?success_url=https%3A%2F%2Fmydraftbuddy.com%2Fmembership%3Fpaid%3Dtrue%26plan%3Dpro" target="_blank" class="plan-btn outline" onclick="handlePlanClick('pro')">Get Pro &mdash; $4.99/mo</a>
     </div>
     <div class="plan-card featured">
       <div class="plan-badge">Most Popular</div>
@@ -110,7 +110,7 @@ body{min-height:100vh;overflow:auto}
         <li><span class="check">&#10003;</span> Monthly strategy session</li>
         <li><span class="check">&#10003;</span> Infinite uses</li>
       </ul>
-      <a href="https://buy.stripe.com/test_28EaEX65Z3mb0NnOleIw01" target="_blank" class="plan-btn primary" onclick="handlePlanClick('champion')">Get Champion &mdash; $9.99/mo</a>
+      <a href="https://buy.stripe.com/test_28EaEX65Z3mb0NnOleIw01?success_url=https%3A%2F%2Fmydraftbuddy.com%2Fmembership%3Fpaid%3Dtrue%26plan%3Dchampion" target="_blank" class="plan-btn primary" onclick="handlePlanClick('champion')">Get Champion &mdash; $9.99/mo</a>
     </div>
   </div>
   <div class="secure-note">
@@ -160,20 +160,40 @@ if (soBtn) soBtn.onclick = signOutHandler;
 window.handlePlanClick = function(plan) {
   try {
     localStorage.setItem('db_chosen_plan', plan);
-    localStorage.setItem('db_membership', plan);
     if (plan === 'free') {
+      localStorage.setItem('db_membership', 'free');
       localStorage.setItem('db_paid', 'false');
       localStorage.setItem('db_uses_limit', '3');
       window.location.href = '/dashboard';
-    } else if (plan === 'pro') {
-      localStorage.setItem('db_paid', 'true');
-      localStorage.setItem('db_uses_limit', '10');
-    } else if (plan === 'champion') {
-      localStorage.setItem('db_paid', 'true');
-      localStorage.setItem('db_uses_limit', 'unlimited');
     }
+    // For pro/champion, Stripe handles payment and redirects back with ?paid=true&plan=X
   } catch(e) {}
 };
+
+// Handle return from Stripe payment success
+(function() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const paid = params.get('paid');
+    const plan = params.get('plan');
+    if (paid === 'true' && plan) {
+      localStorage.setItem('db_membership', plan);
+      localStorage.setItem('db_paid', 'true');
+      localStorage.setItem('db_chosen_plan', plan);
+      if (plan === 'pro') {
+        localStorage.setItem('db_uses_limit', '10');
+      } else if (plan === 'champion') {
+        localStorage.setItem('db_uses_limit', 'unlimited');
+      }
+      // Show brief success message then redirect
+      const banner = document.createElement('div');
+      banner.style.cssText = 'position:fixed;top:0;left:0;width:100%;padding:16px;background:#4ade80;color:#000;text-align:center;font-weight:700;font-size:1.1rem;z-index:9999;';
+      banner.textContent = 'Payment confirmed! Welcome to ' + plan.charAt(0).toUpperCase() + plan.slice(1) + '! Redirecting to dashboard...';
+      document.body.appendChild(banner);
+      setTimeout(function() { window.location.href = '/dashboard'; }, 2500);
+    }
+  } catch(e) {}
+})();
 </script>
 </body>
 </html>
