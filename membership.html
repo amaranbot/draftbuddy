@@ -165,6 +165,12 @@ window.handlePlanClick = function(plan) {
       localStorage.setItem('db_paid', 'false');
       localStorage.setItem('db_uses_limit', '3');
       window.location.href = '/dashboard';
+    } else {
+      // Clear any previous paid status before redirecting to Stripe
+      // so if the user abandons checkout they cannot access paid features
+      localStorage.removeItem('db_paid');
+      localStorage.removeItem('db_membership');
+      localStorage.removeItem('db_uses_limit');
     }
     // For pro/champion, Stripe handles payment and redirects back with ?paid=true&plan=X
   } catch(e) {}
