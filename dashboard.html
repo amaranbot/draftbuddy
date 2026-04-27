@@ -201,6 +201,13 @@ const auth=getAuth(initializeApp(FB));
 setPersistence(auth,browserLocalPersistence).catch(()=>{});
 onAuthStateChanged(auth,user=>{
   if(!user){window.location.href='/login';return;}
+  // Payment gate: if user has no confirmed payment, send to membership page
+  const _paid = localStorage.getItem('db_paid');
+  const _plan = (localStorage.getItem('db_membership') || '').toLowerCase();
+  if (_paid !== 'true' && _plan !== 'free') {
+    window.location.href = '/membership';
+    return;
+  }
   const name=user.displayName||user.email||'Champ';
   const initials=name.substring(0,2).toUpperCase();
   document.getElementById('userInitials').textContent=initials;
@@ -222,3 +229,4 @@ document.getElementById('signOutBtn').addEventListener('click',async()=>{
 </script>
 </body>
 </html>
+
