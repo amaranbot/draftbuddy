@@ -55,6 +55,7 @@ tr.drafted-opp td{background:#1e1e2e;opacity:.5;text-decoration:line-through;col
 .needs-grid{display:flex;flex-wrap:wrap;gap:6px}
 .need-chip{padding:4px 10px;border-radius:20px;font-size:.8rem;font-weight:600}
 .need-required{background:#dc2626;color:#fff}
+.need-late{background:#475569;color:#94a3b8;opacity:.7}
 .need-flex{background:#d97706;color:#fff}
 .need-filled{background:#166534;color:#4ade80}
 .round-info{background:#1e293b;border:1px solid #334155;padding:10px;border-radius:8px;font-size:.85rem;color:#94a3b8}
@@ -700,7 +701,7 @@ function updateNeedsGrid() {
     const filled = window._myRoster[pos] || 0;
     for (let i = 0; i < needed; i++) {
       const chip = document.createElement('div');
-      chip.className = 'need-chip ' + (i < filled ? 'need-filled' : (pos === 'FLEX' || pos === 'UTIL' ? 'need-flex' : 'need-required'));
+      chip.className = 'need-chip ' + (i < filled ? 'need-filled' : (pos === 'FLEX' || pos === 'UTIL' ? 'need-flex' : (['K','DEF','G'].includes(pos) && config.BN && !((window._myRoster && (window._myRoster['BN']||0)) >= config.BN)) ? 'need-late' : 'need-required'));
       chip.textContent = pos + (i < filled ? ' ✓' : ' ?');
       grid.appendChild(chip);
     }
@@ -788,19 +789,33 @@ function pickPlayer(id, type) {
   if (type === 'mine') {
     _aiPicksUsed++;
     const config = getRosterConfig();
-    if (window._myRoster[player.pos] !== undefined && window._myRoster[player.pos] < config[player.pos]) {
+    // Fill order: skill starters first, then bench, then K/DEF last
+    const LATE_POS = ['K', 'DEF', 'G'];
+    const bnFull = !config.BN || ((window._myRoster['BN'] || 0) >= config.BN);
+    const isLatePos = LATE_POS.includes(player.pos);
+    const flexKey = config.FLEX !== undefined ? 'FLEX' : config.UTIL !== undefined ? 'UTIL' : null;
+    const hasStarterSlot = window._myRoster[player.pos] !== undefined && window._myRoster[player.pos] < config[player.pos];
+
+    if (isLatePos && !bnFull) {
+      window._myRoster['BN'] = (window._myRoster['BN'] || 0) + 1;
+    } else if (hasStarterSlot) {
       window._myRoster[player.pos]++;
+    } else if (!isLatePos && flexKey && window._myRoster[flexKey] < config[flexKey]) {
+      window._myRoster[flexKey]++;
+    } else if (config.BN !== undefined && !bnFull) {
+      window._myRoster['BN'] = (window._myRoster['BN'] || 0) + 1;
     } else {
-      const flexKey = config.FLEX !== undefined ? 'FLEX' : config.UTIL !== undefined ? 'UTIL' : null;
-      if (flexKey && window._myRoster[flexKey] < config[flexKey]) window._myRoster[flexKey]++;
-      else if (config.BN !== undefined) window._myRoster['BN'] = (window._myRoster['BN'] || 0) + 1;
+      if (hasStarterSlot) window._myRoster[player.pos]++;
     }
     const round = Math.ceil((overallPick - 1) / NUM_TEAMS);
     myPicks.push({ player, round });
     updateMyPicksList();
     // Check if draft is complete (all my roster spots filled)
-    const totalMyPicks = Object.values(getRosterConfig()).reduce((a,b) => a+b, 0);
-    if (myPicks.length >= totalMyPicks) {
+    const rosterCfg = getRosterConfig();
+    const totalMyPicks = Object.values(rosterCfg).reduce((a,b) => a+b, 0);
+    const kFilled = !rosterCfg.K || (window._myRoster && (window._myRoster['K'] || 0) >= rosterCfg.K);
+    const defFilled = !rosterCfg.DEF || (window._myRoster && (window._myRoster['DEF'] || 0) >= rosterCfg.DEF);
+    if (myPicks.length >= totalMyPicks && kFilled && defFilled) {
       // Save draft to localStorage
       localStorage.setItem('db_draft_complete', 'true');
       localStorage.setItem('db_draft_picks', JSON.stringify(myPicks.map(p => ({name: p.player.name || p.player.full_name, pos: p.player.pos || (p.player.fantasy_positions && p.player.fantasy_positions[0]), team: p.player.team, round: p.round}))));
